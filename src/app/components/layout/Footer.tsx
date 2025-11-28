@@ -94,9 +94,9 @@ export function Footer() {
         </div>
 
         <div className="mt-8 border-t border-slate-800 pt-4 flex justify-between text-[11px] text-slate-500">
-          <span>{new Date().getFullYear()} Alta Cloud. Todos os direitos reservados.</span>
-          <span>Desenvolvido por Eduardo + IA.</span>
-        </div>
+  <span>{new Date().getFullYear()} Alta Cloud. Todos os direitos reservados.</span>
+  <span>Desenvolvido por Eduardo Pompeu + Gepeto 🤖</span>
+</div>
       </div>
     </footer>
   );
