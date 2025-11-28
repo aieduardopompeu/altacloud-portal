@@ -145,21 +145,42 @@ export function Footer() {
 
             {/* Selos de segurança */}
             <div className="mt-4 flex items-center gap-4 opacity-70">
-              <img
-                src="/icons/lgpd.svg"
-                alt="Conformidade com LGPD"
-                className="h-8 w-auto"
-              />
-              <img
-                src="/icons/ssl-secure.svg"
-                alt="Conexão segura SSL"
-                className="h-8 w-auto"
-              />
-              <img
-                src="/icons/google-safe.svg"
-                alt="Navegação segura Google"
-                className="h-8 w-auto"
-              />
+              {/* LGPD → página interna /lgpd */}
+              <Link href="/lgpd" aria-label="Política de Privacidade e LGPD">
+                <img
+                  src="/icons/lgpd.svg"
+                  alt="Conformidade com LGPD"
+                  className="h-8 w-auto hover:opacity-100 transition-opacity"
+                />
+              </Link>
+
+              {/* SSL → relatório SSL externo */}
+              <a
+                href="https://www.ssllabs.com/ssltest/analyze.html?d=altacloud.com.br"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Verificação de conexão segura SSL"
+              >
+                <img
+                  src="/icons/ssl-secure.svg"
+                  alt="Conexão segura SSL"
+                  className="h-8 w-auto hover:opacity-100 transition-opacity"
+                />
+              </a>
+
+              {/* Google Safe → relatório Google Safe Browsing */}
+              <a
+                href="https://transparencyreport.google.com/safe-browsing/search?url=altacloud.com.br"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Verificação Google Safe Browsing"
+              >
+                <img
+                  src="/icons/google-safe.svg"
+                  alt="Navegação segura Google"
+                  className="h-8 w-auto hover:opacity-100 transition-opacity"
+                />
+              </a>
             </div>
           </div>
         </div>
