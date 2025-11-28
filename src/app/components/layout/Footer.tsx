@@ -141,10 +141,25 @@ export function Footer() {
                   Privacidade
                 </Link>
               </li>
+              <li>
+                <Link href="/termos-de-uso" className="hover:text-sky-300">
+                  Termos de uso
+                </Link>
+              </li>
+              <li>
+                <Link href="/cookies" className="hover:text-sky-300">
+                  Cookies
+                </Link>
+              </li>
+              <li>
+                <Link href="/lgpd" className="hover:text-sky-300">
+                  LGPD
+                </Link>
+              </li>
             </ul>
 
             {/* Selos de segurança */}
-            <div className="mt-4 flex items-center gap-4 opacity-70">
+            <div className="mt-4 flex flex-wrap items-center gap-3 opacity-80">
               {/* LGPD → página interna /lgpd */}
               <Link href="/lgpd" aria-label="Política de Privacidade e LGPD">
                 <img
@@ -178,6 +193,20 @@ export function Footer() {
                 <img
                   src="/icons/google-safe.svg"
                   alt="Navegação segura Google"
+                  className="h-8 w-auto hover:opacity-100 transition-opacity"
+                />
+              </a>
+
+              {/* Badge SSL Labs A+ */}
+              <a
+                href="https://www.ssllabs.com/ssltest/analyze.html?d=altacloud.com.br"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Resultado SSL Labs A+"
+              >
+                <img
+                  src="/icons/ssl-labs-a-plus.svg"
+                  alt="SSL Labs: A+"
                   className="h-8 w-auto hover:opacity-100 transition-opacity"
                 />
               </a>
