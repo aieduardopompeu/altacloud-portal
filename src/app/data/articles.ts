@@ -1,0 +1,58 @@
+﻿export type ArticleMeta = {
+  slug: string;
+  title: string;
+  description: string;
+  category: string;   // Fundamentos, AWS, Azure, GCP, DevOps etc.
+  track: string;      // aws | azure | gcp | devops | fundamentos | geral
+  readingTime: string;
+  date: string;
+};
+
+export const articles: ArticleMeta[] = [
+  {
+    slug: "guia-cloud-computing-para-iniciantes",
+    title: "Guia Completo de Cloud Computing para Iniciantes",
+    description:
+      "Um guia direto ao ponto para entender o que é cloud computing, seus modelos, principais provedores e caminhos para começar na nuvem.",
+    category: "Fundamentos",
+    track: "fundamentos",
+    readingTime: "12 min",
+    date: "Jan 2025",
+  },
+{
+  slug: "como-criar-vpc-na-aws",
+  title: "Como criar VPC na AWS",
+  description: "Guia prático para criar sua primeira VPC na AWS com sub-redes públicas e privadas.",
+  category: "AWS",
+  track: "aws",
+  readingTime: "8 min",
+  date: "2025-11-26",
+},
+
+  {
+    slug: "como-criar-vpc-na-aws",
+    title: "Como criar VPC na AWS",
+    description: "Guia prático para criar sua primeira VPC na AWS com sub-redes públicas e privadas.",
+    category: "AWS",
+    track: "aws",
+    readingTime: "8 min",
+    date: "2025-11-26",
+  },
+  {
+    slug: "fundamentos-de-iam-na-aws",
+    title: "Fundamentos de IAM na AWS",
+    description: "Entenda o que é IAM, como funcionam usuários, grupos, roles e políticas, além das melhores práticas de segurança na AWS.",
+    category: "AWS",
+    track: "aws",
+    readingTime: "9 min",
+    date: "2025-11-26",
+  },
+  {
+    slug: "introducao-ao-amazon-s3",
+    title: "Introdução ao Amazon S3",
+    description: "O que é o Amazon S3, como funciona o armazenamento em buckets, classes de armazenamento, políticas de acesso e casos de uso.",
+    category: "AWS",
+    track: "aws",
+    readingTime: "10 min",
+    date: "2025-11-26",
+  },];
