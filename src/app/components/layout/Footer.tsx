@@ -1,7 +1,20 @@
-﻿// src/app/components/layout/Footer.tsx
+﻿"use client";
+
 import Link from "next/link";
 
+declare global {
+  interface Window {
+    ALTACLOUD_OPEN_COOKIE_BANNER?: () => void;
+  }
+}
+
 export function Footer() {
+  const handleOpenCookies = () => {
+    if (typeof window !== "undefined") {
+      window.ALTACLOUD_OPEN_COOKIE_BANNER?.();
+    }
+  };
+
   return (
     <footer className="border-t border-slate-800 bg-slate-950">
       <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
@@ -146,11 +159,18 @@ export function Footer() {
                   Termos de uso
                 </Link>
               </li>
+
+              {/* ESTE "Cookies" abre o modal de preferências */}
               <li>
-                <Link href="/cookies" className="hover:text-sky-300">
+                <button
+                  type="button"
+                  onClick={handleOpenCookies}
+                  className="p-0 text-left text-xs text-slate-400 hover:text-sky-300"
+                >
                   Cookies
-                </Link>
+                </button>
               </li>
+
               <li>
                 <Link href="/lgpd" className="hover:text-sky-300">
                   LGPD
