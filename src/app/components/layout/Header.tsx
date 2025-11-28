@@ -1,6 +1,7 @@
 ﻿"use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 
@@ -35,38 +36,49 @@ export function Header() {
   return (
     <header className="w-full border-b border-slate-800 bg-slate-950/80 backdrop-blur">
       <nav className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
-        {/* LOGO ALTA CLOUD + ÍCONES CLOUD */}
+        
+        {/* LOGO + CLOUD ICONS */}
         <div className="flex items-center gap-6">
-          {/* Logo principal 120px */}
+          {/* LOGO */}
           <Link href="/" className="flex items-center">
-            <img
+            <Image
               src="/logo-altacloud.png"
               alt="Alta Cloud"
-              className="w-[120px] h-auto"
+              width={120}
+              height={40}
+              priority
             />
           </Link>
 
-          {/* ÍCONES AWS / AZURE / GCP / IBM (mobile e desktop) */}
+          {/* CLOUD PROVIDERS */}
           <div className="flex items-center gap-3 md:gap-6">
-            <img
+            <Image
               src="/icons/aws.svg"
               alt="AWS"
-              className="h-8 w-auto md:h-10 invert brightness-200"
+              width={40}
+              height={20}
+              className="invert brightness-200 md:w-10 md:h-auto"
             />
-            <img
+            <Image
               src="/icons/azure.svg"
               alt="Azure"
-              className="h-8 w-auto md:h-10 invert brightness-200"
+              width={40}
+              height={20}
+              className="invert brightness-200 md:w-10 md:h-auto"
             />
-            <img
+            <Image
               src="/icons/gcp.svg"
               alt="Google Cloud"
-              className="h-8 w-auto md:h-10 invert brightness-200"
+              width={40}
+              height={20}
+              className="invert brightness-200 md:w-10 md:h-auto"
             />
-            <img
+            <Image
               src="/icons/ibm.svg"
               alt="IBM Cloud"
-              className="h-8 w-auto md:h-10 invert brightness-200"
+              width={40}
+              height={20}
+              className="invert brightness-200 md:w-10 md:h-auto"
             />
           </div>
         </div>
@@ -129,7 +141,6 @@ export function Header() {
           className="inline-flex items-center justify-center rounded-md border border-slate-700 p-2 text-slate-200 hover:bg-slate-800 md:hidden"
           onClick={() => setOpenMenu((v) => !v)}
         >
-          <span className="sr-only">Abrir menu</span>
           {openMenu ? "✕" : "☰"}
         </button>
       </nav>

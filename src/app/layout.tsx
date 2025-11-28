@@ -67,7 +67,6 @@ export default function RootLayout({
         <Script
           id="adsense-script"
           strategy="afterInteractive"
-          async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4436420746304287"
           crossOrigin="anonymous"
         />
