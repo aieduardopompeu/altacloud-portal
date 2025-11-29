@@ -7,12 +7,12 @@ import { ReactNode } from "react";
 import { Header } from "./components/layout/Header";
 import { Footer } from "./components/layout/Footer";
 import { CookieBanner } from "./components/cookies/CookieBanner";
-import { AnalyticsManager } from "./components/analytics/AnalyticsManager";
 import { siteConfig, ldOrganization, ldWebsite } from "../lib/seo";
 
-// IDs vindos do .env.local
-const GA_ID = process.env.NEXT_PUBLIC_GA_ID || "";
-const ADSENSE_CLIENT_ID = process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID || "";
+// Lê dos env, mas cai no siteConfig se precisar
+const GA_ID = process.env.NEXT_PUBLIC_GA_ID || siteConfig.gaMeasurementId || "";
+const ADSENSE_CLIENT_ID =
+  process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID || "ca-pub-4436420746304287";
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || siteConfig.url;
 
 export const metadata: Metadata = {
@@ -47,13 +47,39 @@ export default function RootLayout({
   return (
     <html lang="pt-BR">
       <body className="min-h-screen bg-slate-950 text-slate-50">
-        {/* GA4 / AdSense controlados pelo consentimento */}
-        <AnalyticsManager
-          gaId={GA_ID}
-          adsenseClientId={ADSENSE_CLIENT_ID}
-        />
+        {/* GA4 – sempre carregando (métricas completas) */}
+        {GA_ID && (
+          <>
+            <Script
+              id="ga4-loader"
+              src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
+              strategy="afterInteractive"
+            />
+            <Script id="ga4-init" strategy="afterInteractive">
+              {`
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', '${GA_ID}', {
+                  page_path: window.location.pathname,
+                });
+              `}
+            </Script>
+          </>
+        )}
 
-        {/* JSON-LD */}
+        {/* ADSENSE GLOBAL – exatamente como o código do print, entre <head> */}
+        {ADSENSE_CLIENT_ID && (
+          <Script
+            id="adsense-script"
+            async
+            strategy="afterInteractive"
+            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT_ID}`}
+            crossOrigin="anonymous"
+          />
+        )}
+
+        {/* JSON-LD Organization */}
         <Script
           id="ld-org"
           type="application/ld+json"
@@ -62,6 +88,7 @@ export default function RootLayout({
           {JSON.stringify(ldOrganization())}
         </Script>
 
+        {/* JSON-LD Website + SearchAction */}
         <Script
           id="ld-website"
           type="application/ld+json"
@@ -70,16 +97,16 @@ export default function RootLayout({
           {JSON.stringify(ldWebsite())}
         </Script>
 
-        {/* HEADER */}
+        {/* HEADER GLOBAL */}
         <Header />
 
-        {/* CONTEÚDO */}
+        {/* CONTEÚDO DAS PÁGINAS */}
         {children}
 
-        {/* FOOTER */}
+        {/* RODAPÉ GLOBAL */}
         <Footer />
 
-        {/* BANNER DE COOKIES */}
+        {/* BANNER DE COOKIES – agora só informativo / preferências visuais */}
         <CookieBanner />
       </body>
     </html>
