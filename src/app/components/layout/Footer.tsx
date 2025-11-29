@@ -2,19 +2,7 @@
 
 import Link from "next/link";
 
-declare global {
-  interface Window {
-    ALTACLOUD_OPEN_COOKIE_BANNER?: () => void;
-  }
-}
-
 export function Footer() {
-  const handleOpenCookies = () => {
-    if (typeof window !== "undefined") {
-      window.ALTACLOUD_OPEN_COOKIE_BANNER?.();
-    }
-  };
-
   return (
     <footer className="border-t border-slate-800 bg-slate-950">
       <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
@@ -159,18 +147,11 @@ export function Footer() {
                   Termos de uso
                 </Link>
               </li>
-
-              {/* ESTE "Cookies" abre o modal de preferências */}
               <li>
-                <button
-                  type="button"
-                  onClick={handleOpenCookies}
-                  className="p-0 text-left text-xs text-slate-400 hover:text-sky-300"
-                >
+                <Link href="/cookies" className="hover:text-sky-300">
                   Cookies
-                </button>
+                </Link>
               </li>
-
               <li>
                 <Link href="/lgpd" className="hover:text-sky-300">
                   LGPD
@@ -185,7 +166,7 @@ export function Footer() {
                 <img
                   src="/icons/lgpd.svg"
                   alt="Conformidade com LGPD"
-                  className="h-8 w-auto hover:opacity-100 transition-opacity"
+                  className="h-8 w-auto transition-opacity hover:opacity-100"
                 />
               </Link>
 
@@ -199,7 +180,7 @@ export function Footer() {
                 <img
                   src="/icons/ssl-secure.svg"
                   alt="Conexão segura SSL"
-                  className="h-8 w-auto hover:opacity-100 transition-opacity"
+                  className="h-8 w-auto transition-opacity hover:opacity-100"
                 />
               </a>
 
@@ -213,7 +194,7 @@ export function Footer() {
                 <img
                   src="/icons/google-safe.svg"
                   alt="Navegação segura Google"
-                  className="h-8 w-auto hover:opacity-100 transition-opacity"
+                  className="h-8 w-auto transition-opacity hover:opacity-100"
                 />
               </a>
 
@@ -227,7 +208,7 @@ export function Footer() {
                 <img
                   src="/icons/ssl-labs-a-plus.svg"
                   alt="SSL Labs: A+"
-                  className="h-8 w-auto hover:opacity-100 transition-opacity"
+                  className="h-8 w-auto transition-opacity hover:opacity-100"
                 />
               </a>
             </div>
