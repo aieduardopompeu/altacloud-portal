@@ -7,16 +7,13 @@ import { ReactNode } from "react";
 import { Header } from "./components/layout/Header";
 import { Footer } from "./components/layout/Footer";
 import { CookieBanner } from "./components/cookies/CookieBanner";
+import { BottomStickyAd } from "./components/ads/BottomStickyAd";
 import { siteConfig, ldOrganization, ldWebsite } from "../lib/seo";
 
-// Lê dos env, mas cai no siteConfig se precisar
-const GA_ID = process.env.NEXT_PUBLIC_GA_ID || siteConfig.gaMeasurementId || "";
-const ADSENSE_CLIENT_ID =
-  process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID || "ca-pub-4436420746304287";
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || siteConfig.url;
+const GA_ID = siteConfig.gaMeasurementId;
 
 export const metadata: Metadata = {
-  metadataBase: new URL(SITE_URL),
+  metadataBase: new URL(siteConfig.url),
   title: {
     default: siteConfig.name,
     template: `%s - ${siteConfig.name}`,
@@ -25,7 +22,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: siteConfig.name,
     description: siteConfig.description,
-    url: SITE_URL,
+    url: siteConfig.url,
     images: [
       {
         url: siteConfig.ogImage,
@@ -47,8 +44,8 @@ export default function RootLayout({
   return (
     <html lang="pt-BR">
       <body className="min-h-screen bg-slate-950 text-slate-50">
-        {/* GA4 – sempre carregando (métricas completas) */}
-        {GA_ID && (
+        {/* GA4 */}
+        {GA_ID && GA_ID !== "G-XXXXXXXXXX" && (
           <>
             <Script
               id="ga4-loader"
@@ -68,16 +65,13 @@ export default function RootLayout({
           </>
         )}
 
-        {/* ADSENSE GLOBAL – exatamente como o código do print, entre <head> */}
-        {ADSENSE_CLIENT_ID && (
-          <Script
-            id="adsense-script"
-            async
-            strategy="afterInteractive"
-            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT_ID}`}
-            crossOrigin="anonymous"
-          />
-        )}
+        {/* ADSENSE GLOBAL */}
+        <Script
+          id="adsense-script"
+          strategy="afterInteractive"
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4436420746304287"
+          crossOrigin="anonymous"
+        />
 
         {/* JSON-LD Organization */}
         <Script
@@ -106,8 +100,11 @@ export default function RootLayout({
         {/* RODAPÉ GLOBAL */}
         <Footer />
 
-        {/* BANNER DE COOKIES – agora só informativo / preferências visuais */}
+        {/* BANNER DE COOKIES */}
         <CookieBanner />
+
+        {/* PUBLICIDADE FIXA NO RODAPÉ – RECOLHÍVEL */}
+        <BottomStickyAd />
       </body>
     </html>
   );
