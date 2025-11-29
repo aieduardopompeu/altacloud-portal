@@ -20,16 +20,13 @@ export function AdsBanner({ adSlot, format = "auto", className }: AdsBannerProps
     try {
       (window.adsbygoogle = window.adsbygoogle || []).push({});
     } catch {
-      // Se o AdBlock bloquear, não quebra a página
+      // Se o AdBlock bloquear ou o script não carregar, não quebra a página
     }
   }, []);
 
-  const clientId = process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID;
-
-  if (!clientId) {
-    // Se não tiver client configurado, não renderiza nada
-    return null;
-  }
+  // Usa a env SE existir, senão cai pro ID fixo do seu AdSense
+  const clientId =
+    process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID || "ca-pub-4436420746304287";
 
   return (
     <ins
