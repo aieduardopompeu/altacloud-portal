@@ -10,7 +10,8 @@ import { CookieBanner } from "./components/cookies/CookieBanner";
 import { BottomStickyAd } from "./components/ads/BottomStickyAd";
 import { siteConfig, ldOrganization, ldWebsite } from "../lib/seo";
 
-const GA_ID = siteConfig.gaMeasurementId;
+// GA4 fixo por enquanto, pra garantir que funcione
+const GA_ID: string = "G-TZKCQC7Q7Y";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
@@ -45,7 +46,7 @@ export default function RootLayout({
     <html lang="pt-BR">
       <body className="min-h-screen bg-slate-950 text-slate-50">
         {/* GA4 */}
-        {GA_ID && GA_ID !== "G-XXXXXXXXXX" && (
+        {GA_ID && (
           <>
             <Script
               id="ga4-loader"
