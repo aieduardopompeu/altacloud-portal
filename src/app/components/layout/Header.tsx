@@ -1,111 +1,205 @@
 ﻿"use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 
-const navLinks = [
+const mainLinks = [
   { href: "/", label: "Início" },
   { href: "/trilhas", label: "Trilhas" },
   { href: "/artigos", label: "Artigos" },
-  { href: "/comparativos", label: "Comparativos" },
   { href: "/noticias", label: "Notícias" },
   { href: "/glossario", label: "Glossário" },
   { href: "/sobre", label: "Sobre" },
   { href: "/contato", label: "Contato" },
 ];
 
+const tracks = [
+  { href: "/trilhas/fundamentos", label: "Fundamentos de Cloud" },
+  { href: "/trilhas/iam", label: "IAM" },
+  { href: "/trilhas/s3", label: "Amazon S3" },
+  { href: "/trilhas/ec2", label: "Amazon EC2" },
+  { href: "/trilhas/vpc", label: "VPC" },
+];
+
 export function Header() {
   const pathname = usePathname();
-  const [open, setOpen] = useState(false);
+  const [openMenu, setOpenMenu] = useState(false);
+  const [openTracks, setOpenTracks] = useState(false);
 
-  const isActive = (href: string) =>
-    href === "/"
-      ? pathname === "/"
-      : pathname === href || pathname.startsWith(`${href}/`);
+  const isActive = (href: string) => {
+    if (href === "/") return pathname === "/";
+    return pathname.startsWith(href);
+  };
 
   return (
-    <header className="sticky top-0 z-40 border-b border-slate-800 bg-slate-950/95 backdrop-blur">
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
-        {/* LOGO + MARCA */}
-        <div className="flex items-center gap-3">
-          <Link href="/" className="flex items-center gap-2">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-sky-600">
-              <span className="text-xs font-bold text-white leading-none">
-                AL
-                <br />
-                T A
-              </span>
-            </div>
-            <div className="flex flex-col leading-tight">
-              <span className="text-sm font-semibold text-slate-50">
-                Alta Cloud
-              </span>
-              <span className="text-[10px] uppercase tracking-wide text-slate-400">
-                Cloud Computing em português
-              </span>
-            </div>
+    <header className="w-full border-b border-slate-800 bg-slate-950/80 backdrop-blur">
+      <nav className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
+        {/* LOGO + CLOUD ICONS */}
+        <div className="flex items-center gap-6">
+          {/* LOGO */}
+          <Link href="/" className="flex items-center">
+            <Image
+              src="/logo-altacloud.png"
+              alt="Alta Cloud"
+              width={120}
+              height={40}
+              priority
+            />
           </Link>
+
+          {/* CLOUD PROVIDERS */}
+          <div className="flex items-center gap-3 md:gap-6">
+            <Image
+              src="/icons/aws.svg"
+              alt="AWS"
+              width={40}
+              height={20}
+              className="invert brightness-200 md:w-10 md:h-auto"
+            />
+            <Image
+              src="/icons/azure.svg"
+              alt="Azure"
+              width={40}
+              height={20}
+              className="invert brightness-200 md:w-10 md:h-auto"
+            />
+            <Image
+              src="/icons/gcp.svg"
+              alt="Google Cloud"
+              width={40}
+              height={20}
+              className="invert brightness-200 md:w-10 md:h-auto"
+            />
+            <Image
+              src="/icons/ibm.svg"
+              alt="IBM Cloud"
+              width={40}
+              height={20}
+              className="invert brightness-200 md:w-10 md:h-auto"
+            />
+          </div>
         </div>
 
-        {/* NAV DESKTOP */}
-        <nav className="hidden items-center gap-5 text-xs font-medium text-slate-300 md:flex">
-          {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className={`transition hover:text-sky-300 ${
-                isActive(link.href) ? "text-sky-400" : ""
-              }`}
-            >
-              {link.label}
-            </Link>
-          ))}
-        </nav>
+        {/* MENU DESKTOP */}
+        <div className="hidden items-center gap-6 md:flex">
+          {mainLinks.map((link) =>
+            link.href === "/trilhas" ? (
+              <div
+                key={link.href}
+                className="relative"
+                onMouseEnter={() => setOpenTracks(true)}
+                onMouseLeave={() => setOpenTracks(false)}
+              >
+                <button
+                  type="button"
+                  className={`flex items-center gap-1 text-sm transition hover:text-sky-400 ${
+                    isActive("/trilhas")
+                      ? "font-semibold text-sky-400"
+                      : "text-slate-300"
+                  }`}
+                >
+                  {link.label}
+                  <span className="text-xs">▾</span>
+                </button>
 
-        {/* BOTÃO MENU MOBILE – AGORA BEM DESTACADO */}
+                {openTracks && (
+                  <div className="absolute right-0 mt-2 w-64 rounded-xl border border-slate-800 bg-slate-900/95 p-2 shadow-xl">
+                    {tracks.map((track) => (
+                      <Link
+                        key={track.href}
+                        href={track.href}
+                        className="block rounded-lg px-3 py-2 text-sm text-slate-200 hover:bg-slate-800 hover:text-sky-300"
+                      >
+                        {track.label}
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ) : (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={`text-sm transition hover:text-sky-400 ${
+                  isActive(link.href)
+                    ? "font-semibold text-sky-400"
+                    : "text-slate-300"
+                }`}
+              >
+                {link.label}
+              </Link>
+            )
+          )}
+        </div>
+
+        {/* BOTÃO MOBILE – AGORA BEM VISÍVEL */}
         <button
           type="button"
-          onClick={() => setOpen((prev) => !prev)}
-          aria-label="Abrir menu de navegação"
-          className="flex items-center gap-2 rounded-full bg-sky-600 px-4 py-2 text-xs font-semibold text-white shadow-md hover:bg-sky-500 md:hidden"
+          className="inline-flex items-center gap-2 rounded-full bg-sky-600 px-4 py-2 text-xs font-semibold text-white shadow-md hover:bg-sky-500 md:hidden"
+          onClick={() => setOpenMenu((v) => !v)}
         >
           <span>Menu</span>
-          <span className="flex flex-col gap-0.5">
+          <span className="flex flex-col gap-[3px]">
             <span className="block h-[2px] w-4 rounded-full bg-white" />
             <span className="block h-[2px] w-4 rounded-full bg-white" />
             <span className="block h-[2px] w-4 rounded-full bg-white" />
           </span>
         </button>
-      </div>
+      </nav>
 
-      {/* NAV MOBILE DROPDOWN */}
-      {open && (
+      {/* MENU MOBILE */}
+      {openMenu && (
         <div className="border-t border-slate-800 bg-slate-950 md:hidden">
-          <nav className="mx-auto max-w-6xl px-4 py-3 text-sm text-slate-100 sm:px-6 lg:px-8">
-            <ul className="space-y-1">
-              {navLinks.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    onClick={() => setOpen(false)}
-                    className={`flex items-center justify-between rounded-md px-3 py-2 text-[13px] transition hover:bg-slate-900 ${
-                      isActive(link.href)
-                        ? "bg-slate-900 text-sky-300"
-                        : "text-slate-200"
+          <div className="space-y-1 px-4 py-3">
+            {mainLinks.map((link) =>
+              link.href === "/trilhas" ? (
+                <div key={link.href} className="space-y-1">
+                  <button
+                    type="button"
+                    className={`flex w-full items-center justify-between rounded-lg px-3 py-2 text-sm ${
+                      isActive("/trilhas")
+                        ? "bg-slate-800 text-sky-300"
+                        : "text-slate-200 hover:bg-slate-900"
                     }`}
+                    onClick={() => setOpenTracks((v) => !v)}
                   >
                     <span>{link.label}</span>
-                    {isActive(link.href) && (
-                      <span className="text-[10px] uppercase text-sky-400">
-                        ativo
-                      </span>
-                    )}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
+                    <span className="text-xs">{openTracks ? "▴" : "▾"}</span>
+                  </button>
+
+                  {openTracks && (
+                    <div className="space-y-1 pl-4">
+                      {tracks.map((track) => (
+                        <Link
+                          key={track.href}
+                          href={track.href}
+                          className="block rounded-lg px-3 py-2 text-sm text-slate-200 hover:bg-slate-900 hover:text-sky-300"
+                          onClick={() => setOpenMenu(false)}
+                        >
+                          {track.label}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={`block rounded-lg px-3 py-2 text-sm ${
+                    isActive(link.href)
+                      ? "bg-slate-800 text-sky-300"
+                      : "text-slate-200 hover:bg-slate-900"
+                  }`}
+                  onClick={() => setOpenMenu(false)}
+                >
+                  {link.label}
+                </Link>
+              )
+            )}
+          </div>
         </div>
       )}
     </header>

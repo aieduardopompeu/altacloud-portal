@@ -31,7 +31,7 @@ export function BottomStickyAd() {
           {!isCollapsed && (
             <div className="px-3 pb-3">
               <AdsBanner
-                adSlot="7666231438" // slot que você está usando no rodapé
+                adSlot="7666231438"
                 className="w-full"
                 format="auto"
               />
