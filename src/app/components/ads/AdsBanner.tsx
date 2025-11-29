@@ -1,44 +1,43 @@
+// src/app/components/ads/AdsBanner.tsx
 "use client";
 
 import { useEffect } from "react";
 
-declare global {
-  interface Window {
-    adsbygoogle: any[];
-  }
-}
-
 type AdsBannerProps = {
   adSlot: string;
+  format?: string;
   className?: string;
 };
 
-export function AdsBanner({ adSlot, className = "" }: AdsBannerProps) {
+declare global {
+  interface Window {
+    adsbygoogle?: unknown[];
+  }
+}
+
+export function AdsBanner({ adSlot, format = "auto", className }: AdsBannerProps) {
   useEffect(() => {
     try {
-      if (typeof window === "undefined") return;
-      window.adsbygoogle = window.adsbygoogle || [];
-      window.adsbygoogle.push({});
-    } catch (err) {
-      // Se o AdBlock bloquear, não quebra o site
-      console.warn("Adsense error:", err);
+      (window.adsbygoogle = window.adsbygoogle || []).push({});
+    } catch {
+      // Se o AdBlock bloquear, não quebra a página
     }
   }, []);
 
-  return (
-    <div className={`w-full ${className}`}>
-      <span className="mb-1 block text-[10px] uppercase tracking-[0.2em] text-slate-500">
-        Publicidade
-      </span>
+  const clientId = process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID;
 
-      <ins
-        className="adsbygoogle"
-        style={{ display: "block" }}
-        data-ad-client="ca-pub-4436420746304287"
-        data-ad-slot={adSlot}
-        data-ad-format="auto"
-        data-full-width-responsive="true"
-      />
-    </div>
+  if (!clientId) {
+    // Se não tiver client configurado, não renderiza nada
+    return null;
+  }
+
+  return (
+    <ins
+      className={`adsbygoogle ${className ?? ""}`}
+      style={{ display: "block" }}
+      data-ad-client={clientId}
+      data-ad-slot={adSlot}
+      data-ad-format={format}
+    />
   );
 }

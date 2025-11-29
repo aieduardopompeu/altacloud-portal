@@ -1,8 +1,10 @@
 // src/app/comparativos/devops-vs-sre/page.tsx
 import type { Metadata } from "next";
+import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "DevOps vs SRE – Diferenças completas, papéis e quando escolher | Alta Cloud",
+  title:
+    "DevOps vs SRE – Diferenças completas, papéis e quando escolher | Alta Cloud",
   description:
     "Guia definitivo comparando DevOps e SRE. Entenda diferenças, papéis, ferramentas, salários, responsabilidades e qual caminho seguir na carreira em Cloud Computing.",
   openGraph: {
@@ -24,12 +26,16 @@ export default function DevOpsVsSREPage() {
   return (
     <main className="min-h-screen bg-slate-950 text-slate-100">
       <div className="mx-auto max-w-4xl px-4 py-12 sm:px-6 lg:px-8">
-
         {/* BREADCRUMB */}
         <nav className="mb-8 text-xs text-slate-400">
-          <a href="/" className="hover:text-sky-400">Início</a> /
-          <a href="/comparativos" className="ml-1 hover:text-sky-400">Comparativos</a> /
-          <span className="ml-1 text-sky-300">DevOps vs SRE</span>
+          <Link href="/" className="hover:text-sky-400">
+            Início
+          </Link>{" "}
+          /
+          <Link href="/comparativos" className="ml-1 hover:text-sky-400">
+            Comparativos
+          </Link>{" "}
+          /<span className="ml-1 text-sky-300">DevOps vs SRE</span>
         </nav>
 
         {/* HEADER */}
@@ -41,10 +47,11 @@ export default function DevOpsVsSREPage() {
             DevOps vs SRE: Guia Definitivo (2025)
           </h1>
           <p className="mt-4 text-sm text-slate-300 leading-relaxed">
-            DevOps e SRE são duas das carreiras mais importantes e bem pagas da área de tecnologia.
-            Embora pareçam semelhantes, possuem objetivos diferentes: DevOps aumenta a velocidade
-            de entrega, enquanto SRE aumenta a confiabilidade. Este guia explica tudo de forma
-            simples, profunda e prática — no estilo Alta Cloud.
+            DevOps e SRE são duas das carreiras mais importantes e bem pagas da
+            área de tecnologia. Embora pareçam semelhantes, possuem objetivos
+            diferentes: DevOps aumenta a velocidade de entrega, enquanto SRE
+            aumenta a confiabilidade. Este guia explica tudo de forma simples,
+            profunda e prática — no estilo Alta Cloud.
           </p>
         </header>
 
@@ -52,13 +59,15 @@ export default function DevOpsVsSREPage() {
         <section className="mb-12 space-y-6 text-sm leading-relaxed text-slate-300">
           <h2 className="text-xl font-semibold text-sky-300">1. Introdução</h2>
           <p>
-            DevOps e SRE trabalham com automação, pipelines, nuvem e sistemas distribuídos.
-            Porém, <strong className="text-sky-300">DevOps é sobre velocidade</strong> e
+            DevOps e SRE trabalham com automação, pipelines, nuvem e sistemas
+            distribuídos. Porém,{" "}
+            <strong className="text-sky-300">DevOps é sobre velocidade</strong> e
             <strong className="text-sky-300"> SRE é sobre confiabilidade</strong>.
           </p>
           <p>
-            Se você quer entender qual caminho seguir — ou como essas áreas se complementam —
-            esta é a melhor explicação que você vai encontrar em português.
+            Se você quer entender qual caminho seguir — ou como essas áreas se
+            complementam — esta é a melhor explicação que você vai encontrar em
+            português.
           </p>
         </section>
 
@@ -67,8 +76,8 @@ export default function DevOpsVsSREPage() {
           <h2 className="text-xl font-semibold text-sky-300">2. O que é DevOps?</h2>
 
           <p className="mt-4">
-            DevOps é uma filosofia + conjunto de práticas que aproxima os times de desenvolvimento
-            (Dev) e operações (Ops), com foco em:
+            DevOps é uma filosofia + conjunto de práticas que aproxima os times
+            de desenvolvimento (Dev) e operações (Ops), com foco em:
           </p>
 
           <ul className="mt-4 list-disc space-y-1 pl-6 text-slate-400">
@@ -81,10 +90,13 @@ export default function DevOpsVsSREPage() {
           </ul>
 
           <p className="mt-4">
-            DevOps é sobre <strong className="text-sky-300">acelerar entregas</strong>,
-            reduzir retrabalho e manter o fluxo:
+            DevOps é sobre{" "}
+            <strong className="text-sky-300">acelerar entregas</strong>, reduzir
+            retrabalho e manter o fluxo:
           </p>
-          <p className="font-mono text-slate-400 mt-1">código → build → teste → deploy → usuário</p>
+          <p className="mt-1 font-mono text-slate-400">
+            código → build → teste → deploy → usuário
+          </p>
         </section>
 
         {/* SRE */}
@@ -92,8 +104,8 @@ export default function DevOpsVsSREPage() {
           <h2 className="text-xl font-semibold text-sky-300">3. O que é SRE?</h2>
 
           <p className="mt-4">
-            SRE (Site Reliability Engineering) nasceu no Google e foi criado para garantir que
-            sistemas gigantescos permaneçam:
+            SRE (Site Reliability Engineering) nasceu no Google e foi criado para
+            garantir que sistemas gigantescos permaneçam:
           </p>
 
           <ul className="mt-4 list-disc space-y-1 pl-6 text-slate-400">
@@ -105,8 +117,9 @@ export default function DevOpsVsSREPage() {
           </ul>
 
           <p className="mt-4">
-            SRE combina engenharia de software com operações avançadas. É uma área mais profunda,
-            com foco em métricas, observabilidade e performance.
+            SRE combina engenharia de software com operações avançadas. É uma
+            área mais profunda, com foco em métricas, observabilidade e
+            performance.
           </p>
         </section>
 
@@ -128,10 +141,18 @@ export default function DevOpsVsSREPage() {
               <tbody className="text-slate-400">
                 {[
                   ["Origem", "Movimento cultural", "Criado pelo Google"],
-                  ["Objetivo", "Velocidade de entrega", "Confiabilidade e estabilidade"],
+                  [
+                    "Objetivo",
+                    "Velocidade de entrega",
+                    "Confiabilidade e estabilidade",
+                  ],
                   ["Foco", "CI/CD e automação", "Reliability, SLIs e SLOs"],
                   ["Entrega principal", "Pipelines prontos", "Sistemas que não quebram"],
-                  ["Ferramentas", "Docker, Terraform, GitHub Actions", "Prometheus, Grafana, SRE Workbook"],
+                  [
+                    "Ferramentas",
+                    "Docker, Terraform, GitHub Actions",
+                    "Prometheus, Grafana, SRE Workbook",
+                  ],
                   ["Perfil", "Automação e cloud", "Engenharia e análise profunda"],
                   ["Salários BR", "R$ 7k–16k", "R$ 12k–28k"],
                 ].map(([a, b, c], i) => (
@@ -159,42 +180,47 @@ export default function DevOpsVsSREPage() {
 
           <h3 className="mt-6 text-slate-200 font-medium">5.2 SRE → confiabilidade</h3>
           <p className="mt-2">
-            SRE existe para evitar quedas, reduzir incidentes e garantir resiliência.
+            SRE existe para evitar quedas, reduzir incidentes e garantir
+            resiliência.
           </p>
 
           <h3 className="mt-6 text-slate-200 font-medium">5.3 Como se complementam</h3>
           <p className="mt-2">
-            DevOps constrói a esteira (pipelines).  
-            SRE garante que ela não exploda em produção.
+            DevOps constrói a esteira (pipelines). SRE garante que ela não
+            exploda em produção.
           </p>
         </section>
 
         {/* CASES */}
         <section className="mb-14 text-sm text-slate-300 leading-relaxed">
-          <h2 className="text-xl font-semibold text-sky-300">6. DevOps vs SRE na prática</h2>
+          <h2 className="text-xl font-semibold text-sky-300">
+            6. DevOps vs SRE na prática
+          </h2>
 
           <div className="mt-6 space-y-6">
             <div>
               <h3 className="font-medium text-slate-200">Caso 1: Deploy frequente</h3>
               <p className="text-slate-400 mt-1">
-                DevOps acelera o deploy.  
-                SRE monitora e garante estabilidade pós-deploy.
+                DevOps acelera o deploy. SRE monitora e garante estabilidade
+                pós-deploy.
               </p>
             </div>
 
             <div>
-              <h3 className="font-medium text-slate-200">Caso 2: Sistema caiu no pico</h3>
+              <h3 className="font-medium text-slate-200">
+                Caso 2: Sistema caiu no pico
+              </h3>
               <p className="text-slate-400 mt-1">
-                DevOps faz rollback.  
-                SRE descobre causa-raiz e evita repetição.
+                DevOps faz rollback. SRE descobre causa-raiz e evita repetição.
               </p>
             </div>
 
             <div>
-              <h3 className="font-medium text-slate-200">Caso 3: Escalabilidade real</h3>
+              <h3 className="font-medium text-slate-200">
+                Caso 3: Escalabilidade real
+              </h3>
               <p className="text-slate-400 mt-1">
-                DevOps cria IaC (Terraform).  
-                SRE define SLIs e ajusta capacidade.
+                DevOps cria IaC (Terraform). SRE define SLIs e ajusta capacidade.
               </p>
             </div>
           </div>
@@ -235,7 +261,9 @@ export default function DevOpsVsSREPage() {
 
           <div className="mt-6 space-y-6">
             <div>
-              <h3 className="font-medium text-slate-200">Você deve seguir DevOps se:</h3>
+              <h3 className="font-medium text-slate-200">
+                Você deve seguir DevOps se:
+              </h3>
               <ul className="mt-2 list-disc space-y-1 pl-5 text-slate-400">
                 <li>Gosta de automação</li>
                 <li>Curte pipelines</li>
@@ -245,7 +273,9 @@ export default function DevOpsVsSREPage() {
             </div>
 
             <div>
-              <h3 className="font-medium text-slate-200">Você deve seguir SRE se:</h3>
+              <h3 className="font-medium text-slate-200">
+                Você deve seguir SRE se:
+              </h3>
               <ul className="mt-2 list-disc space-y-1 pl-5 text-slate-400">
                 <li>Gosta de engenharia profunda</li>
                 <li>Curte logs, métricas e sistemas distribuídos</li>
@@ -261,12 +291,12 @@ export default function DevOpsVsSREPage() {
           <p className="text-sm text-slate-300">
             Quer uma trilha completa de DevOps e SRE aqui no portal?
           </p>
-          <a
+          <Link
             href="/contato"
             className="mt-3 inline-block rounded-md bg-sky-600 px-5 py-2 text-sm font-medium text-white hover:bg-sky-500"
           >
             Solicitar trilha →
-          </a>
+          </Link>
         </div>
       </div>
     </main>

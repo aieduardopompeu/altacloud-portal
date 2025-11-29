@@ -1,40 +1,61 @@
+// src/app/components/cookies/CookieBanner.tsx
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
+
+type ConsentLevel = "essential" | "all" | "none";
+
+const STORAGE_KEY = "altacloud.cookieConsent";
+
+type StoredConsent = {
+  level: ConsentLevel;
+};
+
+function getInitialConsent(): { isOpen: boolean; level: ConsentLevel } {
+  if (typeof window === "undefined") {
+    return { isOpen: false, level: "essential" };
+  }
+
+  try {
+    const saved = window.localStorage.getItem(STORAGE_KEY);
+    if (!saved) {
+      // primeira visita → abre banner, nível essencial
+      return { isOpen: true, level: "essential" };
+    }
+
+    const parsed = JSON.parse(saved) as StoredConsent;
+    if (
+      parsed.level === "essential" ||
+      parsed.level === "all" ||
+      parsed.level === "none"
+    ) {
+      return { isOpen: false, level: parsed.level };
+    }
+
+    return { isOpen: false, level: "essential" };
+  } catch {
+    return { isOpen: false, level: "essential" };
+  }
+}
 
 export function CookieBanner() {
-  const STORAGE_KEY = "altacloud.cookieConsent";
+  const initial = getInitialConsent();
+  const [isOpen, setIsOpen] = useState<boolean>(initial.isOpen);
+  const [level, setLevel] = useState<ConsentLevel>(initial.level);
 
-  const [isOpen, setIsOpen] = useState(false);
-  const [level, setLevel] = useState<"essential" | "all" | "none">("essential");
+  const savePreferences = (selected: ConsentLevel) => {
+    if (typeof window !== "undefined") {
+      const value: StoredConsent = { level: selected };
+      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(value));
 
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-
-    const saved = localStorage.getItem(STORAGE_KEY);
-
-    if (!saved) {
-      setIsOpen(true);
-      return;
+      const event = new CustomEvent("altacloud:cookie-consent-change", {
+        detail: { level: selected },
+      });
+      window.dispatchEvent(event);
     }
 
-    const parsed = JSON.parse(saved) as { level?: "essential" | "all" | "none" };
-    if (parsed?.level) {
-      setLevel(parsed.level);
-    }
-  }, []);
-
-  const savePreferences = (selected: "essential" | "all" | "none") => {
-    const value = JSON.stringify({ level: selected });
-    localStorage.setItem(STORAGE_KEY, value);
     setLevel(selected);
     setIsOpen(false);
-
-    // Dispara evento global se quiser usar no futuro
-    const event = new CustomEvent("altacloud:cookie-consent-change", {
-      detail: { level: selected },
-    });
-    window.dispatchEvent(event);
   };
 
   if (!isOpen) {

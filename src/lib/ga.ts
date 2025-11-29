@@ -1,16 +1,39 @@
 // src/lib/ga.ts
+const GA_ID = process.env.NEXT_PUBLIC_GA_ID || "";
 
-export const GA_ID = "G-TZKCQC7Q7Y"; // coloque seu ID real do GA4 aqui
+declare global {
+  interface Window {
+    gtag?: (...args: unknown[]) => void;
+    dataLayer?: unknown[];
+  }
+}
 
-export const gaEvent = (
-  action: string,
-  params: Record<string, any> = {}
-) => {
-  // Garantia de que só roda no browser
+export const pageview = (url: string): void => {
   if (typeof window === "undefined") return;
+  if (!GA_ID || !window.gtag) return;
 
-  const gtag = (window as any).gtag as undefined | ((...args: any[]) => void);
-  if (!gtag) return;
+  window.gtag("config", GA_ID, {
+    page_path: url,
+  } as Record<string, unknown>);
+};
 
-  gtag("event", action, params);
+export type GAEvent = {
+  action: string;
+  category: string;
+  label?: string;
+  value?: number;
+};
+
+export const gaEvent = ({ action, category, label, value }: GAEvent): void => {
+  if (typeof window === "undefined") return;
+  if (!window.gtag) return;
+
+  const params: Record<string, unknown> = {
+    event_category: category,
+  };
+
+  if (label) params.event_label = label;
+  if (typeof value === "number") params.value = value;
+
+  window.gtag("event", action, params);
 };
