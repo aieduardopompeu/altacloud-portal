@@ -50,35 +50,35 @@ export function Header() {
           </Link>
 
           {/* CLOUD PROVIDERS */}
-          <div className="flex items-center gap-3 md:gap-6">
-            <Image
-              src="/icons/aws.svg"
-              alt="AWS"
-              width={40}
-              height={20}
-              className="invert brightness-200 md:w-10 md:h-auto"
-            />
-            <Image
-              src="/icons/azure.svg"
-              alt="Azure"
-              width={40}
-              height={20}
-              className="invert brightness-200 md:w-10 md:h-auto"
-            />
-            <Image
-              src="/icons/gcp.svg"
-              alt="Google Cloud"
-              width={40}
-              height={20}
-              className="invert brightness-200 md:w-10 md:h-auto"
-            />
-            <Image
-              src="/icons/ibm.svg"
-              alt="IBM Cloud"
-              width={40}
-              height={20}
-              className="invert brightness-200 md:w-10 md:h-auto"
-            />
+          <div className="hidden md:flex items-center gap-4">
+          <Image
+            src="/icons/aws.svg"
+            alt="AWS"
+            width={28}
+            height={14}
+            className="invert brightness-200"
+          />
+          <Image
+            src="/icons/azure.svg"
+            alt="Azure"
+            width={28}
+            height={14}
+            className="invert brightness-200"
+          />
+          <Image
+            src="/icons/gcp.svg"
+            alt="Google Cloud"
+            width={28}
+            height={14}
+            className="invert brightness-200"
+          />
+          <Image
+            src="/icons/ibm.svg"
+            alt="IBM Cloud"
+            width={28}
+            height={14}
+            className="invert brightness-200"
+          />
           </div>
         </div>
 
