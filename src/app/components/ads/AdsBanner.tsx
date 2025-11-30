@@ -1,13 +1,7 @@
 // src/app/components/ads/AdsBanner.tsx
 "use client";
 
-import { useEffect } from "react";
-
-type AdsBannerProps = {
-  adSlot: string;
-  format?: string;
-  className?: string;
-};
+import { useEffect, useRef } from "react";
 
 declare global {
   interface Window {
@@ -15,26 +9,45 @@ declare global {
   }
 }
 
-export function AdsBanner({ adSlot, format = "auto", className }: AdsBannerProps) {
+type AdsBannerProps = {
+  /** ID do slot do AdSense (data-ad-slot) */
+  slot: string;
+  /** Classe opcional para estilizar/posicionar o wrapper */
+  className?: string;
+};
+
+export function AdsBanner({ slot, className }: AdsBannerProps) {
+  const adRef = useRef<HTMLDivElement | null>(null);
+
   useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (!adRef.current) return;
+
     try {
+      const el = adRef.current as any;
+
+      // evita push duplicado no mesmo bloco
+      if (el.getAttribute("data-adsbygoogle-status") === "done") {
+        return;
+      }
+
       (window.adsbygoogle = window.adsbygoogle || []).push({});
-    } catch {
-      // Se o AdBlock bloquear ou o script não carregar, não quebra a página
+    } catch (error) {
+      console.error("Erro ao inicializar AdSense:", error);
     }
   }, []);
 
-  // Usa a env SE existir, senão cai pro ID fixo do seu AdSense
-  const clientId =
-    process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID || "ca-pub-4436420746304287";
-
   return (
-    <ins
-      className={`adsbygoogle ${className ?? ""}`}
-      style={{ display: "block" }}
-      data-ad-client={clientId}
-      data-ad-slot={adSlot}
-      data-ad-format={format}
-    />
+    <div className={className ?? "my-8 flex justify-center"}>
+      <ins
+        ref={adRef as any}
+        className="adsbygoogle"
+        style={{ display: "block" }}
+        data-ad-client="ca-pub-4436420746304287"
+        data-ad-slot={slot}
+        data-ad-format="auto"
+        data-full-width-responsive="true"
+      />
+    </div>
   );
 }
