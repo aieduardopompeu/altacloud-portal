@@ -10,16 +10,11 @@ declare global {
 }
 
 type AdsBannerProps = {
-  /**
-   * ID do slot do AdSense.
-   * Pode usar tanto `slot="..."` quanto `adSlot="..."` para compatibilidade
-   * com código antigo.
-   */
+  /** ID do slot do AdSense */
   slot?: string;
-  adSlot?: string;
-  /** Classe opcional para estilizar/posicionar o wrapper */
+  adSlot?: string; // compatibilidade com código antigo
   className?: string;
-  /** data-ad-format (ex: "auto", "horizontal", "vertical", etc.) */
+  /** data-ad-format: "auto", "autorelaxed", etc. */
   format?: string;
 };
 
@@ -36,7 +31,7 @@ export function AdsBanner({ slot, adSlot, className, format }: AdsBannerProps) {
     try {
       const el = adRef.current as any;
 
-      // evita push duplicado no mesmo bloco
+      // evita push duplicado
       if (el.getAttribute("data-adsbygoogle-status") === "done") {
         return;
       }
@@ -47,10 +42,7 @@ export function AdsBanner({ slot, adSlot, className, format }: AdsBannerProps) {
     }
   }, [effectiveSlot]);
 
-  if (!effectiveSlot) {
-    // se esquecer de passar o slot, não quebra o layout
-    return null;
-  }
+  if (!effectiveSlot) return null;
 
   return (
     <div className={className ?? "my-8 flex justify-center"}>
