@@ -1,12 +1,11 @@
 // src/app/profissionais/inscricao/page.tsx
-
 import Link from "next/link";
 import { AdsBanner } from "../../components/ads/AdsBanner";
 
 export default function ProfessionalsApplicationPage() {
   return (
     <main className="min-h-screen bg-slate-950">
-      <div className="mx-auto flex w-full max-w-2xl flex-col gap-8 px-4 pt-24 pb-16 lg:px-0">
+      <div className="mx-auto w-full max-w-2xl px-4 pt-24 pb-16 md:px-6 lg:px-0">
         <header className="space-y-3">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-400">
             Alta Cloud · Diretório
@@ -29,7 +28,7 @@ export default function ProfessionalsApplicationPage() {
         </header>
 
         {/* STATUS DO MVP */}
-        <section className="space-y-3 rounded-2xl border border-amber-500/40 bg-amber-950/40 p-4">
+        <section className="mt-5 space-y-3 rounded-2xl border border-amber-500/40 bg-amber-950/40 p-4">
           <h2 className="text-sm font-semibold text-amber-200">
             MVP em andamento 🚧
           </h2>
@@ -41,14 +40,15 @@ export default function ProfessionalsApplicationPage() {
           </p>
         </section>
 
-        {/* PUBLICIDADE – ENTRE AVISO E FORMULÁRIO (in-article) */}
+        {/* PUBLICIDADE – ENTRE AVISO E FORMULÁRIO (IN-ARTICLE) */}
         <AdsBanner
           adSlot="7666231438"
-          className="flex justify-center"
+          type="in-article"
+          className="mt-4 flex justify-center"
         />
 
         {/* FORMULÁRIO BASE (SEM BACKEND AINDA) */}
-        <section className="space-y-4 rounded-2xl border border-slate-800 bg-slate-950/90 p-6 shadow-lg shadow-slate-900/40">
+        <section className="mt-4 space-y-4 rounded-2xl border border-slate-800 bg-slate-950/90 p-6 shadow-lg shadow-slate-900/40">
           <h2 className="text-base font-semibold text-slate-50">
             Dados do profissional
           </h2>
@@ -286,13 +286,14 @@ export default function ProfessionalsApplicationPage() {
           </form>
         </section>
 
-        {/* PUBLICIDADE – RODAPÉ DISCRETO (multiplex) */}
+        {/* PUBLICIDADE – RODAPÉ (MULTIPLEX) */}
         <AdsBanner
           adSlot="9227543350"
+          type="multiplex"
           className="mt-6 flex justify-center"
         />
 
-        <div className="text-xs text-slate-500">
+        <div className="mt-4 text-xs text-slate-500">
           <Link
             href="/profissionais"
             className="text-cyan-300 hover:text-cyan-200"

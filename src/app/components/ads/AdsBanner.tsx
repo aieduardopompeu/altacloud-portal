@@ -2,74 +2,62 @@
 "use client";
 
 import { useEffect } from "react";
-
-type AdsBannerProps = {
-  /**
-   * Novo nome da prop (recomendado)
-   * Ex.: "6664851396"
-   */
-  slot?: string;
-
-  /**
-   * Nome antigo da prop (legado).
-   * Mantido só para compatibilidade com chamadas existentes,
-   * ex.: <AdsBanner adSlot="..." />
-   */
-  adSlot?: string;
-
-  /** Ex.: "auto", "horizontal", etc. */
-  format?: string;
-
-  /** Classes extras para o wrapper */
-  className?: string;
-};
+import { usePathname } from "next/navigation";
 
 declare global {
   interface Window {
-    // adsbygoogle é basicamente um array que recebe objetos.
-    // Usar unknown[] evita encrenca de tipo no .push({}).
-    adsbygoogle: unknown[];
+    adsbygoogle?: any[];
   }
 }
 
+type AdKind = "display" | "in-article" | "multiplex";
+
+type AdsBannerProps = {
+  adSlot: string;
+  type?: AdKind; // display, in-article ou multiplex
+  className?: string;
+};
+
 export function AdsBanner({
-  slot,
   adSlot,
-  format = "auto",
-  className = "",
+  type = "display",
+  className,
 }: AdsBannerProps) {
-  // Aceita tanto slot quanto adSlot; dá prioridade ao novo nome.
-  const finalSlot = slot ?? adSlot;
+  const pathname = usePathname();
 
   useEffect(() => {
-    if (!finalSlot) return;
+    if (typeof window === "undefined") return;
 
     try {
-      // Garante o array e empurra um novo "pedido" de anúncio
-      (window.adsbygoogle = window.adsbygoogle || []).push({});
-    } catch (err) {
-      if (process.env.NODE_ENV === "development") {
-        console.error("Erro ao inicializar adsbygoogle:", err);
-      }
+      window.adsbygoogle = window.adsbygoogle || [];
+      window.adsbygoogle.push({});
+    } catch (error) {
+      console.error("Erro ao carregar AdSense", error);
     }
-  }, [finalSlot]);
+  }, [adSlot, pathname]);
 
-  // Se não tiver slot nenhum, não renderiza nada
-  if (!finalSlot) {
-    if (process.env.NODE_ENV === "development") {
-      console.warn("AdsBanner renderizado sem 'slot' ou 'adSlot'.");
-    }
-    return null;
+  let adFormat = "auto";
+  let adLayout: string | undefined;
+
+  // Ajuste fino por tipo de bloco
+  if (type === "in-article") {
+    // Código típico de in-article
+    adFormat = "fluid";
+    adLayout = "in-article";
+  } else if (type === "multiplex") {
+    // Código típico de multiplex
+    adFormat = "autorelaxed";
   }
 
   return (
     <div className={className}>
       <ins
-        className="adsbygoogle block"
+        className="adsbygoogle"
         style={{ display: "block" }}
         data-ad-client={process.env.NEXT_PUBLIC_GOOGLE_ADSENSE_CLIENT}
-        data-ad-slot={finalSlot}
-        data-ad-format={format}
+        data-ad-slot={adSlot}
+        data-ad-format={adFormat}
+        {...(adLayout ? { "data-ad-layout": adLayout } : {})}
       />
     </div>
   );
