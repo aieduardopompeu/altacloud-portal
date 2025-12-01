@@ -1,5 +1,4 @@
 ﻿// src/app/layout.tsx
-
 import "./globals.css";
 import type { Metadata } from "next";
 import Script from "next/script";
@@ -46,9 +45,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="pt-BR">
       <head>
-        {/* =============================================================
-            JSON-LD (SEO Estruturado)
-        ============================================================= */}
+        {/* JSON-LD */}
         <Script
           id="ld-organization"
           type="application/ld+json"
@@ -67,9 +64,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           }}
         />
 
-        {/* =============================================================
-            GOOGLE ANALYTICS 4 (gtag.js + configuração)
-        ============================================================= */}
+        {/* GA4 */}
         <Script
           id="ga-script"
           src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
@@ -92,9 +87,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           }}
         />
 
-        {/* =============================================================
-            GA4 DEBUG MODE — funciona com localhost OU ?_dbg=1
-        ============================================================= */}
+        {/* GA4 DEBUG */}
         <Script
           id="ga-debug"
           strategy="afterInteractive"
@@ -120,9 +113,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           }}
         />
 
-        {/* =============================================================
-            GOOGLE ADSENSE (script global)
-        ============================================================= */}
+        {/* ADSENSE GLOBAL */}
         <Script
           id="adsense-script"
           async
@@ -132,18 +123,11 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         />
       </head>
 
-      {/* =============================================================
-          BODY
-      ============================================================= */}
       <body className="bg-slate-950 text-slate-50 antialiased">
         <CookieBanner />
-
         <div className="flex min-h-screen flex-col">
           <Header />
-
-          {/* Todas as páginas aparecem aqui */}
           <main className="flex-1">{children}</main>
-
           <Footer />
         </div>
       </body>

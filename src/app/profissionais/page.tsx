@@ -6,9 +6,9 @@ import { ReactNode } from "react";
 import { AdsBanner } from "../components/ads/AdsBanner";
 
 export const metadata: Metadata = {
-  title: "Profissionais Certificados",
+  title: "Profissionais Certificados em Cloud | Alta Cloud",
   description:
-    "Encontre profissionais certificados em AWS, Azure, Google Cloud e Oracle. Diretório gratuito mantido pelo Alta Cloud.",
+    "Encontre profissionais certificados em AWS, Azure, Google Cloud e Oracle. Diretório gratuito de especialistas em computação em nuvem, mantido pelo Alta Cloud.",
 };
 
 type CloudId = "aws" | "azure" | "gcp" | "oracle";
@@ -176,26 +176,26 @@ const clouds: {
   {
     id: "aws",
     label: "AWS",
-    badgeClass: "bg-yellow-400/10 text-yellow-400 ring-yellow-400/40",
-    titleClass: "text-yellow-500",
+    badgeClass: "bg-yellow-400/10 text-yellow-300 ring-yellow-400/40",
+    titleClass: "text-yellow-300",
   },
   {
     id: "azure",
     label: "Microsoft Azure",
     badgeClass: "bg-blue-500/10 text-blue-300 ring-blue-500/40",
-    titleClass: "text-blue-400",
+    titleClass: "text-blue-300",
   },
   {
     id: "gcp",
     label: "Google Cloud",
     badgeClass: "bg-red-500/10 text-red-300 ring-red-500/40",
-    titleClass: "text-red-400",
+    titleClass: "text-red-300",
   },
   {
     id: "oracle",
     label: "Oracle Cloud",
     badgeClass: "bg-red-700/10 text-red-300 ring-red-700/40",
-    titleClass: "text-red-500",
+    titleClass: "text-red-300",
   },
 ];
 
@@ -265,6 +265,7 @@ function ProfessionalCard({ professional }: { professional: Professional }) {
           <Link
             href={professional.linkedinUrl}
             target="_blank"
+            rel="noopener noreferrer"
             className="inline-flex items-center gap-1 text-cyan-300 hover:text-cyan-200"
           >
             <span>LinkedIn</span>
@@ -274,6 +275,7 @@ function ProfessionalCard({ professional }: { professional: Professional }) {
           <Link
             href={professional.githubUrl}
             target="_blank"
+            rel="noopener noreferrer"
             className="inline-flex items-center gap-1 text-cyan-300 hover:text-cyan-200"
           >
             <span>GitHub</span>
@@ -283,6 +285,7 @@ function ProfessionalCard({ professional }: { professional: Professional }) {
           <Link
             href={professional.websiteUrl}
             target="_blank"
+            rel="noopener noreferrer"
             className="inline-flex items-center gap-1 text-cyan-300 hover:text-cyan-200"
           >
             <span>Portfólio</span>
@@ -299,99 +302,122 @@ function ProfessionalCard({ professional }: { professional: Professional }) {
 
 export default function ProfessionalsPage() {
   return (
-    <div className="mx-auto flex w-full max-w-6xl flex-col gap-10 px-4 pt-24 pb-16 lg:px-0">
-      <header className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
-        <div className="space-y-4">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-400">
-            Alta Cloud · Diretório
-          </p>
-          <h1 className="text-3xl font-bold text-slate-900 sm:text-4xl">
-            Profissionais Certificados
-          </h1>
-          <p className="max-w-2xl text-sm text-slate-600 sm:text-base">
-            Aqui você encontra profissionais certificados em{" "}
-            <span className="font-semibold text-cyan-600">
-              AWS, Azure, Google Cloud e Oracle
-            </span>
-            . Esta primeira versão do diretório é{" "}
-            <span className="font-semibold text-emerald-600">
-              totalmente gratuita
-            </span>{" "}
-            tanto para profissionais quanto para empresas. Em breve, novas
-            funcionalidades de destaque, filtros avançados e indicações premium.
-          </p>
-          <p className="text-xs text-slate-500">
-            Obs.: Esta é uma versão inicial (MVP). As informações são fornecidas
-            pelos próprios profissionais e podem ser atualizadas ao longo do
-            tempo.
-          </p>
-        </div>
+    <main className="min-h-screen bg-slate-950">
+      <div className="mx-auto flex w-full max-w-6xl flex-col gap-10 px-4 pt-24 pb-16 lg:px-0">
+        <header className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
+          <div className="space-y-4">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-400">
+              Alta Cloud · Diretório
+            </p>
+            <h1 className="text-3xl font-bold text-slate-50 sm:text-4xl">
+              Profissionais Certificados em Cloud
+            </h1>
+            <p className="max-w-2xl text-sm text-slate-300 sm:text-base">
+              Aqui você encontra profissionais certificados em{" "}
+              <span className="font-semibold text-cyan-300">
+                AWS, Azure, Google Cloud e Oracle
+              </span>
+              . Esta primeira versão do diretório é{" "}
+              <span className="font-semibold text-emerald-300">
+                totalmente gratuita
+              </span>{" "}
+              tanto para profissionais quanto para empresas. Em breve, novas
+              funcionalidades de destaque, filtros avançados e indicações
+              premium.
+            </p>
+            <p className="text-xs text-slate-400">
+              Obs.: Esta é uma versão inicial (MVP). As informações são
+              fornecidas pelos próprios profissionais e podem ser atualizadas ao
+              longo do tempo.
+            </p>
+          </div>
 
-        {/* CTA "Quero aparecer na lista" */}
-        <div className="md:pt-8">
-          <Link
-            href="/profissionais/inscricao"
-            className="inline-flex items-center justify-center rounded-full bg-cyan-500 px-5 py-2.5 text-sm font-semibold text-slate-950 shadow-lg shadow-cyan-500/40 transition hover:bg-cyan-400 hover:shadow-cyan-400/50"
-          >
-            Quero aparecer na lista
-          </Link>
-          <p className="mt-2 max-w-xs text-xs text-slate-500">
-            Área gratuita nesta fase inicial. Em breve, benefícios exclusivos
-            para profissionais em destaque.
-          </p>
-        </div>
-      </header>
+          {/* CTA "Quero aparecer na lista" */}
+          <div className="md:pt-8">
+            <Link
+              href="/profissionais/inscricao"
+              className="inline-flex items-center justify-center rounded-full bg-cyan-500 px-5 py-2.5 text-sm font-semibold text-slate-950 shadow-lg shadow-cyan-500/40 transition hover:bg-cyan-400 hover:shadow-cyan-400/50"
+            >
+              Quero aparecer na lista
+            </Link>
+            <p className="mt-2 max-w-xs text-xs text-slate-400">
+              Área gratuita nesta fase inicial. Em breve, benefícios exclusivos
+              para profissionais em destaque.
+            </p>
+          </div>
+        </header>
 
-      {/* PUBLICIDADE – usa um slot seu do AdSense */}
-      <AdsBanner slot="1234567890" />
+        {/* PUBLICIDADE – DISPLAY TOPO (display_topo_altacloud → 6664851396) */}
+        <AdsBanner
+          adSlot="6664851396"
+          className="my-4 flex justify-center"
+        />
 
-      <section className="space-y-10">
-        {clouds.map((cloud) => {
-          const cloudProfessionals = professionals.filter(
-            (p) => p.cloud === cloud.id
-          );
+        {/* LISTAGEM + ANÚNCIO DE MEIO */}
+        <section className="mt-4 space-y-10">
+          {clouds.map((cloud, index) => {
+            const cloudProfessionals = professionals.filter(
+              (p) => p.cloud === cloud.id
+            );
 
-          if (cloudProfessionals.length === 0) return null;
+            if (cloudProfessionals.length === 0) return null;
 
-          return (
-            <div key={cloud.id} className="space-y-4">
-              <div className="flex flex-wrap items-center justify-between gap-3">
-                <div className="space-y-1">
-                  <div
-                    className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold ring-1 ${cloud.badgeClass}`}
-                  >
-                    <span className="h-1.5 w-1.5 rounded-full bg-current" />
-                    {cloud.label}
+            return (
+              <div key={cloud.id} className="space-y-4">
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <div className="space-y-1">
+                    <div
+                      className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold ring-1 ${cloud.badgeClass}`}
+                    >
+                      <span className="h-1.5 w-1.5 rounded-full bg-current" />
+                      {cloud.label}
+                    </div>
+                    <h2
+                      className={`text-lg font-semibold ${cloud.titleClass}`}
+                    >
+                      Profissionais certificados em {cloud.label}
+                    </h2>
+                    <p className="text-sm text-slate-300">
+                      Especialistas com certificações oficiais na {cloud.label}.
+                      Use este diretório para encontrar profissionais para
+                      projetos, consultorias, treinamentos e oportunidades.
+                    </p>
                   </div>
-                  <h2 className={`text-lg font-semibold ${cloud.titleClass}`}>
-                    Profissionais certificados em {cloud.label}
-                  </h2>
-                  <p className="text-sm text-slate-600">
-                    Especialistas com certificações oficiais na {cloud.label}.
-                    Use este diretório para encontrar profissionais para
-                    projetos, consultorias, treinamentos e oportunidades.
+                  <p className="text-xs text-slate-400">
+                    {cloudProfessionals.length}{" "}
+                    {cloudProfessionals.length === 1
+                      ? "profissional listado"
+                      : "profissionais listados"}
                   </p>
                 </div>
-                <p className="text-xs text-slate-500">
-                  {cloudProfessionals.length}{" "}
-                  {cloudProfessionals.length === 1
-                    ? "profissional listado"
-                    : "profissionais listados"}
-                </p>
-              </div>
 
-              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {cloudProfessionals.map((professional) => (
-                  <ProfessionalCard
-                    key={professional.id}
-                    professional={professional}
+                <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                  {cloudProfessionals.map((professional) => (
+                    <ProfessionalCard
+                      key={professional.id}
+                      professional={professional}
+                    />
+                  ))}
+                </div>
+
+                {/* Após a segunda nuvem, banner in-article (7666231438) */}
+                {index === 1 && (
+                  <AdsBanner
+                    adSlot="7666231438"
+                    className="mt-6 flex justify-center"
                   />
-                ))}
+                )}
               </div>
-            </div>
-          );
-        })}
-      </section>
-    </div>
+            );
+          })}
+        </section>
+
+        {/* PUBLICIDADE – RODAPÉ (multiplex_footer_altacloud → 9227543350) */}
+        <AdsBanner
+          adSlot="9227543350"
+          className="mt-10 flex justify-center"
+        />
+      </div>
+    </main>
   );
 }

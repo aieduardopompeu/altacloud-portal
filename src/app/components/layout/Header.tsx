@@ -1,4 +1,5 @@
-﻿"use client";
+﻿// src/app/components/layout/Header.tsx
+"use client";
 
 import Link from "next/link";
 import Image from "next/image";
@@ -8,6 +9,7 @@ import { useState } from "react";
 const mainLinks = [
   { href: "/", label: "Início" },
   { href: "/trilhas", label: "Trilhas" },
+  { href: "/profissionais", label: "Profissionais" }, // NOVO
   { href: "/artigos", label: "Artigos" },
   { href: "/noticias", label: "Notícias" },
   { href: "/glossario", label: "Glossário" },
@@ -50,35 +52,35 @@ export function Header() {
           </Link>
 
           {/* CLOUD PROVIDERS */}
-          <div className="hidden md:flex items-center gap-4">
-          <Image
-            src="/icons/aws.svg"
-            alt="AWS"
-            width={28}
-            height={14}
-            className="invert brightness-200"
-          />
-          <Image
-            src="/icons/azure.svg"
-            alt="Azure"
-            width={28}
-            height={14}
-            className="invert brightness-200"
-          />
-          <Image
-            src="/icons/gcp.svg"
-            alt="Google Cloud"
-            width={28}
-            height={14}
-            className="invert brightness-200"
-          />
-          <Image
-            src="/icons/ibm.svg"
-            alt="IBM Cloud"
-            width={28}
-            height={14}
-            className="invert brightness-200"
-          />
+          <div className="hidden items-center gap-4 md:flex">
+            <Image
+              src="/icons/aws.svg"
+              alt="AWS"
+              width={28}
+              height={14}
+              className="invert brightness-200"
+            />
+            <Image
+              src="/icons/azure.svg"
+              alt="Azure"
+              width={28}
+              height={14}
+              className="invert brightness-200"
+            />
+            <Image
+              src="/icons/gcp.svg"
+              alt="Google Cloud"
+              width={28}
+              height={14}
+              className="invert brightness-200"
+            />
+            <Image
+              src="/icons/ibm.svg"
+              alt="IBM Cloud"
+              width={28}
+              height={14}
+              className="invert brightness-200"
+            />
           </div>
         </div>
 
@@ -134,7 +136,7 @@ export function Header() {
           )}
         </div>
 
-        {/* BOTÃO MOBILE – AGORA BEM VISÍVEL */}
+        {/* BOTÃO MOBILE */}
         <button
           type="button"
           className="inline-flex items-center gap-2 rounded-full bg-sky-600 px-4 py-2 text-xs font-semibold text-white shadow-md hover:bg-sky-500 md:hidden"

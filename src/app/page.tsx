@@ -2,6 +2,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { AdsBanner } from "./components/ads/AdsBanner";
+import { AdsContainer } from "./components/ads/AdsContainer";
 
 export default function HomePage() {
   return (
@@ -44,7 +45,6 @@ export default function HomePage() {
               </Link>
             </div>
 
-            {/* Mini info */}
             <div className="flex flex-wrap gap-4 pt-2 text-xs text-slate-400">
               <span>✔ Conteúdo em português</span>
               <span>✔ Sequência pensada para iniciantes</span>
@@ -52,7 +52,7 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Imagem destaque geral da home */}
+          {/* Imagem */}
           <div className="w-full overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/70 shadow-xl">
             <Image
               src="/aprenda-cloud-de-forma-clara.jpg"
@@ -65,13 +65,54 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ADSENSE – display_topo_altacloud (discreto entre hero e trilhas) */}
-        <div className="mt-10 mb-4">
+        {/* ADSENSE – display_topo_altacloud */}
+        <AdsContainer>
           <AdsBanner adSlot="6664851396" />
-        </div>
+        </AdsContainer>
+
+        {/* DESTAQUE – DIRETÓRIO DE PROFISSIONAIS */}
+        <section className="mt-8">
+          <div className="rounded-2xl border border-cyan-500/30 bg-gradient-to-r from-slate-900 via-slate-950 to-slate-900 px-6 py-6 shadow-lg shadow-cyan-500/15 sm:px-8 sm:py-8">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <div className="space-y-2">
+                <p className="text-xs font-semibold uppercase tracking-[0.25em] text-cyan-400">
+                  NOVO · DIRETÓRIO
+                </p>
+                <h2 className="text-xl font-bold text-slate-50 sm:text-2xl">
+                  Profissionais Certificados em Cloud
+                </h2>
+                <p className="max-w-xl text-sm text-slate-300">
+                  Encontre especialistas certificados em{" "}
+                  <span className="font-semibold text-cyan-300">
+                    AWS, Azure, Google Cloud e Oracle
+                  </span>{" "}
+                  para projetos, consultorias, treinamentos e oportunidades.
+                  Diretório gratuito mantido pelo Alta Cloud.
+                </p>
+                <p className="text-[11px] text-slate-400">
+                  MVP em evolução · Em breve, filtros avançados, perfis em
+                  destaque e indicações premium.
+                </p>
+              </div>
+
+              <div className="flex flex-col items-start gap-3 sm:items-end">
+                <Link
+                  href="/profissionais"
+                  className="inline-flex items-center justify-center rounded-full bg-cyan-500 px-5 py-2.5 text-sm font-semibold text-slate-950 shadow-lg shadow-cyan-500/40 transition hover:bg-cyan-400 hover:shadow-cyan-400/60"
+                >
+                  Ver diretório de profissionais
+                </Link>
+                <span className="inline-flex items-center gap-2 rounded-full bg-slate-900/70 px-3 py-1 text-[11px] font-medium text-slate-300 ring-1 ring-slate-700/70">
+                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+                  Inscrição gratuita para profissionais nesta fase inicial
+                </span>
+              </div>
+            </div>
+          </div>
+        </section>
 
         {/* TRILHAS EM DESTAQUE */}
-        <section className="mt-6 space-y-5">
+        <section className="mt-10 space-y-5">
           <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
             <div>
               <h2 className="text-xl font-semibold md:text-2xl">
@@ -175,45 +216,6 @@ export default function HomePage() {
                 </span>
               </div>
             </Link>
-          </div>
-        </section>
-
-        {/* POR QUE APRENDER CLOUD AQUI */}
-        <section className="mt-16 space-y-6">
-          <h2 className="text-xl font-semibold md:text-2xl">
-            Por que aprender cloud aqui?
-          </h2>
-
-          <div className="grid gap-6 md:grid-cols-3">
-            <div className="rounded-xl border border-slate-800 bg-slate-900/80 p-4">
-              <h3 className="text-sm font-semibold text-slate-50">
-                Linguagem direta, sem jargão desnecessário
-              </h3>
-              <p className="mt-2 text-sm text-slate-300">
-                Conceitos explicados de forma simples, em português, pensando em
-                quem está começando ou vindo de outras áreas.
-              </p>
-            </div>
-
-            <div className="rounded-xl border border-slate-800 bg-slate-900/80 p-4">
-              <h3 className="text-sm font-semibold text-slate-50">
-                Trilhas pensadas como “mapa” de estudos
-              </h3>
-              <p className="mt-2 text-sm text-slate-300">
-                Em vez de conteúdo solto, você segue uma ordem lógica:
-                fundamentos, identidade, armazenamento, compute, redes e além.
-              </p>
-            </div>
-
-            <div className="rounded-xl border border-slate-800 bg-slate-900/80 p-4">
-              <h3 className="text-sm font-semibold text-slate-50">
-                Foco em prática e vida real
-              </h3>
-              <p className="mt-2 text-sm text-slate-300">
-                Sempre conectando conceitos com cenários reais, boas práticas e
-                problemas que realmente aparecem no dia a dia.
-              </p>
-            </div>
           </div>
         </section>
       </div>

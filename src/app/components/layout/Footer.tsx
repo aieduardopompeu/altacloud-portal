@@ -1,4 +1,5 @@
-﻿"use client";
+﻿// src/app/components/layout/Footer.tsx
+"use client";
 
 import Link from "next/link";
 
@@ -113,6 +114,11 @@ export function Footer() {
               <li>
                 <Link href="/trilhas" className="hover:text-sky-300">
                   Trilhas de estudo
+                </Link>
+              </li>
+              <li>
+                <Link href="/profissionais" className="hover:text-sky-300">
+                  Diretório de profissionais
                 </Link>
               </li>
             </ul>

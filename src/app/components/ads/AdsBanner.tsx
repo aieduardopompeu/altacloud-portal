@@ -1,59 +1,75 @@
 // src/app/components/ads/AdsBanner.tsx
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
+
+type AdsBannerProps = {
+  /**
+   * Novo nome da prop (recomendado)
+   * Ex.: "6664851396"
+   */
+  slot?: string;
+
+  /**
+   * Nome antigo da prop (legado).
+   * Mantido só para compatibilidade com chamadas existentes,
+   * ex.: <AdsBanner adSlot="..." />
+   */
+  adSlot?: string;
+
+  /** Ex.: "auto", "horizontal", etc. */
+  format?: string;
+
+  /** Classes extras para o wrapper */
+  className?: string;
+};
 
 declare global {
   interface Window {
-    adsbygoogle?: unknown[];
+    // adsbygoogle é basicamente um array que recebe objetos.
+    // Usar unknown[] evita encrenca de tipo no .push({}).
+    adsbygoogle: unknown[];
   }
 }
 
-type AdsBannerProps = {
-  /** ID do slot do AdSense */
-  slot?: string;
-  adSlot?: string; // compatibilidade com código antigo
-  className?: string;
-  /** data-ad-format: "auto", "autorelaxed", etc. */
-  format?: string;
-};
-
-export function AdsBanner({ slot, adSlot, className, format }: AdsBannerProps) {
-  const adRef = useRef<HTMLDivElement | null>(null);
-  const effectiveSlot = slot ?? adSlot;
-  const effectiveFormat = format ?? "auto";
+export function AdsBanner({
+  slot,
+  adSlot,
+  format = "auto",
+  className = "",
+}: AdsBannerProps) {
+  // Aceita tanto slot quanto adSlot; dá prioridade ao novo nome.
+  const finalSlot = slot ?? adSlot;
 
   useEffect(() => {
-    if (typeof window === "undefined") return;
-    if (!adRef.current) return;
-    if (!effectiveSlot) return;
+    if (!finalSlot) return;
 
     try {
-      const el = adRef.current as any;
-
-      // evita push duplicado
-      if (el.getAttribute("data-adsbygoogle-status") === "done") {
-        return;
-      }
-
+      // Garante o array e empurra um novo "pedido" de anúncio
       (window.adsbygoogle = window.adsbygoogle || []).push({});
-    } catch (error) {
-      console.error("Erro ao inicializar AdSense:", error);
+    } catch (err) {
+      if (process.env.NODE_ENV === "development") {
+        console.error("Erro ao inicializar adsbygoogle:", err);
+      }
     }
-  }, [effectiveSlot]);
+  }, [finalSlot]);
 
-  if (!effectiveSlot) return null;
+  // Se não tiver slot nenhum, não renderiza nada
+  if (!finalSlot) {
+    if (process.env.NODE_ENV === "development") {
+      console.warn("AdsBanner renderizado sem 'slot' ou 'adSlot'.");
+    }
+    return null;
+  }
 
   return (
-    <div className={className ?? "my-8 flex justify-center"}>
+    <div className={className}>
       <ins
-        ref={adRef as any}
-        className="adsbygoogle"
+        className="adsbygoogle block"
         style={{ display: "block" }}
-        data-ad-client="ca-pub-4436420746304287"
-        data-ad-slot={effectiveSlot}
-        data-ad-format={effectiveFormat}
-        data-full-width-responsive="true"
+        data-ad-client={process.env.NEXT_PUBLIC_GOOGLE_ADSENSE_CLIENT}
+        data-ad-slot={finalSlot}
+        data-ad-format={format}
       />
     </div>
   );
