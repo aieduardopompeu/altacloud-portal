@@ -43,9 +43,8 @@ export default function ProfessionalsApplicationPage() {
         {/* PUBLICIDADE – ENTRE AVISO E FORMULÁRIO (IN-ARTICLE) */}
         <AdsBanner
           adSlot="7666231438"
-          type="in-article"
-          className="mt-4 flex justify-center"
-        />
+          className="flex justify-center"
+                />
 
         {/* FORMULÁRIO BASE (SEM BACKEND AINDA) */}
         <section className="mt-4 space-y-4 rounded-2xl border border-slate-800 bg-slate-950/90 p-6 shadow-lg shadow-slate-900/40">
@@ -289,9 +288,8 @@ export default function ProfessionalsApplicationPage() {
         {/* PUBLICIDADE – RODAPÉ (MULTIPLEX) */}
         <AdsBanner
           adSlot="9227543350"
-          type="multiplex"
           className="mt-6 flex justify-center"
-        />
+         />
 
         <div className="mt-4 text-xs text-slate-500">
           <Link
