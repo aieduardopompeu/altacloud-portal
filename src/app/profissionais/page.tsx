@@ -303,7 +303,7 @@ function ProfessionalCard({ professional }: { professional: Professional }) {
 export default function ProfessionalsPage() {
   return (
     <main className="min-h-screen bg-slate-950">
-      <div className="mx-auto flex w-full max-w-6xl flex-col gap-10 px-4 pt-24 pb-16 lg:px-0">
+      <div className="mx-auto flex w-full max-w-6xl flex-col gap-10 px-4 pt-24 pb-16 md:px-6">
         <header className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
           <div className="space-y-4">
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-400">
@@ -348,10 +348,7 @@ export default function ProfessionalsPage() {
         </header>
 
         {/* PUBLICIDADE – DISPLAY TOPO (display_topo_altacloud → 6664851396) */}
-        <AdsBanner
-          adSlot="6664851396"
-          className="my-4 flex justify-center"
-        />
+        <AdsBanner adSlot="6664851396" className="my-4 flex justify-center" />
 
         {/* LISTAGEM + ANÚNCIO DE MEIO */}
         <section className="mt-4 space-y-10">
