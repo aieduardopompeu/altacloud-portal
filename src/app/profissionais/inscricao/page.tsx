@@ -6,7 +6,7 @@ import { AdsBanner } from "../../components/ads/AdsBanner";
 export default function ProfessionalsApplicationPage() {
   return (
     <main className="min-h-screen bg-slate-950">
-      <div className="mx-auto flex w-full max-w-2xl flex-col gap-8 px-4 pt-24 pb-16 md:px-6">
+      <div className="mx-auto flex w-full max-w-2xl flex-col gap-8 px-4 pt-24 pb-16 lg:px-0">
         <header className="space-y-3">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-400">
             Alta Cloud · Diretório
@@ -41,10 +41,9 @@ export default function ProfessionalsApplicationPage() {
           </p>
         </section>
 
-        {/* PUBLICIDADE – ENTRE AVISO E FORMULÁRIO (IN-ARTICLE) */}
+        {/* PUBLICIDADE – ENTRE AVISO E FORMULÁRIO (in-article) */}
         <AdsBanner
           adSlot="7666231438"
-          type="in-article"
           className="flex justify-center"
         />
 
@@ -287,10 +286,9 @@ export default function ProfessionalsApplicationPage() {
           </form>
         </section>
 
-        {/* PUBLICIDADE – RODAPÉ DISCRETO (MULTIPLEX) */}
+        {/* PUBLICIDADE – RODAPÉ DISCRETO (multiplex) */}
         <AdsBanner
           adSlot="9227543350"
-          type="multiplex"
           className="mt-6 flex justify-center"
         />
 

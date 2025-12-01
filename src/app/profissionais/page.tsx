@@ -1,5 +1,4 @@
 // src/app/profissionais/page.tsx
-
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ReactNode } from "react";
@@ -303,7 +302,7 @@ function ProfessionalCard({ professional }: { professional: Professional }) {
 export default function ProfessionalsPage() {
   return (
     <main className="min-h-screen bg-slate-950">
-      <div className="mx-auto flex w-full max-w-6xl flex-col gap-10 px-4 pt-24 pb-16 md:px-6">
+      <div className="mx-auto flex w-full max-w-6xl flex-col gap-10 px-4 pt-24 pb-16 lg:px-0">
         <header className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
           <div className="space-y-4">
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-400">
@@ -347,10 +346,13 @@ export default function ProfessionalsPage() {
           </div>
         </header>
 
-        {/* PUBLICIDADE – DISPLAY TOPO (display_topo_altacloud → 6664851396) */}
-        <AdsBanner adSlot="6664851396" className="my-4 flex justify-center" />
+        {/* PUBLICIDADE – DISPLAY TOPO (display_topo_altacloud) */}
+        <AdsBanner
+          adSlot="6664851396"
+          className="my-4 flex justify-center"
+        />
 
-        {/* LISTAGEM + ANÚNCIO DE MEIO */}
+        {/* BLOCOS POR NUVEM + AD NO MEIO */}
         <section className="mt-4 space-y-10">
           {clouds.map((cloud, index) => {
             const cloudProfessionals = professionals.filter(
@@ -397,7 +399,7 @@ export default function ProfessionalsPage() {
                   ))}
                 </div>
 
-                {/* Após a segunda nuvem, banner in-article (7666231438) */}
+                {/* Depois do segundo bloco de nuvem, anúncio in-article */}
                 {index === 1 && (
                   <AdsBanner
                     adSlot="7666231438"
@@ -409,7 +411,7 @@ export default function ProfessionalsPage() {
           })}
         </section>
 
-        {/* PUBLICIDADE – RODAPÉ (multiplex_footer_altacloud → 9227543350) */}
+        {/* PUBLICIDADE – RODAPÉ (multiplex_footer_altacloud) */}
         <AdsBanner
           adSlot="9227543350"
           className="mt-10 flex justify-center"
