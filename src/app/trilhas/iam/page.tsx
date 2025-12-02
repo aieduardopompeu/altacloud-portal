@@ -2,6 +2,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { AdsBanner } from "../../components/ads/AdsBanner";
 
 export const metadata: Metadata = {
   title: "Módulo IAM na prática | Alta Cloud",
@@ -100,6 +101,11 @@ export default function IamPage() {
             </div>
           </div>
         </section>
+
+        {/* Anúncio discreto dentro da trilha (inarticle_altacloud_tutorial) */}
+        <div className="my-10">
+          <AdsBanner adSlot="7666231438" />
+        </div>
 
         {/* Conteúdo do módulo */}
         <section id="conteudo" className="mt-10 space-y-6">
