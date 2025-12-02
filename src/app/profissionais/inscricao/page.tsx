@@ -4,7 +4,7 @@ import { AdsBanner } from "../../components/ads/AdsBanner";
 
 export default function ProfessionalsApplicationPage() {
   return (
-    <main className="min-h-screen bg-slate-950">
+    <main className="min-h-screen bg-slate-950 text-slate-50">
       <div className="mx-auto w-full max-w-2xl px-4 pt-24 pb-16 md:px-6 lg:px-0">
         <header className="space-y-3">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-400">
@@ -41,10 +41,9 @@ export default function ProfessionalsApplicationPage() {
         </section>
 
         {/* PUBLICIDADE – ENTRE AVISO E FORMULÁRIO (IN-ARTICLE) */}
-        <AdsBanner
-          adSlot="7666231438"
-          className="flex justify-center"
-                />
+        <div className="my-6 flex justify-center">
+          <AdsBanner adSlot="7666231438" />
+        </div>
 
         {/* FORMULÁRIO BASE (SEM BACKEND AINDA) */}
         <section className="mt-4 space-y-4 rounded-2xl border border-slate-800 bg-slate-950/90 p-6 shadow-lg shadow-slate-900/40">
@@ -286,10 +285,9 @@ export default function ProfessionalsApplicationPage() {
         </section>
 
         {/* PUBLICIDADE – RODAPÉ (MULTIPLEX) */}
-        <AdsBanner
-          adSlot="9227543350"
-          className="mt-6 flex justify-center"
-         />
+        <div className="mt-6 flex justify-center">
+          <AdsBanner adSlot="9227543350" />
+        </div>
 
         <div className="mt-4 text-xs text-slate-500">
           <Link
