@@ -25,8 +25,14 @@ export function AdsBanner({
 }: AdsBannerProps) {
   const pathname = usePathname();
 
+  // pega o client de qualquer um dos dois nomes
+  const adClient =
+    process.env.NEXT_PUBLIC_GOOGLE_ADSENSE_CLIENT ??
+    process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID;
+
   useEffect(() => {
     if (typeof window === "undefined") return;
+    if (!adClient) return; // sem client, não tenta carregar
 
     try {
       window.adsbygoogle = window.adsbygoogle || [];
@@ -34,22 +40,30 @@ export function AdsBanner({
     } catch (error) {
       console.error("Erro ao carregar AdSense", error);
     }
-  }, [adSlot, pathname]);
+  }, [adSlot, pathname, adClient]);
 
   let adFormat = "auto";
   let adLayout: string | undefined;
   let fullWidthResponsive: string | undefined;
 
-  // Ajuste fino por tipo de bloco
   if (type === "in-article") {
     adFormat = "fluid";
     adLayout = "in-article";
   } else if (type === "multiplex") {
     adFormat = "autorelaxed";
   } else {
-    // display padrão responsivo
     adFormat = "auto";
     fullWidthResponsive = "true";
+  }
+
+  // em dev, avisa se a env não veio
+  if (!adClient) {
+    if (process.env.NODE_ENV === "development") {
+      console.warn(
+        "AdsBanner: NEXT_PUBLIC_GOOGLE_ADSENSE_CLIENT / NEXT_PUBLIC_ADSENSE_CLIENT_ID não definida."
+      );
+    }
+    return null;
   }
 
   return (
@@ -57,7 +71,7 @@ export function AdsBanner({
       <ins
         className="adsbygoogle"
         style={{ display: "block", width: "100%" }}
-        data-ad-client={process.env.NEXT_PUBLIC_GOOGLE_ADSENSE_CLIENT}
+        data-ad-client={adClient}
         data-ad-slot={adSlot}
         data-ad-format={adFormat}
         {...(adLayout ? { "data-ad-layout": adLayout } : {})}
