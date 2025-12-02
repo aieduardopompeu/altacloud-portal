@@ -23,6 +23,7 @@ const tracks = [
   { href: "/trilhas/s3", label: "Amazon S3" },
   { href: "/trilhas/ec2", label: "Amazon EC2" },
   { href: "/trilhas/vpc", label: "VPC" },
+  { href: "/trilhas/devops", label: "DevOps" }, // ⬅ ADICIONADO
 ];
 
 export function Header() {
@@ -170,7 +171,9 @@ export function Header() {
                     onClick={() => setOpenTracks((v) => !v)}
                   >
                     <span>{link.label}</span>
-                    <span className="text-xs">{openTracks ? "▴" : "▾"}</span>
+                    <span className="text-xs">
+                      {openTracks ? "▴" : "▾"}
+                    </span>
                   </button>
 
                   {openTracks && (

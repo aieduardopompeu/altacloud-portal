@@ -2,7 +2,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import { AdsBanner } from "./components/ads/AdsBanner";
-import { AdsContainer } from "./components/ads/AdsContainer";
 
 export default function HomePage() {
   return (
@@ -65,10 +64,10 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ADSENSE – display_topo_altacloud */}
-        <AdsContainer>
-          <AdsBanner adSlot="6664851396" />
-        </AdsContainer>
+        {/* ADS – topo da home (home_top) */}
+        <div className="mt-6">
+          <AdsBanner position="home_top" />
+        </div>
 
         {/* DESTAQUE – DIRETÓRIO DE PROFISSIONAIS */}
         <section className="mt-8">
@@ -110,6 +109,11 @@ export default function HomePage() {
             </div>
           </div>
         </section>
+
+        {/* ADS – entre diretório e trilhas (home_between_tracks) */}
+        <div className="mt-8">
+          <AdsBanner position="home_between_tracks" />
+        </div>
 
         {/* TRILHAS EM DESTAQUE */}
         <section className="mt-10 space-y-5">
@@ -218,6 +222,11 @@ export default function HomePage() {
             </Link>
           </div>
         </section>
+
+        {/* ADS – rodapé da home (home_bottom) */}
+        <div className="mt-10">
+          <AdsBanner position="home_bottom" />
+        </div>
       </div>
     </main>
   );

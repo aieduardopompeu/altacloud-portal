@@ -16,7 +16,10 @@ export default function S3Page() {
       <div className="mx-auto w-full max-w-5xl px-4 pb-16 pt-10 md:px-6 md:pt-14">
         {/* Breadcrumb */}
         <nav className="mb-6 text-sm text-slate-400">
-          <Link href="/trilhas" className="transition-colors hover:text-slate-100">
+          <Link
+            href="/trilhas"
+            className="transition-colors hover:text-slate-100"
+          >
             Trilhas
           </Link>
           <span className="mx-2 text-slate-600">/</span>
@@ -75,8 +78,13 @@ export default function S3Page() {
           </div>
         </header>
 
+        {/* ADS – topo da trilha (track_top) */}
+        <div className="mt-8">
+          <AdsBanner position="track_top" />
+        </div>
+
         {/* CTA */}
-        <section className="mt-10 rounded-xl border border-slate-800 bg-slate-900/70 p-5 shadow-lg md:p-6">
+        <section className="mt-6 rounded-xl border border-slate-800 bg-slate-900/70 p-5 shadow-lg md:p-6">
           <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <div>
               <h2 className="text-lg font-semibold text-slate-50 md:text-xl">
@@ -99,9 +107,9 @@ export default function S3Page() {
           </div>
         </section>
 
-        {/* ⭐ ANÚNCIO INSERIDO AQUI (discreto, elegante) */}
-        <div className="my-10">
-          <AdsBanner adSlot="7666231438" />
+        {/* ADS – meio da trilha (track_middle) */}
+        <div className="mt-8">
+          <AdsBanner position="track_middle" />
         </div>
 
         {/* Conteúdo do módulo */}
@@ -112,7 +120,8 @@ export default function S3Page() {
             </h2>
             <p className="text-sm text-slate-300 md:text-base">
               Assim como no módulo IAM, esta estrutura é uma base sugerida.
-              Depois você pode conectar cada parte a aulas, artigos ou labs práticos.
+              Depois você pode conectar cada parte a aulas, artigos ou labs
+              práticos.
             </p>
           </div>
 
@@ -144,7 +153,9 @@ export default function S3Page() {
               <ul className="mt-2 space-y-1 text-sm text-slate-300">
                 <li>• Standard, Infrequent Access, Glacier e variações</li>
                 <li>• Como escolher a classe certa para cada cenário</li>
-                <li>• Noções de custo: armazenamento, requisições, transferência</li>
+                <li>
+                  • Noções de custo: armazenamento, requisições, transferência
+                </li>
                 <li>• Estratégias simples para evitar sustos na fatura</li>
               </ul>
             </div>
@@ -183,9 +194,14 @@ export default function S3Page() {
           </div>
         </section>
 
+        {/* ADS – final da trilha (track_bottom) */}
+        <div className="mt-10">
+          <AdsBanner position="track_bottom" />
+        </div>
+
         {/* Link de volta para a trilha */}
-        <section className="mt-10">
-          <div className="rounded-xl border border-slate-800 bg-slate-900/80 p-4 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+        <section className="mt-8">
+          <div className="flex flex-col gap-3 rounded-xl border border-slate-800 bg-slate-900/80 p-4 md:flex-row md:items-center md:justify-between">
             <div>
               <p className="text-sm font-medium text-slate-50">
                 Faz parte da Trilha Fundamentos de Cloud

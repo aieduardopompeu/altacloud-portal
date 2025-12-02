@@ -1,7 +1,5 @@
 ﻿// src/app/artigos/page.tsx
 import Link from "next/link";
-import { AdsBanner } from "../components/ads/AdsBanner";
-import { AdsContainer } from "../components/ads/AdsContainer";
 import { articles } from "../data/articles";
 
 type Article = {
@@ -33,12 +31,7 @@ export default function ArtigosPage() {
           </p>
         </header>
 
-        {/* ADSENSE – inarticle_altacloud_tutorial */}
-        <AdsContainer>
-          <AdsBanner adSlot="7666231438" />
-        </AdsContainer>
-
-        <section className="grid gap-6 md:grid-cols-2">
+        <section className="mt-8 grid gap-6 md:grid-cols-2">
           {typedArticles.length === 0 && (
             <p className="text-sm text-slate-400">
               Ainda não há artigos publicados. Em breve você verá conteúdos

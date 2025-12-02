@@ -1,15 +1,15 @@
-﻿import { ReactNode } from "react";
-import { Section } from "../ui/Section";
-import { TagPill } from "../ui/TagPill";
+﻿// src/app/components/layout/ArticleLayout.tsx
+import type { ReactNode } from "react";
+import { AdsBanner } from "../ads/AdsBanner";
 
-interface ArticleLayoutProps {
+type ArticleLayoutProps = {
   category: string;
   title: string;
   description: string;
   readingTime: string;
   date: string;
   children: ReactNode;
-}
+};
 
 export function ArticleLayout({
   category,
@@ -20,41 +20,43 @@ export function ArticleLayout({
   children,
 }: ArticleLayoutProps) {
   return (
-    <Section className="py-10 lg:py-14">
-      <article className="mx-auto max-w-3xl rounded-3xl border border-slate-800 bg-slate-950/80 px-6 py-8 shadow-xl shadow-slate-950/60">
-        <header className="space-y-3">
-          <TagPill>{category}</TagPill>
+    <main className="min-h-screen bg-slate-950 text-slate-50">
+      <div className="mx-auto w-full max-w-4xl px-4 pb-16 pt-10 md:px-6 md:pt-14">
+        <article className="rounded-3xl border border-slate-800 bg-slate-900/95 px-4 pb-10 pt-6 shadow-2xl md:px-8 md:pt-8">
+          {/* HEADER */}
+          <header className="mb-6">
+            <div className="mb-4 flex flex-wrap gap-3 text-xs">
+              <span className="inline-flex items-center rounded-full bg-slate-800 px-3 py-1 font-medium text-slate-100">
+                {category}
+              </span>
+            </div>
 
-          <h1 className="text-2xl sm:text-3xl font-semibold text-slate-50">
-            {title}
-          </h1>
+            <h1 className="text-3xl font-bold tracking-tight md:text-4xl">
+              {title}
+            </h1>
 
-          <p className="text-sm text-slate-200">
-            {description}
-          </p>
+            <p className="mt-3 max-w-2xl text-sm text-slate-300 md:text-base">
+              {description}
+            </p>
 
-          <div className="flex flex-wrap items-center gap-3 text-xs text-slate-400">
-            <span>{date}</span>
-            <span></span>
-            <span>{readingTime} de leitura</span>
+            <div className="mt-4 flex flex-wrap items-center gap-3 text-xs text-slate-400">
+              <span>{date}</span>
+              <span className="h-1 w-1 rounded-full bg-slate-600" />
+              <span>{readingTime}</span>
+            </div>
+          </header>
+
+          {/* ✅ APENAS UM BLOCO DE ANÚNCIO NO TOPO DO ARTIGO */}
+          <div className="mb-6">
+            <AdsBanner position="article_top" />
           </div>
-        </header>
 
-        {/* Slot de anúncio - topo do artigo */}
-        <div className="mt-6 flex items-center justify-center rounded-xl border border-dashed border-slate-700 bg-slate-900/60 px-4 py-6 text-[11px] text-slate-400">
-          Slot de anúncio (topo do artigo)  insira aqui o bloco de anúncio do
-          Google AdSense.
-        </div>
-
-        <div className="mt-6 space-y-4 text-sm leading-relaxed text-slate-100">
-          {children}
-        </div>
-
-        {/* Slot de anúncio - fim do artigo */}
-        <div className="mt-8 flex items-center justify-center rounded-xl border border-dashed border-slate-700 bg-slate-900/60 px-4 py-6 text-[11px] text-slate-400">
-          Slot de anúncio (meio/fim do artigo) – ideal para anúncios in-article.
-        </div>
-      </article>
-    </Section>
+          {/* CONTEÚDO DO ARTIGO */}
+          <div className="space-y-4 text-sm leading-relaxed text-slate-200 md:text-base">
+            {children}
+          </div>
+        </article>
+      </div>
+    </main>
   );
 }

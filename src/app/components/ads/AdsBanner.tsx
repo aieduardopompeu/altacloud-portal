@@ -1,84 +1,39 @@
 // src/app/components/ads/AdsBanner.tsx
 "use client";
 
-import { useEffect } from "react";
-import { usePathname } from "next/navigation";
-
-declare global {
-  interface Window {
-    adsbygoogle?: any[];
-  }
-}
-
-type AdKind = "display" | "in-article" | "multiplex";
+import React from "react";
+import { adsConfig, AdPosition } from "../../../config/ads";
 
 type AdsBannerProps = {
-  adSlot: string;
-  type?: AdKind; // display, in-article ou multiplex
+  position: AdPosition;
   className?: string;
 };
 
-export function AdsBanner({
-  adSlot,
-  type = "display",
-  className,
-}: AdsBannerProps) {
-  const pathname = usePathname();
+export function AdsBanner({ position, className }: AdsBannerProps) {
+  const config = adsConfig[position];
 
-  // pega o client de qualquer um dos dois nomes
-  const adClient =
-    process.env.NEXT_PUBLIC_GOOGLE_ADSENSE_CLIENT ??
-    process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID;
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    if (!adClient) return; // sem client, não tenta carregar
-
-    try {
-      window.adsbygoogle = window.adsbygoogle || [];
-      window.adsbygoogle.push({});
-    } catch (error) {
-      console.error("Erro ao carregar AdSense", error);
-    }
-  }, [adSlot, pathname, adClient]);
-
-  let adFormat = "auto";
-  let adLayout: string | undefined;
-  let fullWidthResponsive: string | undefined;
-
-  if (type === "in-article") {
-    adFormat = "fluid";
-    adLayout = "in-article";
-  } else if (type === "multiplex") {
-    adFormat = "autorelaxed";
-  } else {
-    adFormat = "auto";
-    fullWidthResponsive = "true";
+  // Se não houver config para essa posição ou estiver desativado, não renderiza nada
+  if (!config || !config.enabled) {
+    return null;
   }
 
-  // em dev, avisa se a env não veio
-  if (!adClient) {
-    if (process.env.NODE_ENV === "development") {
-      console.warn(
-        "AdsBanner: NEXT_PUBLIC_GOOGLE_ADSENSE_CLIENT / NEXT_PUBLIC_ADSENSE_CLIENT_ID não definida."
-      );
-    }
+  const { slot } = config;
+
+  if (!slot) {
     return null;
   }
 
   return (
-    <div className={className}>
-      <ins
-        className="adsbygoogle"
-        style={{ display: "block", width: "100%" }}
-        data-ad-client={adClient}
-        data-ad-slot={adSlot}
-        data-ad-format={adFormat}
-        {...(adLayout ? { "data-ad-layout": adLayout } : {})}
-        {...(fullWidthResponsive
-          ? { "data-full-width-responsive": fullWidthResponsive }
-          : {})}
-      />
+    <div
+      className={
+        className ??
+        "my-4 flex items-center justify-center rounded-xl border border-dashed border-slate-700 bg-slate-900/60 px-4 py-3 text-xs text-slate-400"
+      }
+    >
+      <span>
+        Espaço de anúncio{" "}
+        <span className="opacity-70">(slot: {slot})</span>
+      </span>
     </div>
   );
 }

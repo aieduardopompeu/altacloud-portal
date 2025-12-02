@@ -33,7 +33,7 @@ export function BottomStickyAd() {
 
         {/* Anúncio propriamente dito */}
         <div className="flex-1">
-          <AdsBanner adSlot="9227543350" className="w-full" />
+          <AdsBanner position="bottom_sticky" className="w-full" />
         </div>
 
         {/* Botão de fechar */}

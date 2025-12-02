@@ -2,6 +2,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { AdsBanner } from "../../components/ads/AdsBanner";
 
 export const metadata: Metadata = {
   title: "Fundamentos de Cloud | Alta Cloud",
@@ -71,8 +72,13 @@ export default function FundamentosPage() {
           </div>
         </header>
 
+        {/* ADS – topo da trilha (track_top) */}
+        <div className="mt-8">
+          <AdsBanner position="track_top" />
+        </div>
+
         {/* CTA */}
-        <section className="mt-10 rounded-xl border border-slate-800 bg-slate-900/70 p-5 shadow-lg md:p-6">
+        <section className="mt-6 rounded-xl border border-slate-800 bg-slate-900/70 p-5 shadow-lg md:p-6">
           <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <div>
               <h2 className="text-lg font-semibold text-slate-50 md:text-xl">
@@ -95,6 +101,11 @@ export default function FundamentosPage() {
             </div>
           </div>
         </section>
+
+        {/* ADS – meio da trilha (track_middle) */}
+        <div className="mt-8">
+          <AdsBanner position="track_middle" />
+        </div>
 
         {/* Conteúdo do módulo */}
         <section id="conteudo" className="mt-10 space-y-6">
@@ -173,9 +184,14 @@ export default function FundamentosPage() {
           </div>
         </section>
 
+        {/* ADS – final da trilha (track_bottom) */}
+        <div className="mt-10">
+          <AdsBanner position="track_bottom" />
+        </div>
+
         {/* Link de volta para a trilha */}
-        <section className="mt-10">
-          <div className="rounded-xl border border-slate-800 bg-slate-900/80 p-4 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+        <section className="mt-8">
+          <div className="flex flex-col gap-3 rounded-xl border border-slate-800 bg-slate-900/80 p-4 md:flex-row md:items-center md:justify-between">
             <div>
               <p className="text-sm font-medium text-slate-50">
                 Faz parte da Trilha Fundamentos de Cloud

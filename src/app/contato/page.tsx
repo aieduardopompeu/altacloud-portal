@@ -1,6 +1,4 @@
 ﻿// src/app/contato/page.tsx
-import { AdsBanner } from "../components/ads/AdsBanner";
-
 export default function ContatoPage() {
   return (
     <main className="min-h-screen bg-slate-950 text-slate-50">
@@ -18,11 +16,6 @@ export default function ContatoPage() {
             mensagem.
           </p>
         </header>
-
-        {/* PUBLICIDADE – DISPLAY TOPO (display_topo_altacloud) */}
-        <div className="mt-6 flex justify-center">
-          <AdsBanner adSlot="6664851396" />
-        </div>
 
         <section className="mt-10 grid gap-10 md:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
           {/* Formulário (estático por enquanto) */}
@@ -132,11 +125,6 @@ export default function ContatoPage() {
             </div>
           </div>
         </section>
-
-        {/* PUBLICIDADE – RODAPÉ (multiplex_footer_altacloud) */}
-        <div className="mt-10 flex justify-center">
-          <AdsBanner adSlot="9227543350" type="multiplex" />
-        </div>
       </div>
     </main>
   );

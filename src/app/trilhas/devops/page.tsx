@@ -1,6 +1,8 @@
 // src/app/trilhas/devops/page.tsx
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
+import { AdsBanner } from "../../components/ads/AdsBanner";
 
 export const metadata: Metadata = {
   title: "Trilha DevOps – Fundamentos e caminho completo | Alta Cloud",
@@ -11,26 +13,72 @@ export const metadata: Metadata = {
 export default function DevOpsTrilhaPage() {
   return (
     <main className="min-h-screen bg-slate-950 text-slate-100">
-      <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6 lg:px-8">
-        {/* HEADER */}
-        <header className="mb-10">
-          <p className="text-xs font-semibold uppercase tracking-wide text-sky-400">
-            Trilha
-          </p>
-          <h1 className="mt-2 text-3xl font-semibold">
-            Fundamentos de DevOps – O caminho completo
-          </h1>
-          <p className="mt-3 max-w-2xl text-sm text-slate-300">
-            Tudo o que você precisa para começar sua carreira como DevOps
-            Engineer: fundamentos, ferramentas essenciais, pipelines reais e
-            integração com AWS, Azure e Google Cloud.
-          </p>
+      <div className="mx-auto max-w-5xl px-4 pb-16 pt-10 sm:px-6 md:pt-14 lg:px-8">
+        {/* Breadcrumb (segue padrão das trilhas) */}
+        <nav className="mb-6 text-sm text-slate-400">
+          <Link
+            href="/trilhas"
+            className="transition-colors hover:text-slate-100"
+          >
+            Trilhas
+          </Link>
+          <span className="mx-2 text-slate-600">/</span>
+          <span className="text-slate-100">DevOps</span>
+        </nav>
+
+        {/* CABEÇALHO – padrão VPC/EC2 */}
+        <header className="grid gap-6 md:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] md:items-center">
+          <div className="space-y-4">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-sky-400">
+              Trilha Alta Cloud · DevOps
+            </p>
+            <h1 className="text-3xl font-bold tracking-tight md:text-4xl lg:text-5xl">
+              Fundamentos de DevOps – O caminho completo
+            </h1>
+            <p className="max-w-xl text-sm leading-relaxed text-slate-300 md:text-base">
+              Tudo o que você precisa para começar sua carreira como{" "}
+              <strong className="font-semibold text-slate-100">
+                DevOps Engineer
+              </strong>
+              : fundamentos, ferramentas essenciais, pipelines reais e
+              integração com AWS, Azure e Google Cloud.
+            </p>
+
+            <div className="flex flex-wrap gap-3 pt-2">
+              <span className="rounded-full bg-sky-500/10 px-3 py-1 text-xs font-medium text-sky-300 ring-1 ring-sky-500/30">
+                DevOps · Cultura e Automação
+              </span>
+              <span className="rounded-full bg-slate-800 px-3 py-1 text-xs font-medium text-slate-200 ring-1 ring-slate-700">
+                Foco: CI/CD · IaC · Observabilidade
+              </span>
+              <span className="rounded-full bg-emerald-500/10 px-3 py-1 text-xs font-medium text-emerald-300 ring-1 ring-emerald-500/30">
+                Trilha em construção
+              </span>
+            </div>
+          </div>
+
+          {/* Thumbnail DevOps */}
+          <div className="w-full overflow-hidden rounded-xl border border-slate-800 bg-slate-900/60 shadow-xl">
+            <Image
+              src="/thumbnails/devops.jpg"
+              alt="Thumbnail da Trilha DevOps"
+              width={1200}
+              height={675}
+              priority
+              className="h-auto w-full object-contain"
+            />
+          </div>
         </header>
 
+        {/* ADS – topo da trilha (track_top) */}
+        <div className="mt-8">
+          <AdsBanner position="track_top" />
+        </div>
+
         {/* SEÇÃO 1 – O QUE É DEVOPS */}
-        <section className="mb-12">
+        <section className="mt-8 mb-12">
           <h2 className="text-xl font-semibold text-sky-300">O que é DevOps?</h2>
-          <p className="mt-3 text-sm text-slate-300 leading-relaxed">
+          <p className="mt-3 text-sm leading-relaxed text-slate-300">
             DevOps é um conjunto de práticas, ferramentas e uma mudança de
             cultura que aproxima desenvolvimento (Dev) e operações (Ops) para
             entregar software de forma mais rápida, estável e confiável.
@@ -89,6 +137,11 @@ export default function DevOpsTrilhaPage() {
           </div>
         </section>
 
+        {/* ADS – meio da trilha (track_middle) */}
+        <div className="mb-12">
+          <AdsBanner position="track_middle" />
+        </div>
+
         {/* SEÇÃO 3 – ETAPAS DA TRILHA */}
         <section className="mb-12">
           <h2 className="text-xl font-semibold text-sky-300">
@@ -142,6 +195,11 @@ export default function DevOpsTrilhaPage() {
             ))}
           </div>
         </section>
+
+        {/* ADS – final da trilha (track_bottom) */}
+        <div className="mb-12">
+          <AdsBanner position="track_bottom" />
+        </div>
 
         {/* CTA FINAL */}
         <section className="rounded-lg border border-slate-800 bg-slate-900 p-6 text-center">
