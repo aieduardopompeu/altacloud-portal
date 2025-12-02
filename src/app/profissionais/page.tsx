@@ -302,7 +302,7 @@ function ProfessionalCard({ professional }: { professional: Professional }) {
 export default function ProfessionalsPage() {
   return (
     <main className="min-h-screen bg-slate-950">
-      <div className="mx-auto w-full max-w-6xl px-4 pt-24 pb-16 md:px-6 lg:px-0">
+      <div className="mx-auto w-full max-w-5xl px-4 pb-16 pt-10 md:px-6 md:pt-14">
         <header className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
           <div className="space-y-4">
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-400">

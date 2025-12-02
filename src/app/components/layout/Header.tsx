@@ -28,7 +28,7 @@ const tracks = [
 export function Header() {
   const pathname = usePathname();
   const [openMenu, setOpenMenu] = useState(false);
-  const [openTracks, setOpenTracks] = useState(false);
+  const [openTracks, setOpenTracks] = useState(false); // usado para desktop E mobile
 
   const isActive = (href: string) => {
     if (href === "/") return pathname === "/";
@@ -88,12 +88,8 @@ export function Header() {
         <div className="hidden items-center gap-6 md:flex">
           {mainLinks.map((link) =>
             link.href === "/trilhas" ? (
-              <div
-                key={link.href}
-                className="relative"
-                onMouseEnter={() => setOpenTracks(true)}
-                onMouseLeave={() => setOpenTracks(false)}
-              >
+              <div key={link.href} className="relative">
+                {/* Botão Trilhas (abre por clique no desktop) */}
                 <button
                   type="button"
                   className={`flex items-center gap-1 text-sm transition hover:text-sky-400 ${
@@ -101,18 +97,21 @@ export function Header() {
                       ? "font-semibold text-sky-400"
                       : "text-slate-300"
                   }`}
+                  onClick={() => setOpenTracks((v) => !v)}
                 >
                   {link.label}
-                  <span className="text-xs">▾</span>
+                  <span className="text-xs">{openTracks ? "▴" : "▾"}</span>
                 </button>
 
+                {/* Dropdown Trilhas (desktop) */}
                 {openTracks && (
-                  <div className="absolute right-0 mt-2 w-64 rounded-xl border border-slate-800 bg-slate-900/95 p-2 shadow-xl">
+                  <div className="absolute right-0 top-full z-30 mt-3 w-64 rounded-xl border border-slate-800 bg-slate-900/95 p-2 shadow-xl">
                     {tracks.map((track) => (
                       <Link
                         key={track.href}
                         href={track.href}
                         className="block rounded-lg px-3 py-2 text-sm text-slate-200 hover:bg-slate-800 hover:text-sky-300"
+                        onClick={() => setOpenTracks(false)}
                       >
                         {track.label}
                       </Link>
@@ -140,7 +139,10 @@ export function Header() {
         <button
           type="button"
           className="inline-flex items-center gap-2 rounded-full bg-sky-600 px-4 py-2 text-xs font-semibold text-white shadow-md hover:bg-sky-500 md:hidden"
-          onClick={() => setOpenMenu((v) => !v)}
+          onClick={() => {
+            setOpenMenu((v) => !v);
+            if (!openMenu) setOpenTracks(false); // fecha trilhas ao abrir menu
+          }}
         >
           <span>Menu</span>
           <span className="flex flex-col gap-[3px]">
@@ -178,7 +180,10 @@ export function Header() {
                           key={track.href}
                           href={track.href}
                           className="block rounded-lg px-3 py-2 text-sm text-slate-200 hover:bg-slate-900 hover:text-sky-300"
-                          onClick={() => setOpenMenu(false)}
+                          onClick={() => {
+                            setOpenMenu(false);
+                            setOpenTracks(false);
+                          }}
                         >
                           {track.label}
                         </Link>
