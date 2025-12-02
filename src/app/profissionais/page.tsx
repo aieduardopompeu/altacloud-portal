@@ -1,418 +1,358 @@
 // src/app/profissionais/page.tsx
-import type { Metadata } from "next";
 import Link from "next/link";
-import { ReactNode } from "react";
 import { AdsBanner } from "../components/ads/AdsBanner";
 
-export const metadata: Metadata = {
-  title: "Profissionais Certificados em Cloud | Alta Cloud",
-  description:
-    "Encontre profissionais certificados em AWS, Azure, Google Cloud e Oracle. Diretório gratuito de especialistas em computação em nuvem, mantido pelo Alta Cloud.",
-};
-
-type CloudId = "aws" | "azure" | "gcp" | "oracle";
-
-type CertificationLevel =
-  | "Foundational"
-  | "Associate"
-  | "Professional"
-  | "Specialty"
-  | "Expert"
-  | "Other";
-
-type Certification = {
-  id: string;
-  name: string;
-  code?: string;
-  level: CertificationLevel;
-};
+type Availability = "available" | "open-to-opps";
 
 type Professional = {
-  id: string;
   name: string;
   role: string;
-  cloud: CloudId;
-  location?: string;
-  headline?: string;
-  certifications: Certification[];
-  linkedinUrl?: string;
-  githubUrl?: string;
-  websiteUrl?: string;
-  isAvailable: boolean;
+  location: string;
+  availability: Availability;
+  summary: string;
+  certifications: string;
+  linkedin?: string;
+  github?: string;
+  portfolio?: string;
 };
 
-// =====================
-// DATABASE ESTÁTICO (MVP)
-// =====================
+type CloudSection = {
+  id: string;
+  title: string;
+  subtitle: string;
+  professionals: Professional[];
+};
 
-const professionals: Professional[] = [
-  {
-    id: "joao-souza",
-    name: "João Souza",
-    role: "Cloud Architect",
-    cloud: "aws",
-    location: "São Paulo, SP",
-    headline:
-      "Arquitetura em AWS focada em alta disponibilidade, segurança e custo otimizado.",
-    certifications: [
-      {
-        id: "aws-sa-associate",
-        name: "AWS Certified Solutions Architect",
-        code: "SAA-C03",
-        level: "Associate",
-      },
-      {
-        id: "aws-sa-pro",
-        name: "AWS Certified Solutions Architect",
-        code: "SAP-C02",
-        level: "Professional",
-      },
-    ],
-    linkedinUrl: "https://www.linkedin.com/",
-    githubUrl: "https://github.com/",
-    isAvailable: true,
-  },
-  {
-    id: "maria-lima",
-    name: "Maria Lima",
-    role: "DevOps & Cloud Engineer",
-    cloud: "aws",
-    location: "Belo Horizonte, MG",
-    headline:
-      "Pipelines CI/CD, IaC e observabilidade para ambientes nativos em nuvem.",
-    certifications: [
-      {
-        id: "aws-devops-pro",
-        name: "AWS Certified DevOps Engineer",
-        code: "DOP-C02",
-        level: "Professional",
-      },
-    ],
-    linkedinUrl: "https://www.linkedin.com/",
-    githubUrl: "https://github.com/",
-    isAvailable: false,
-  },
-  {
-    id: "carlos-oliveira",
-    name: "Carlos Oliveira",
-    role: "Azure Cloud Engineer",
-    cloud: "azure",
-    location: "Curitiba, PR",
-    headline:
-      "Ambientes híbridos, identidade, rede e segurança em Azure para empresas.",
-    certifications: [
-      {
-        id: "az-900",
-        name: "Microsoft Certified: Azure Fundamentals",
-        code: "AZ-900",
-        level: "Foundational",
-      },
-      {
-        id: "az-104",
-        name: "Microsoft Certified: Azure Administrator Associate",
-        code: "AZ-104",
-        level: "Associate",
-      },
-    ],
-    linkedinUrl: "https://www.linkedin.com/",
-    isAvailable: true,
-  },
-  {
-    id: "ana-pereira",
-    name: "Ana Pereira",
-    role: "Data & ML Engineer",
-    cloud: "gcp",
-    location: "Remoto · Brasil",
-    headline:
-      "Pipelines de dados, BigQuery, machine learning em produção e governança.",
-    certifications: [
-      {
-        id: "gcp-data-pro",
-        name: "Google Cloud Professional Data Engineer",
-        level: "Professional",
-      },
-    ],
-    linkedinUrl: "https://www.linkedin.com/",
-    githubUrl: "https://github.com/",
-    websiteUrl: "https://example.com",
-    isAvailable: true,
-  },
-  {
-    id: "ricardo-santos",
-    name: "Ricardo Santos",
-    role: "Cloud Architect OCI",
-    cloud: "oracle",
-    location: "Porto Alegre, RS",
-    headline:
-      "Arquitetura em Oracle Cloud para workloads críticos e banco de dados.",
-    certifications: [
-      {
-        id: "oci-foundation",
-        name: "Oracle Cloud Infrastructure Foundations",
-        level: "Foundational",
-      },
-      {
-        id: "oci-architect-pro",
-        name: "Oracle Cloud Infrastructure Architect Professional",
-        level: "Professional",
-      },
-    ],
-    linkedinUrl: "https://www.linkedin.com/",
-    isAvailable: false,
-  },
-];
-
-// =====================
-// COMPONENTES
-// =====================
-
-const clouds: {
-  id: CloudId;
-  label: string;
-  badgeClass: string;
-  titleClass: string;
-}[] = [
+const directorySections: CloudSection[] = [
   {
     id: "aws",
-    label: "AWS",
-    badgeClass: "bg-yellow-400/10 text-yellow-300 ring-yellow-400/40",
-    titleClass: "text-yellow-300",
+    title: "AWS",
+    subtitle:
+      "Especialistas com certificações oficiais na AWS. Use este diretório para encontrar profissionais para projetos, consultorias, treinamentos e oportunidades.",
+    professionals: [
+      {
+        name: "João Souza",
+        role: "Cloud Architect",
+        location: "São Paulo, SP",
+        availability: "available",
+        summary:
+          "Arquitetura em AWS focada em alta disponibilidade, segurança e custo otimizado.",
+        certifications:
+          "Associate · SAA-C03 · AWS Certified Solutions Architect — Associate · Professional · SAP-C02 · AWS Certified Solutions Architect — Professional",
+        linkedin: "https://www.linkedin.com",
+        github: "https://github.com",
+      },
+      {
+        name: "Maria Lima",
+        role: "DevOps & Cloud Engineer",
+        location: "Belo Horizonte, MG",
+        availability: "open-to-opps",
+        summary:
+          "Pipelines CI/CD, IaC e observabilidade para ambientes nativos em nuvem.",
+        certifications:
+          "Professional · DOP-C02 · AWS Certified DevOps Engineer — Professional",
+        linkedin: "https://www.linkedin.com",
+        github: "https://github.com",
+      },
+    ],
   },
   {
     id: "azure",
-    label: "Microsoft Azure",
-    badgeClass: "bg-blue-500/10 text-blue-300 ring-blue-500/40",
-    titleClass: "text-blue-300",
+    title: "Microsoft Azure",
+    subtitle:
+      "Especialistas com certificações oficiais na Microsoft Azure. Use este diretório para encontrar profissionais para projetos, consultorias, treinamentos e oportunidades.",
+    professionals: [
+      {
+        name: "Carlos Oliveira",
+        role: "Azure Cloud Engineer",
+        location: "Curitiba, PR",
+        availability: "available",
+        summary:
+          "Ambientes híbridos, identidade, rede e segurança em Azure para empresas.",
+        certifications:
+          "Foundational · AZ-900 · Microsoft Certified: Azure Fundamentals · Associate · AZ-104 · Microsoft Certified: Azure Administrator Associate",
+        linkedin: "https://www.linkedin.com",
+      },
+    ],
   },
   {
     id: "gcp",
-    label: "Google Cloud",
-    badgeClass: "bg-red-500/10 text-red-300 ring-red-500/40",
-    titleClass: "text-red-300",
+    title: "Google Cloud",
+    subtitle:
+      "Especialistas com certificações oficiais na Google Cloud. Use este diretório para encontrar profissionais para projetos, consultorias, treinamentos e oportunidades.",
+    professionals: [
+      {
+        name: "Ana Pereira",
+        role: "Data & ML Engineer",
+        location: "Remoto · Brasil",
+        availability: "available",
+        summary:
+          "Pipelines de dados, BigQuery, machine learning em produção e governança.",
+        certifications:
+          "Professional · Google Cloud Professional Data Engineer",
+        linkedin: "https://www.linkedin.com",
+        github: "https://github.com",
+        portfolio: "https://example.com",
+      },
+    ],
   },
   {
-    id: "oracle",
-    label: "Oracle Cloud",
-    badgeClass: "bg-red-700/10 text-red-300 ring-red-700/40",
-    titleClass: "text-red-300",
+    id: "oci",
+    title: "Oracle Cloud",
+    subtitle:
+      "Especialistas com certificações oficiais na Oracle Cloud. Use este diretório para encontrar profissionais para projetos, consultorias, treinamentos e oportunidades.",
+    professionals: [
+      {
+        name: "Ricardo Santos",
+        role: "Cloud Architect OCI",
+        location: "Porto Alegre, RS",
+        availability: "open-to-opps",
+        summary:
+          "Arquitetura em Oracle Cloud para workloads críticos e banco de dados.",
+        certifications:
+          "Foundational · Oracle Cloud Infrastructure Foundations · Professional · Oracle Cloud Infrastructure Architect Professional",
+        linkedin: "https://www.linkedin.com",
+      },
+    ],
   },
 ];
 
-function Badge({ children }: { children: ReactNode }) {
-  return (
-    <span className="inline-flex items-center rounded-full border border-slate-700 bg-slate-900/70 px-2.5 py-0.5 text-xs font-medium text-slate-200">
-      {children}
-    </span>
-  );
+function availabilityLabel(status: Availability) {
+  if (status === "available") return "Disponível para projetos";
+  return "Ouvindo propostas";
 }
 
-function AvailabilityBadge({ isAvailable }: { isAvailable: boolean }) {
-  if (isAvailable) {
-    return (
-      <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-2.5 py-0.5 text-xs font-medium text-emerald-300 ring-1 ring-emerald-500/40">
-        <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-        Disponível para projetos
-      </span>
-    );
+function availabilityClassName(status: Availability) {
+  if (status === "available") {
+    return "inline-flex items-center rounded-full bg-emerald-500/15 px-3 py-1 text-xs font-medium text-emerald-300 ring-1 ring-emerald-500/40";
   }
 
+  return "inline-flex items-center rounded-full bg-amber-500/15 px-3 py-1 text-xs font-medium text-amber-300 ring-1 ring-amber-500/40";
+}
+
+// Botão padrão do diretório (usado no topo e no rodapé)
+function DirectoryCtaButton({ href, children }: { href: string; children: string }) {
   return (
-    <span className="inline-flex items-center gap-1 rounded-full bg-slate-700/30 px-2.5 py-0.5 text-xs font-medium text-slate-300 ring-1 ring-slate-600/60">
-      <span className="h-1.5 w-1.5 rounded-full bg-slate-400" />
-      Ouvindo propostas
-    </span>
+    <Link
+      href={href}
+      className="group relative inline-flex items-center overflow-hidden rounded-full bg-cyan-500 px-6 py-2.5 text-sm font-semibold text-slate-950 shadow-lg shadow-cyan-500/40 transition-transform hover:-translate-y-0.5 hover:bg-cyan-400 hover:shadow-cyan-400/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
+    >
+      <span
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 translate-x-[-40%] bg-gradient-to-r from-cyan-300/0 via-cyan-100/30 to-cyan-300/0 opacity-0 blur-[2px] transition group-hover:translate-x-[40%] group-hover:opacity-100"
+      />
+      <span className="relative flex items-center gap-2">
+        <span className="h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_10px_rgba(52,211,153,0.9)]" />
+        <span>{children}</span>
+        <span className="text-xs opacity-80 transition-transform group-hover:translate-x-0.5">
+          →
+        </span>
+      </span>
+    </Link>
   );
 }
 
-function ProfessionalCard({ professional }: { professional: Professional }) {
-  return (
-    <article className="group flex flex-col rounded-2xl border border-slate-800 bg-slate-950/90 p-6 shadow-lg shadow-slate-900/40 transition-all hover:-translate-y-1 hover:border-cyan-500/60 hover:shadow-cyan-500/20">
-      <div className="flex items-start justify-between gap-3">
-        <div>
-          <h3 className="text-base font-semibold text-slate-50">
-            {professional.name}
-          </h3>
-          <p className="mt-0.5 text-sm text-slate-300">{professional.role}</p>
-          {professional.location && (
-            <p className="mt-0.5 text-xs text-slate-400">
-              📍 {professional.location}
-            </p>
-          )}
-        </div>
-        <AvailabilityBadge isAvailable={professional.isAvailable} />
-      </div>
-
-      {professional.headline && (
-        <p className="mt-3 text-sm text-slate-300">{professional.headline}</p>
-      )}
-
-      <div className="mt-3 flex flex-wrap gap-2">
-        {professional.certifications.map((cert) => (
-          <Badge key={cert.id}>
-            <span className="font-semibold">
-              {cert.level}
-              {cert.code ? ` • ${cert.code}` : ""}
-            </span>
-            <span className="mx-1.5 text-slate-500">·</span>
-            <span>{cert.name}</span>
-          </Badge>
-        ))}
-      </div>
-
-      <div className="mt-4 flex flex-wrap gap-3 text-xs font-medium text-slate-300">
-        {professional.linkedinUrl && (
-          <Link
-            href={professional.linkedinUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-1 text-cyan-300 hover:text-cyan-200"
-          >
-            <span>LinkedIn</span>
-          </Link>
-        )}
-        {professional.githubUrl && (
-          <Link
-            href={professional.githubUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-1 text-cyan-300 hover:text-cyan-200"
-          >
-            <span>GitHub</span>
-          </Link>
-        )}
-        {professional.websiteUrl && (
-          <Link
-            href={professional.websiteUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-1 text-cyan-300 hover:text-cyan-200"
-          >
-            <span>Portfólio</span>
-          </Link>
-        )}
-      </div>
-    </article>
-  );
-}
-
-// =====================
-// PÁGINA PRINCIPAL
-// =====================
-
-export default function ProfessionalsPage() {
+export default function ProfessionalsDirectoryPage() {
   return (
     <main className="min-h-screen bg-slate-950 text-slate-50">
-      <div className="mx-auto w-full max-w-5xl px-4 pb-16 pt-10 md:px-6 md:pt-14">
-        <header className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
-          <div className="space-y-4">
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-400">
-              Alta Cloud · Diretório
-            </p>
-            <h1 className="text-3xl font-bold text-slate-50 sm:text-4xl">
-              Profissionais Certificados em Cloud
-            </h1>
-            <p className="max-w-2xl text-sm text-slate-300 sm:text-base">
-              Aqui você encontra{" "}
-              <span className="font-semibold text-cyan-300">
-                profissionais certificados em AWS, Azure, Google Cloud e Oracle
-              </span>
-              . Esta primeira versão do diretório é{" "}
-              <span className="font-semibold text-emerald-300">
-                totalmente gratuita
-              </span>{" "}
-              tanto para profissionais quanto para empresas. Em breve, novas
-              funcionalidades de destaque, filtros avançados e indicações
-              premium.
-            </p>
-            <p className="text-xs text-slate-400">
-              Obs.: Esta é uma versão inicial (MVP). As informações são
-              fornecidas pelos próprios profissionais e podem ser atualizadas ao
-              longo do tempo.
-            </p>
-          </div>
+      <div className="mx-auto w-full max-w-5xl px-4 pt-24 pb-16 md:px-6 lg:px-0">
+        {/* Header */}
+        <header className="space-y-4">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-400">
+            Alta Cloud · Diretório
+          </p>
 
-          {/* CTA "Quero aparecer na lista" */}
-          <div className="md:pt-8">
-            <Link
-              href="/profissionais/inscricao"
-              className="inline-flex items-center justify-center rounded-full bg-cyan-500 px-5 py-2.5 text-sm font-semibold text-slate-950 shadow-lg shadow-cyan-500/40 transition hover:bg-cyan-400 hover:shadow-cyan-400/50"
-            >
-              Quero aparecer na lista
-            </Link>
-            <p className="mt-2 max-w-xs text-xs text-slate-400">
-              Área gratuita nesta fase inicial. Em breve, benefícios exclusivos
-              para profissionais em destaque.
-            </p>
+          <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+            <div className="space-y-3">
+              <h1 className="text-3xl font-bold text-slate-50 sm:text-4xl">
+                Profissionais Certificados em Cloud
+              </h1>
+              <p className="max-w-2xl text-sm text-slate-300 sm:text-base">
+                Encontre especialistas certificados em{" "}
+                <span className="font-semibold">
+                  AWS, Azure, Google Cloud e Oracle
+                </span>{" "}
+                para projetos, consultorias, treinamentos e oportunidades de
+                carreira. Esta primeira versão do diretório é{" "}
+                <span className="font-semibold">
+                  gratuita para empresas e profissionais
+                </span>{" "}
+                enquanto consolidamos a base inicial.
+              </p>
+            </div>
+
+            {/* CTA topo – botão + tudo na mesma linha */}
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-3">
+              <DirectoryCtaButton href="/profissionais/inscricao?from=directory">
+                Quero aparecer na lista
+              </DirectoryCtaButton>
+
+              {/* Texto explicativo foi removido daqui.
+                  Agora essa mensagem aparece como popup
+                  na página /profissionais/inscricao. */}
+            </div>
           </div>
         </header>
 
-        {/* PUBLICIDADE – DISPLAY TOPO (display_topo_altacloud) */}
-        <div className="my-6 flex justify-center">
-          <AdsBanner adSlot="6664851396" />
-        </div>
+        {/* Como usar o diretório */}
+        <section className="mt-8 grid gap-6 rounded-2xl border border-slate-800 bg-slate-900/60 p-5 sm:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)] sm:p-6">
+          <div className="space-y-2">
+            <h2 className="text-sm font-semibold text-slate-100 sm:text-base">
+              Como usar este diretório
+            </h2>
+            <ol className="mt-1 list-decimal space-y-1 pl-5 text-sm text-slate-300 sm:text-[0.95rem]">
+              <li>
+                <span className="font-medium">Escolha a nuvem:</span> navegue
+                pelas seções de AWS, Azure, Google Cloud ou Oracle.
+              </li>
+              <li>
+                <span className="font-medium">Avalie o perfil:</span> veja
+                certificações, resumo profissional e links de contato.
+              </li>
+              <li>
+                <span className="font-medium">Converse direto:</span> use os
+                links do próprio profissional para falar sobre vagas, projetos
+                ou parcerias.
+              </li>
+            </ol>
+          </div>
 
-        {/* LISTA POR NUVEM + ANÚNCIO NO MEIO */}
-        <section className="mt-4 space-y-10">
-          {clouds.map((cloud, index) => {
-            const cloudProfessionals = professionals.filter(
-              (p) => p.cloud === cloud.id
-            );
-
-            if (cloudProfessionals.length === 0) return null;
-
-            return (
-              <div key={cloud.id} className="space-y-4">
-                <div className="flex flex-wrap items-center justify-between gap-3">
-                  <div className="space-y-1">
-                    <div
-                      className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold ring-1 ${cloud.badgeClass}`}
-                    >
-                      <span className="h-1.5 w-1.5 rounded-full bg-current" />
-                      {cloud.label}
-                    </div>
-                    <h2
-                      className={`text-lg font-semibold ${cloud.titleClass}`}
-                    >
-                      Profissionais certificados em {cloud.label}
-                    </h2>
-                    <p className="text-sm text-slate-300">
-                      Especialistas com certificações oficiais na {cloud.label}.
-                      Use este diretório para encontrar profissionais para
-                      projetos, consultorias, treinamentos e oportunidades.
-                    </p>
-                  </div>
-                  <p className="text-xs text-slate-400">
-                    {cloudProfessionals.length}{" "}
-                    {cloudProfessionals.length === 1
-                      ? "profissional listado"
-                      : "profissionais listados"}
-                  </p>
-                </div>
-
-                <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                  {cloudProfessionals.map((professional) => (
-                    <ProfessionalCard
-                      key={professional.id}
-                      professional={professional}
-                    />
-                  ))}
-                </div>
-
-                {/* Após o segundo bloco de nuvem, insere um anúncio in-article */}
-                {index === 1 && (
-                  <div className="mt-8 flex justify-center">
-                    <AdsBanner adSlot="7666231438" />
-                  </div>
-                )}
-              </div>
-            );
-          })}
+          <div className="space-y-2 rounded-xl border border-slate-800 bg-slate-950/60 p-4 text-sm text-slate-300">
+            <h3 className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
+              Curadoria em evolução
+            </h3>
+            <p className="mt-1">
+              Os dados são informados pelos próprios profissionais e passam por
+              uma revisão básica da equipe Alta Cloud antes de serem
+              publicados. Em breve, novos recursos de destaque, filtros
+              avançados e recomendações inteligentes.
+            </p>
+          </div>
         </section>
 
-        {/* PUBLICIDADE – RODAPÉ (multiplex_footer_altacloud) */}
-        <div className="mt-12 flex justify-center">
-          <AdsBanner adSlot="9227543350" />
+        {/* Primeiro banner de anúncio */}
+        <div className="mt-8">
+          <AdsBanner position="directory_top" />
         </div>
+
+        {/* Seções por nuvem */}
+        <div className="mt-10 space-y-12">
+          {directorySections.map((section, index) => (
+            <section key={section.id} id={section.id} className="space-y-4">
+              <header className="space-y-2">
+                <h2 className="text-lg font-semibold text-slate-50 sm:text-xl">
+                  {section.title}
+                </h2>
+                <p className="max-w-2xl text-sm text-slate-300 sm:text-[0.95rem]">
+                  {section.subtitle}
+                </p>
+                <p className="text-xs font-medium text-slate-400">
+                  {section.professionals.length}{" "}
+                  {section.professionals.length === 1
+                    ? "profissional listado"
+                    : "profissionais listados"}
+                </p>
+              </header>
+
+              <div className="grid gap-4 md:grid-cols-2">
+                {section.professionals.map((pro) => (
+                  <article
+                    key={pro.name}
+                    className="flex h-full flex-col justify-between rounded-2xl border border-slate-800 bg-slate-900/70 p-4 shadow-sm shadow-slate-950/40"
+                  >
+                    <div className="space-y-3">
+                      <div className="flex flex-wrap items-start justify-between gap-2">
+                        <div>
+                          <h3 className="text-base font-semibold text-slate-50">
+                            {pro.name}
+                          </h3>
+                          <p className="text-xs text-slate-400">{pro.role}</p>
+                        </div>
+                        <span className={availabilityClassName(pro.availability)}>
+                          {availabilityLabel(pro.availability)}
+                        </span>
+                      </div>
+
+                      <p className="text-xs text-slate-400">{pro.location}</p>
+
+                      <p className="text-sm text-slate-200">{pro.summary}</p>
+
+                      <p className="text-xs text-slate-400">
+                        <span className="font-semibold">Certificações: </span>
+                        {pro.certifications}
+                      </p>
+                    </div>
+
+                    <div className="mt-4 flex flex-wrap gap-2">
+                      {pro.linkedin && (
+                        <a
+                          href={pro.linkedin}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="inline-flex items-center rounded-full border border-slate-700 bg-slate-900 px-3 py-1 text-xs font-medium text-slate-200 hover:border-cyan-400 hover:text-cyan-300"
+                        >
+                          LinkedIn
+                        </a>
+                      )}
+                      {pro.github && (
+                        <a
+                          href={pro.github}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="inline-flex items-center rounded-full border border-slate-700 bg-slate-900 px-3 py-1 text-xs font-medium text-slate-200 hover:border-cyan-400 hover:text-cyan-300"
+                        >
+                          GitHub
+                        </a>
+                      )}
+                      {pro.portfolio && (
+                        <a
+                          href={pro.portfolio}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="inline-flex items-center rounded-full border border-slate-700 bg-slate-900 px-3 py-1 text-xs font-medium text-slate-200 hover:border-cyan-400 hover:text-cyan-300"
+                        >
+                          Portfólio
+                        </a>
+                      )}
+                    </div>
+                  </article>
+                ))}
+              </div>
+
+              {/* Banners adicionais entre blocos */}
+              {index === 0 && (
+                <div className="mt-6">
+                  <AdsBanner position="directory_aws_after" />
+                </div>
+              )}
+              {index === 2 && (
+                <div className="mt-6">
+                  <AdsBanner position="directory_middle" />
+                </div>
+              )}
+            </section>
+          ))}
+        </div>
+
+        {/* CTA final */}
+        <section className="mt-12 rounded-2xl border border-slate-800 bg-slate-900/70 p-5 sm:p-6">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className="space-y-1.5">
+              <h2 className="text-base font-semibold text-slate-50 sm:text-lg">
+                Quer fazer parte do diretório?
+              </h2>
+              <p className="max-w-xl text-sm text-slate-300">
+                Se você é profissional de cloud com certificações oficiais e
+                quer mais visibilidade para projetos, vagas e parcerias, envie
+                seus dados para a curadoria do Alta Cloud.
+              </p>
+            </div>
+
+            <DirectoryCtaButton href="/profissionais/inscricao?from=directory">
+              Quero aparecer na lista
+            </DirectoryCtaButton>
+          </div>
+        </section>
       </div>
     </main>
   );
