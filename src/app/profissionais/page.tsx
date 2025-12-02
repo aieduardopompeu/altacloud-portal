@@ -301,7 +301,7 @@ function ProfessionalCard({ professional }: { professional: Professional }) {
 
 export default function ProfessionalsPage() {
   return (
-    <main className="min-h-screen bg-slate-950">
+    <main className="min-h-screen bg-slate-950 text-slate-50">
       <div className="mx-auto w-full max-w-5xl px-4 pb-16 pt-10 md:px-6 md:pt-14">
         <header className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
           <div className="space-y-4">
@@ -312,9 +312,9 @@ export default function ProfessionalsPage() {
               Profissionais Certificados em Cloud
             </h1>
             <p className="max-w-2xl text-sm text-slate-300 sm:text-base">
-              Aqui você encontra profissionais certificados em{" "}
+              Aqui você encontra{" "}
               <span className="font-semibold text-cyan-300">
-                AWS, Azure, Google Cloud e Oracle
+                profissionais certificados em AWS, Azure, Google Cloud e Oracle
               </span>
               . Esta primeira versão do diretório é{" "}
               <span className="font-semibold text-emerald-300">
@@ -347,11 +347,9 @@ export default function ProfessionalsPage() {
         </header>
 
         {/* PUBLICIDADE – DISPLAY TOPO (display_topo_altacloud) */}
-        <AdsBanner
-          adSlot="6664851396"
-          type="display"
-          className="my-6 flex justify-center"
-        />
+        <div className="my-6 flex justify-center">
+          <AdsBanner adSlot="6664851396" />
+        </div>
 
         {/* LISTA POR NUVEM + ANÚNCIO NO MEIO */}
         <section className="mt-4 space-y-10">
@@ -402,11 +400,9 @@ export default function ProfessionalsPage() {
 
                 {/* Após o segundo bloco de nuvem, insere um anúncio in-article */}
                 {index === 1 && (
-                  <AdsBanner
-                    adSlot="7666231438"
-                    type="in-article"
-                    className="mt-8 flex justify-center"
-                  />
+                  <div className="mt-8 flex justify-center">
+                    <AdsBanner adSlot="7666231438" />
+                  </div>
                 )}
               </div>
             );
@@ -414,11 +410,9 @@ export default function ProfessionalsPage() {
         </section>
 
         {/* PUBLICIDADE – RODAPÉ (multiplex_footer_altacloud) */}
-        <AdsBanner
-          adSlot="9227543350"
-          type="multiplex"
-          className="mt-12 flex justify-center"
-        />
+        <div className="mt-12 flex justify-center">
+          <AdsBanner adSlot="9227543350" />
+        </div>
       </div>
     </main>
   );
