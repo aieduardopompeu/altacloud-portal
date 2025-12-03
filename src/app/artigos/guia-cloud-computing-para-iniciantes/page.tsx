@@ -2,6 +2,7 @@
 import type { Metadata } from "next";
 import Script from "next/script";
 import { ArticleLayout } from "../../components/layout/ArticleLayout";
+import { AdsBanner } from "../../components/ads/AdsBanner";
 
 const articleSlug = "guia-cloud-computing-para-iniciantes";
 const articleUrl = `https://altacloud.com.br/artigos/${articleSlug}`;
@@ -50,12 +51,6 @@ export const metadata: Metadata = {
     type: "article",
     locale: "pt_BR",
     siteName: "Alta Cloud",
-    images: [
-      {
-        url: "https://altacloud.com.br/og/guia-cloud-computing-para-iniciantes.png",
-        alt: "Guia Completo de Cloud Computing para Iniciantes",
-      },
-    ],
   },
 };
 
@@ -77,17 +72,20 @@ export default function Page() {
         readingTime="12 min"
         date="Jan 2025"
       >
+        {/* Anúncio topo do artigo (controlado por article_top no adsConfig) */}
+        <AdsBanner position="article_top" className="my-6" />
+
         <p>
           Se você está começando na área de tecnologia ou migrando de
           infraestrutura tradicional, entender cloud computing não é mais um
           diferencial — é praticamente obrigatório. A boa notícia é que, com uma
-          base bem estruturada, a nuvem deixa de ser um bicho de sete cabeças e
-          passa a ser uma aliada estratégica.
+          base bem estruturada, a nuvem deixa de ser um bicho de sete cabeças
+          e passa a ser uma aliada estratégica.
         </p>
 
         <p>
-          Neste guia, vamos passar pelos conceitos essenciais de forma direta: o
-          que é cloud, quais são os principais modelos de serviço, como os
+          Neste guia, vamos passar pelos conceitos essenciais de forma direta:
+          o que é cloud, quais são os principais modelos de serviço, como os
           provedores se organizam e quais caminhos você pode seguir para
           aprender na prática.
         </p>
@@ -97,18 +95,18 @@ export default function Page() {
         </h2>
 
         <p>
-          Cloud computing é a entrega de recursos de computação – como
-          servidores, armazenamento, bancos de dados, redes, software e
-          analytics – pela internet, sob demanda e com pagamento conforme o uso.
-          Em vez de comprar e manter servidores físicos, você utiliza recursos
-          de datacenters de provedores como AWS, Azure e Google Cloud.
+          Cloud computing é a entrega de recursos de computação – como servidores,
+          armazenamento, bancos de dados, redes, software e analytics – pela
+          internet, sob demanda e com pagamento conforme o uso. Em vez de comprar
+          e manter servidores físicos, você utiliza recursos de datacenters de
+          provedores como AWS, Azure e Google Cloud.
         </p>
 
         <p>
           A grande vantagem é poder escalar para cima e para baixo de acordo com
           a necessidade, pagando apenas pelo que realmente consome. Isso muda a
-          forma como empresas testam ideias, lançam produtos e sustentam
-          sistemas em produção.
+          forma como empresas testam ideias, lançam produtos e sustentam sistemas
+          em produção.
         </p>
 
         <h2 className="mt-6 text-lg font-semibold text-slate-50">
@@ -120,7 +118,7 @@ export default function Page() {
           grandes modelos de serviço:
         </p>
 
-        <ul className="list-disc space-y-1 pl-5">
+        <ul className="list-disc pl-5 space-y-1">
           <li>
             <strong>IaaS (Infrastructure as a Service)</strong>: você aluga
             infraestrutura básica — como máquinas virtuais, redes e discos — e
@@ -141,8 +139,8 @@ export default function Page() {
         </ul>
 
         <p>
-          Com o tempo, você vai perceber que esses modelos se combinam e que, na
-          prática, muitas soluções misturam características de mais de um
+          Com o tempo, você vai perceber que esses modelos se combinam e que,
+          na prática, muitas soluções misturam características de mais de um
           modelo.
         </p>
 
@@ -154,7 +152,7 @@ export default function Page() {
           Hoje, três grandes players dominam o mercado global de nuvem pública:
         </p>
 
-        <ul className="list-disc space-y-1 pl-5">
+        <ul className="list-disc pl-5 space-y-1">
           <li>
             <strong>AWS (Amazon Web Services)</strong>: pioneira em cloud
             pública, com um ecossistema enorme de serviços e forte presença
@@ -185,7 +183,7 @@ export default function Page() {
 
         <p>Um caminho possível para organizar seus estudos:</p>
 
-        <ol className="list-decimal space-y-1 pl-5">
+        <ol className="list-decimal pl-5 space-y-1">
           <li>
             Dominar os fundamentos de redes, sistemas operacionais e segurança
             básica.
@@ -223,7 +221,7 @@ export default function Page() {
           são:
         </p>
 
-        <ul className="list-disc space-y-1 pl-5">
+        <ul className="list-disc pl-5 space-y-1">
           <li>Explorar a trilha específica do provedor que você escolheu;</li>
           <li>Consultar o glossário quando encontrar um termo desconhecido;</li>
           <li>

@@ -1,8 +1,15 @@
 // src/app/components/ads/AdsBanner.tsx
 "use client";
 
-import React from "react";
-import { adsConfig, AdPosition } from "../../../config/ads";
+import { useEffect } from "react";
+import { adsConfig, type AdPosition } from "../../../config/ads";
+
+declare global {
+  interface Window {
+    // o AdSense injeta esse array global
+    adsbygoogle?: unknown[];
+  }
+}
 
 type AdsBannerProps = {
   position: AdPosition;
@@ -12,28 +19,38 @@ type AdsBannerProps = {
 export function AdsBanner({ position, className }: AdsBannerProps) {
   const config = adsConfig[position];
 
-  // Se não houver config para essa posição ou estiver desativado, não renderiza nada
-  if (!config || !config.enabled) {
+  // Se posição não estiver configurada ou estiver desativada, não renderiza nada
+  if (!config || config.enabled === false) {
     return null;
   }
 
-  const { slot } = config;
+  useEffect(() => {
+    if (typeof window === "undefined") return;
 
-  if (!slot) {
-    return null;
-  }
+    try {
+      // Inicializa / dispara o anúncio
+      (window.adsbygoogle = window.adsbygoogle || []).push({});
+    } catch (error) {
+      if (process.env.NODE_ENV === "development") {
+        // eslint-disable-next-line no-console
+        console.error("Erro ao inicializar AdSense:", error);
+      }
+    }
+  }, [position]);
 
   return (
-    <div
-      className={
-        className ??
-        "my-4 flex items-center justify-center rounded-xl border border-dashed border-slate-700 bg-slate-900/60 px-4 py-3 text-xs text-slate-400"
+    <ins
+      className={`adsbygoogle block overflow-hidden rounded-2xl border border-dashed border-slate-800 bg-slate-900/40 ${
+        className ?? ""
+      }`}
+      style={{ display: config.styleDisplay ?? "block" }}
+      data-ad-client={config.client}
+      data-ad-slot={config.slot}
+      data-ad-format={config.format}
+      data-ad-layout={config.layout}
+      data-full-width-responsive={
+        config.fullWidthResponsive ? "true" : undefined
       }
-    >
-      <span>
-        Espaço de anúncio{" "}
-        <span className="opacity-70">(slot: {slot})</span>
-      </span>
-    </div>
+    />
   );
 }

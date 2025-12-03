@@ -64,8 +64,8 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ADS – topo da home (home_top) */}
-        <div className="mt-6">
+        {/* ADS – logo abaixo do hero (home_top) */}
+        <div className="mt-8">
           <AdsBanner position="home_top" />
         </div>
 
@@ -223,7 +223,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ADS – rodapé da home (home_bottom) */}
+        {/* ADS – rodapé da home (home_bottom) – controlado por enabled no adsConfig */}
         <div className="mt-10">
           <AdsBanner position="home_bottom" />
         </div>
