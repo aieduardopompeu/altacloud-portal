@@ -66,7 +66,7 @@ export default function HomePage() {
 
         {/* ADS – logo abaixo do hero (home_top) */}
         <div className="mt-8">
-          <AdsBanner position="home_top" />
+         <AdsBanner position="home_hero" />
         </div>
 
         {/* DESTAQUE – DIRETÓRIO DE PROFISSIONAIS */}
@@ -112,7 +112,7 @@ export default function HomePage() {
 
         {/* ADS – entre diretório e trilhas (home_between_tracks) */}
         <div className="mt-8">
-          <AdsBanner position="home_between_tracks" />
+          <AdsBanner position="home_between_sections" />
         </div>
 
         {/* TRILHAS EM DESTAQUE */}
@@ -225,7 +225,7 @@ export default function HomePage() {
 
         {/* ADS – rodapé da home (home_bottom) – controlado por enabled no adsConfig */}
         <div className="mt-10">
-          <AdsBanner position="home_bottom" />
+          <AdsBanner position="home_tracks_bottom" />
         </div>
       </div>
     </main>

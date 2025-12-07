@@ -1,9 +1,19 @@
 // src/config/ads.ts
 
+// Slots reais do AdSense (se quiser mudar depois, é aqui)
+const SLOT_FEED_AUTORELAXED = "9227543350"; // auto-relaxed
+const SLOT_IN_ARTICLE = "7666231438";       // in-article / fluid
+const SLOT_DISPLAY_AUTO = "6664851396";     // display topo / auto responsivo
+
+export type AdFormat = "auto" | "in-article" | "autorelaxed";
+
+// Todos os positions que o projeto usa hoje
 export type AdPosition =
   | "home_top"
-  | "home_between_tracks" // 👈 nome usado na home
-  | "home_bottom"
+  | "home_hero"
+  | "home_directory"
+  | "home_between_sections"
+  | "home_tracks_bottom"
   | "directory_top"
   | "directory_aws_after"
   | "directory_middle"
@@ -12,156 +22,98 @@ export type AdPosition =
   | "track_bottom"
   | "article_top"
   | "article_middle"
-  | "article_bottom"
   | "bottom_sticky";
 
-type AdSlotConfig = {
-  client: string;
-  slot: string;
-  format?: "auto" | "autorelaxed" | "fluid";
-  layout?: "in-article";
+export interface AdConfigItem {
+  adSlot: string;
+  format: AdFormat;
+  enabled: boolean;
+  /**
+   * Se `false`, não adiciona data-full-width-responsive="true"
+   * nos formatos "auto". Se undefined, considera como true.
+   */
   fullWidthResponsive?: boolean;
-  enabled?: boolean;
-  styleDisplay?: "block" | "inline-block";
-  debugLabel?: string;
-};
+}
 
-const ADSENSE_CLIENT = "ca-pub-4436420746304287";
-
-export const adsConfig: Record<AdPosition, AdSlotConfig> = {
-  // ================= HOME =================
-
+// Mapa central de todos os blocos
+export const adsConfig: Record<AdPosition, AdConfigItem> = {
+  // ===== HOME =====
   home_top: {
-    client: ADSENSE_CLIENT,
-    slot: "6664851396",
+    adSlot: SLOT_DISPLAY_AUTO,
     format: "auto",
-    fullWidthResponsive: true,
     enabled: true,
-    styleDisplay: "block",
-    debugLabel: "Home – topo",
+  },
+  home_hero: {
+    adSlot: SLOT_DISPLAY_AUTO,
+    format: "auto",
+    enabled: true,
+  },
+  home_directory: {
+    adSlot: SLOT_IN_ARTICLE,
+    format: "in-article",
+    enabled: true,
+  },
+  home_between_sections: {
+    adSlot: SLOT_IN_ARTICLE,
+    format: "in-article",
+    enabled: true,
+  },
+  home_tracks_bottom: {
+    adSlot: SLOT_FEED_AUTORELAXED,
+    format: "autorelaxed",
+    enabled: true,
   },
 
-  home_between_tracks: {
-    client: ADSENSE_CLIENT,
-    slot: "6664851396",
-    format: "auto",
-    fullWidthResponsive: true,
-    enabled: true,
-    styleDisplay: "block",
-    debugLabel: "Home – entre diretório e trilhas",
-  },
-
-  home_bottom: {
-    client: ADSENSE_CLIENT,
-    slot: "6664851396",
-    format: "auto",
-    fullWidthResponsive: true,
-    enabled: true,
-    styleDisplay: "block",
-    debugLabel: "Home – rodapé",
-  },
-
-  // ============== DIRETÓRIO ==============
-
+  // ===== DIRETÓRIO DE PROFISSIONAIS =====
   directory_top: {
-    client: ADSENSE_CLIENT,
-    slot: "6664851396",
+    adSlot: SLOT_DISPLAY_AUTO,
     format: "auto",
-    fullWidthResponsive: true,
     enabled: true,
-    styleDisplay: "block",
-    debugLabel: "Diretório – topo",
   },
-
   directory_aws_after: {
-    client: ADSENSE_CLIENT,
-    slot: "9227543350",
-    format: "autorelaxed",
+    adSlot: SLOT_IN_ARTICLE,
+    format: "in-article",
     enabled: true,
-    styleDisplay: "block",
-    debugLabel: "Diretório – depois de AWS",
   },
-
   directory_middle: {
-    client: ADSENSE_CLIENT,
-    slot: "9227543350",
+    adSlot: SLOT_FEED_AUTORELAXED,
     format: "autorelaxed",
     enabled: true,
-    styleDisplay: "block",
-    debugLabel: "Diretório – meio",
   },
 
-  // ============== TRILHAS / MÓDULOS ==============
-
+  // ===== TRILHAS (Fundamentos, IAM, S3, EC2, VPC, DevOps) =====
   track_top: {
-    client: ADSENSE_CLIENT,
-    slot: "6664851396",
+    adSlot: SLOT_DISPLAY_AUTO,
     format: "auto",
-    fullWidthResponsive: true,
     enabled: true,
-    styleDisplay: "block",
-    debugLabel: "Trilha – topo",
   },
-
   track_middle: {
-    client: ADSENSE_CLIENT,
-    slot: "7666231438",
-    format: "fluid",
-    layout: "in-article",
+    adSlot: SLOT_IN_ARTICLE,
+    format: "in-article",
     enabled: true,
-    styleDisplay: "block",
-    debugLabel: "Trilha – meio (in-article)",
   },
-
   track_bottom: {
-    client: ADSENSE_CLIENT,
-    slot: "6664851396",
-    format: "auto",
-    fullWidthResponsive: true,
+    adSlot: SLOT_FEED_AUTORELAXED,
+    format: "autorelaxed",
     enabled: true,
-    styleDisplay: "block",
-    debugLabel: "Trilha – rodapé",
   },
 
-  // ============== ARTIGOS ==============
-
+  // ===== ARTIGOS =====
   article_top: {
-    client: ADSENSE_CLIENT,
-    slot: "6664851396",
-    format: "auto",
-    fullWidthResponsive: true,
+    adSlot: SLOT_IN_ARTICLE,
+    format: "in-article",
     enabled: true,
-    styleDisplay: "block",
-    debugLabel: "Artigo – topo",
   },
-
   article_middle: {
-    client: ADSENSE_CLIENT,
-    slot: "7666231438",
-    format: "fluid",
-    layout: "in-article",
-    enabled: true,
-    styleDisplay: "block",
-    debugLabel: "Artigo – meio (in-article)",
-  },
-
-  article_bottom: {
-    client: ADSENSE_CLIENT,
-    slot: "9227543350",
+    adSlot: SLOT_FEED_AUTORELAXED,
     format: "autorelaxed",
     enabled: true,
-    styleDisplay: "block",
-    debugLabel: "Artigo – final (lista relaxada)",
   },
 
-  // ============== STICKY INFERIOR ==============
-
+  // ===== STICKY BOTTOM (MOBILE) =====
   bottom_sticky: {
-    client: ADSENSE_CLIENT,
-    slot: "9227543350",
-    format: "autorelaxed",
+    adSlot: SLOT_DISPLAY_AUTO,
+    format: "auto",
     enabled: true,
-    styleDisplay: "block",
-    debugLabel: "Sticky inferior (mobile/desktop)",
   },
 };
