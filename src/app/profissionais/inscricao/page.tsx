@@ -1,198 +1,207 @@
 // src/app/profissionais/inscricao/page.tsx
-"use client";
 
-import { useEffect, useState } from "react";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
-import { AdsBanner } from "../../components/ads/AdsBanner";
+import { AdsBanner } from "@/app/components/ads/AdsBanner";
 
-export default function ProfessionalsApplicationPage() {
-  const searchParams = useSearchParams();
-  const [showInfoModal, setShowInfoModal] = useState(false);
-
-  // Se veio do diretório (?from=directory), abre o popup
-  useEffect(() => {
-    if (searchParams.get("from") === "directory") {
-      setShowInfoModal(true);
-    }
-  }, [searchParams]);
-
+export default function InscricaoProfissionaisPage() {
   return (
     <main className="min-h-screen bg-slate-950 text-slate-50">
-      {/* MODAL / POPUP DE INFORMAÇÃO */}
-      {showInfoModal && (
-        <div className="fixed inset-0 z-40 flex items-center justify-center bg-slate-950/70 px-4">
-          <div className="w-full max-w-md rounded-2xl border border-slate-700 bg-slate-900 p-6 shadow-2xl">
-            <h2 className="text-base font-semibold text-slate-50">
-              Área gratuita nesta fase inicial
-            </h2>
-            <p className="mt-3 text-sm text-slate-300">
-              Nesta etapa de lançamento, a participação no diretório de
-              profissionais é{" "}
-              <span className="font-semibold text-emerald-300">
-                totalmente gratuita
-              </span>
-              . Em breve, vamos liberar benefícios extras para perfis em
-              destaque, como maior visibilidade, recomendações e oportunidades
-              exclusivas.
-            </p>
-            <div className="mt-5 flex justify-end gap-3">
-              <button
-                type="button"
-                onClick={() => setShowInfoModal(false)}
-                className="rounded-lg border border-slate-600 px-3 py-1.5 text-xs font-semibold text-slate-200 hover:border-slate-400"
-              >
-                Entendi
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      <div className="mx-auto w-full max-w-2xl px-4 pt-24 pb-16 md:px-6 lg:px-0">
-        <header className="space-y-3">
+      <div className="mx-auto w-full max-w-3xl px-4 pt-24 pb-20 md:px-6">
+        {/* Header */}
+        <header className="space-y-5">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-400">
-            Alta Cloud · Diretório
+            Diretório Alta Cloud
           </p>
-          <h1 className="text-3xl font-bold text-slate-50 sm:text-4xl">
-            Quero aparecer na lista
+
+          <h1 className="text-3xl font-bold sm:text-4xl">
+            Cadastre Seu Perfil e Seja Encontrado
           </h1>
-          <p className="text-sm text-slate-300 sm:text-base">
-            Preencha os dados abaixo para entrar na fila de curadoria do
-            diretório de profissionais certificados em cloud. Vamos revisar as
-            informações com calma antes de publicar seu perfil.
+
+          <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
+            Sua visibilidade começa aqui. Profissionais de AWS, Azure, Google Cloud e Oracle podem
+            enviar seus dados para entrar no diretório oficial da Alta Cloud. É gratuito, rápido
+            e ajuda você a aparecer para empresas, recrutadores e parceiros.
           </p>
         </header>
 
-        {/* Banner de anúncio opcional */}
-        <div className="mt-6">
-          <AdsBanner position="directory_top" />
+        {/* ADS */}
+        <div className="mt-8">
+          <AdsBanner position="inscricao_top" />
         </div>
 
-        {/* FORMULÁRIO SIMPLES / PLACEHOLDER */}
-        <section className="mt-8 rounded-2xl border border-slate-800 bg-slate-900/70 p-5 sm:p-6">
-          <form className="space-y-5">
-            <div className="grid gap-4 sm:grid-cols-2">
-              <div className="space-y-1.5">
-                <label className="block text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
-                  Nome completo
-                </label>
-                <input
-                  type="text"
-                  className="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-slate-50 outline-none focus:border-cyan-400"
-                  placeholder="Seu nome"
-                />
-              </div>
-              <div className="space-y-1.5">
-                <label className="block text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
-                  E-mail principal
-                </label>
-                <input
-                  type="email"
-                  className="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-slate-50 outline-none focus:border-cyan-400"
-                  placeholder="voce@exemplo.com"
-                />
-              </div>
-            </div>
+        {/* Por que entrar */}
+        <section className="mt-10 space-y-3 rounded-2xl border border-slate-800 bg-slate-900/60 p-6">
+          <h2 className="text-lg font-semibold">Por que entrar no Diretório?</h2>
 
-            <div className="grid gap-4 sm:grid-cols-2">
-              <div className="space-y-1.5">
-                <label className="block text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
-                  Localidade
-                </label>
-                <input
-                  type="text"
-                  className="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-slate-50 outline-none focus:border-cyan-400"
-                  placeholder="Cidade · Estado / País"
-                />
-              </div>
-              <div className="space-y-1.5">
-                <label className="block text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
-                  Nuvem principal
-                </label>
-                <select
-                  className="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-slate-50 outline-none focus:border-cyan-400"
-                  defaultValue=""
-                >
-                  <option value="" disabled>
-                    Selecione
-                  </option>
-                  <option value="aws">AWS</option>
-                  <option value="azure">Microsoft Azure</option>
-                  <option value="gcp">Google Cloud</option>
-                  <option value="oci">Oracle Cloud</option>
-                  <option value="multi">Multi-cloud</option>
-                </select>
-              </div>
-            </div>
+          <ul className="space-y-2 text-sm text-slate-300">
+            <li>• Visibilidade real para empresas e recrutadores.</li>
+            <li>• Perfil público com certificações, resumo e links profissionais.</li>
+            <li>• Contato direto: WhatsApp, LinkedIn, GitHub ou portfólio.</li>
+            <li>• Inclusão gratuita durante a fase inicial da plataforma.</li>
+            <li>• Posicionamento por categoria (AWS, Azure, GCP, OCI).</li>
+          </ul>
+        </section>
 
-            <div className="space-y-1.5">
-              <label className="block text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
-                Resumo profissional
-              </label>
-              <textarea
-                rows={4}
-                className="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-slate-50 outline-none focus:border-cyan-400"
-                placeholder="Conte em poucas linhas como você atua com cloud, áreas de foco, senioridade e tipos de projetos."
+        {/* Como funciona */}
+        <section className="mt-8 space-y-3 rounded-2xl border border-slate-800 bg-slate-900/70 p-6">
+          <h2 className="text-lg font-semibold">Como funciona</h2>
+
+          <ol className="space-y-2 text-sm text-slate-300 list-decimal pl-5">
+            <li>Preencha o formulário abaixo com seus dados.</li>
+            <li>Nossa equipe valida suas informações.</li>
+            <li>Seu perfil é publicado no diretório oficial.</li>
+            <li>Você passa a receber contatos diretamente.</li>
+          </ol>
+        </section>
+
+        {/* Aviso importante */}
+        <section className="mt-8 p-5 rounded-2xl border border-slate-800 bg-slate-900/80">
+          <h3 className="text-sm font-semibold text-amber-300 mb-2">Importante</h3>
+          <p className="text-sm text-slate-300 leading-relaxed">
+            Todas as informações enviadas ficam visíveis publicamente, inclusive nome,
+            certificações, resumo profissional e links externos. A Alta Cloud não intermedia
+            conversas, pagamentos, entrevistas ou processos seletivos.
+          </p>
+        </section>
+
+        {/* Formulário */}
+        <section className="mt-10 rounded-2xl border border-slate-800 bg-slate-900/60 p-6">
+          <h2 className="text-lg font-semibold mb-4">Formulário de Inscrição</h2>
+
+          <form
+            className="space-y-5 text-sm"
+            action="https://formsubmit.co/contato@altacloud.com.br"
+            method="POST"
+          >
+            {/* Nome */}
+            <div className="flex flex-col gap-1">
+              <label className="text-slate-200 font-medium">Nome completo</label>
+              <input
+                required
+                name="nome"
+                type="text"
+                className="rounded-lg bg-slate-800 px-3 py-2 text-slate-100 border border-slate-700"
               />
             </div>
 
-            <div className="space-y-1.5">
-              <label className="block text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
-                Certificações em cloud
-              </label>
-              <textarea
-                rows={3}
-                className="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-slate-50 outline-none focus:border-cyan-400"
-                placeholder="Liste certificações relevantes (ex: AWS SAA-C03, DOP-C02, AZ-104, etc.)"
+            {/* E-mail */}
+            <div className="flex flex-col gap-1">
+              <label className="text-slate-200 font-medium">E‑mail</label>
+              <input
+                required
+                name="email"
+                type="email"
+                className="rounded-lg bg-slate-800 px-3 py-2 text-slate-100 border border-slate-700"
               />
             </div>
 
-            <div className="grid gap-4 sm:grid-cols-2">
-              <div className="space-y-1.5">
-                <label className="block text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
-                  LinkedIn
-                </label>
-                <input
-                  type="url"
-                  className="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-slate-50 outline-none focus:border-cyan-400"
-                  placeholder="URL do seu perfil"
-                />
-              </div>
-              <div className="space-y-1.5">
-                <label className="block text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
-                  GitHub / Portfólio
-                </label>
-                <input
-                  type="url"
-                  className="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-slate-50 outline-none focus:border-cyan-400"
-                  placeholder="Repositórios ou site com projetos"
-                />
-              </div>
+            {/* Localidade */}
+            <div className="flex flex-col gap-1">
+              <label className="text-slate-200 font-medium">Localização</label>
+              <input
+                required
+                name="localizacao"
+                type="text"
+                placeholder="Ex: São Paulo, SP"
+                className="rounded-lg bg-slate-800 px-3 py-2 text-slate-100 border border-slate-700"
+              />
             </div>
 
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-              <p className="text-[11px] text-slate-400">
-                Ao enviar, você concorda em ter seus dados analisados pela equipe Alta
-                Cloud para possível inclusão no diretório público.
-              </p>
-
-              <button
-                type="submit"
-                className="inline-flex items-center justify-center rounded-full bg-cyan-500 px-6 py-2 text-sm font-semibold text-slate-950 shadow-lg shadow-cyan-500/40 transition hover:-translate-y-0.5 hover:bg-cyan-400 hover:shadow-cyan-400/60"
+            {/* Nuvem */}
+            <div className="flex flex-col gap-1">
+              <label className="text-slate-200 font-medium">Nuvem principal</label>
+              <select
+                required
+                name="nuvem"
+                className="rounded-lg bg-slate-800 px-3 py-2 text-slate-100 border border-slate-700"
               >
-                Enviar inscrição
-              </button>
+                <option value="">Selecione</option>
+                <option value="AWS">AWS</option>
+                <option value="Azure">Azure</option>
+                <option value="GCP">Google Cloud</option>
+                <option value="OCI">Oracle Cloud</option>
+              </select>
             </div>
+
+            {/* Certificações */}
+            <div className="flex flex-col gap-1">
+              <label className="text-slate-200 font-medium">Certificações</label>
+              <textarea
+                required
+                name="certificacoes"
+                rows={3}
+                placeholder="Liste suas certificações relevantes"
+                className="rounded-lg bg-slate-800 px-3 py-2 text-slate-100 border border-slate-700"
+              />
+            </div>
+
+            {/* Resumo */}
+            <div className="flex flex-col gap-1">
+              <label className="text-slate-200 font-medium">Resumo profissional</label>
+              <textarea
+                required
+                name="resumo"
+                rows={4}
+                placeholder="Descreva sua experiência de forma objetiva"
+                className="rounded-lg bg-slate-800 px-3 py-2 text-slate-100 border border-slate-700"
+              />
+            </div>
+
+            {/* LinkedIn */}
+            <div className="flex flex-col gap-1">
+              <label className="text-slate-200 font-medium">LinkedIn (opcional)</label>
+              <input
+                name="linkedin"
+                type="url"
+                placeholder="https://linkedin.com/in/..."
+                className="rounded-lg bg-slate-800 px-3 py-2 text-slate-100 border border-slate-700"
+              />
+            </div>
+
+            {/* GitHub */}
+            <div className="flex flex-col gap-1">
+              <label className="text-slate-200 font-medium">GitHub (opcional)</label>
+              <input
+                name="github"
+                type="url"
+                placeholder="https://github.com/..."
+                className="rounded-lg bg-slate-800 px-3 py-2 text-slate-100 border border-slate-700"
+              />
+            </div>
+
+            {/* Portfólio */}
+            <div className="flex flex-col gap-1">
+              <label className="text-slate-200 font-medium">Portfólio (opcional)</label>
+              <input
+                name="portfolio"
+                type="url"
+                placeholder="https://..."
+                className="rounded-lg bg-slate-800 px-3 py-2 text-slate-100 border border-slate-700"
+              />
+            </div>
+
+            {/* Submit */}
+            <button
+              type="submit"
+              className="w-full mt-6 rounded-full bg-cyan-500 px-5 py-3 font-semibold text-slate-950 hover:bg-cyan-400 transition"
+            >
+              Enviar inscrição
+            </button>
           </form>
         </section>
 
-        <div className="mt-6 text-center text-xs text-slate-500">
+        {/* ADS */}
+        <div className="mt-12">
+          <AdsBanner position="inscricao_bottom" />
+        </div>
+
+        {/* Link de voltar */}
+        <div className="mt-10 text-center">
           <Link
             href="/profissionais"
-            className="text-sky-400 underline-offset-2 hover:underline"
+            className="text-cyan-400 hover:text-cyan-300 text-sm"
           >
-            Voltar para o diretório de profissionais
+            ← Voltar ao diretório
           </Link>
         </div>
       </div>

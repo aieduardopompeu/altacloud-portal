@@ -1,119 +1,94 @@
 // src/config/ads.ts
 
-// Slots reais do AdSense (se quiser mudar depois, é aqui)
-const SLOT_FEED_AUTORELAXED = "9227543350"; // auto-relaxed
-const SLOT_IN_ARTICLE = "7666231438";       // in-article / fluid
-const SLOT_DISPLAY_AUTO = "6664851396";     // display topo / auto responsivo
-
-export type AdFormat = "auto" | "in-article" | "autorelaxed";
-
-// Todos os positions que o projeto usa hoje
+// Todas as posições válidas de anúncio no site
 export type AdPosition =
-  | "home_top"
-  | "home_hero"
-  | "home_directory"
+  | "directory_top"
+  | "directory_middle"
+  | "directory_aws_after"
   | "home_between_sections"
   | "home_tracks_bottom"
-  | "directory_top"
-  | "directory_aws_after"
-  | "directory_middle"
-  | "track_top"
   | "track_middle"
   | "track_bottom"
-  | "article_top"
   | "article_middle"
-  | "bottom_sticky";
+  | "inscricao_top"
+  | "inscricao_bottom";
 
-export interface AdConfigItem {
-  adSlot: string;
-  format: AdFormat;
+type AdConfig = {
   enabled: boolean;
-  /**
-   * Se `false`, não adiciona data-full-width-responsive="true"
-   * nos formatos "auto". Se undefined, considera como true.
-   */
+  adSlot: string;
+  format?: "auto" | "in-article" | "autorelaxed";
   fullWidthResponsive?: boolean;
-}
+};
 
-// Mapa central de todos os blocos
-export const adsConfig: Record<AdPosition, AdConfigItem> = {
-  // ===== HOME =====
-  home_top: {
-    adSlot: SLOT_DISPLAY_AUTO,
-    format: "auto",
-    enabled: true,
-  },
-  home_hero: {
-    adSlot: SLOT_DISPLAY_AUTO,
-    format: "auto",
-    enabled: true,
-  },
-  home_directory: {
-    adSlot: SLOT_IN_ARTICLE,
-    format: "in-article",
-    enabled: true,
-  },
-  home_between_sections: {
-    adSlot: SLOT_IN_ARTICLE,
-    format: "in-article",
-    enabled: true,
-  },
-  home_tracks_bottom: {
-    adSlot: SLOT_FEED_AUTORELAXED,
-    format: "autorelaxed",
-    enabled: true,
-  },
-
-  // ===== DIRETÓRIO DE PROFISSIONAIS =====
+// Configuração central de todos os slots
+export const adsConfig: Record<AdPosition, AdConfig> = {
+  /* ====== DIRETÓRIO DE PROFISSIONAIS ====== */
   directory_top: {
-    adSlot: SLOT_DISPLAY_AUTO,
+    enabled: true,
+    adSlot: "6684581396", // use aqui o slot real que você já usa
     format: "auto",
-    enabled: true,
-  },
-  directory_aws_after: {
-    adSlot: SLOT_IN_ARTICLE,
-    format: "in-article",
-    enabled: true,
+    fullWidthResponsive: true,
   },
   directory_middle: {
-    adSlot: SLOT_FEED_AUTORELAXED,
-    format: "autorelaxed",
     enabled: true,
+    adSlot: "6684581396",
+    format: "auto",
+    fullWidthResponsive: true,
+  },
+  directory_aws_after: {
+    enabled: true,
+    adSlot: "6684581396",
+    format: "auto",
+    fullWidthResponsive: true,
   },
 
-  // ===== TRILHAS (Fundamentos, IAM, S3, EC2, VPC, DevOps) =====
-  track_top: {
-    adSlot: SLOT_DISPLAY_AUTO,
+  /* ====== HOME ====== */
+  home_between_sections: {
+    enabled: true,
+    adSlot: "6684581396",
     format: "auto",
-    enabled: true,
+    fullWidthResponsive: true,
   },
-  track_middle: {
-    adSlot: SLOT_IN_ARTICLE,
-    format: "in-article",
+  home_tracks_bottom: {
     enabled: true,
+    adSlot: "6684581396",
+    format: "auto",
+    fullWidthResponsive: true,
+  },
+
+  /* ====== TRILHAS ====== */
+  track_middle: {
+    enabled: true,
+    adSlot: "6684581396",
+    format: "auto",
+    fullWidthResponsive: true,
   },
   track_bottom: {
-    adSlot: SLOT_FEED_AUTORELAXED,
-    format: "autorelaxed",
     enabled: true,
-  },
-
-  // ===== ARTIGOS =====
-  article_top: {
-    adSlot: SLOT_IN_ARTICLE,
-    format: "in-article",
-    enabled: true,
-  },
-  article_middle: {
-    adSlot: SLOT_FEED_AUTORELAXED,
-    format: "autorelaxed",
-    enabled: true,
-  },
-
-  // ===== STICKY BOTTOM (MOBILE) =====
-  bottom_sticky: {
-    adSlot: SLOT_DISPLAY_AUTO,
+    adSlot: "6684581396",
     format: "auto",
+    fullWidthResponsive: true,
+  },
+
+  /* ====== ARTIGOS ====== */
+  article_middle: {
     enabled: true,
+    adSlot: "6684581396",
+    format: "in-article",
+    fullWidthResponsive: true,
+  },
+
+  /* ====== INSCRIÇÃO DE PROFISSIONAIS ====== */
+  inscricao_top: {
+    enabled: true,
+    adSlot: "6684581396", // pode ser o mesmo slot das outras posições
+    format: "auto",
+    fullWidthResponsive: true,
+  },
+  inscricao_bottom: {
+    enabled: true,
+    adSlot: "6684581396",
+    format: "auto",
+    fullWidthResponsive: true,
   },
 };

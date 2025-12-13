@@ -1,6 +1,6 @@
 // src/app/components/ads/AdsBanner.tsx
 import Script from "next/script";
-import { adsConfig, AdPosition } from "../../../config/ads";
+import { adsConfig, AdPosition } from "@/config/ads";
 
 type AdsBannerProps = {
   position: AdPosition;

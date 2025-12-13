@@ -28,7 +28,7 @@ const directorySections: CloudSection[] = [
     id: "aws",
     title: "AWS",
     subtitle:
-      "Especialistas com certificações oficiais na AWS. Use este diretório para encontrar profissionais para projetos, consultorias, treinamentos e oportunidades.",
+      "Especialistas certificados prontos para projetos, consultorias, migrações e soluções escaláveis em Amazon Web Services.",
     professionals: [
       {
         name: "João Souza",
@@ -36,9 +36,9 @@ const directorySections: CloudSection[] = [
         location: "São Paulo, SP",
         availability: "available",
         summary:
-          "Arquitetura em AWS focada em alta disponibilidade, segurança e custo otimizado.",
+          "Arquitetura AWS com foco em alta disponibilidade, governança, segurança e otimização de custos.",
         certifications:
-          "Associate · SAA-C03 · AWS Certified Solutions Architect — Associate · Professional · SAP-C02 · AWS Certified Solutions Architect — Professional",
+          "SAA-C03 · AWS Solutions Architect Associate · SAP-C02 · AWS Solutions Architect Professional",
         linkedin: "https://www.linkedin.com",
         github: "https://github.com",
       },
@@ -48,9 +48,9 @@ const directorySections: CloudSection[] = [
         location: "Belo Horizonte, MG",
         availability: "open-to-opps",
         summary:
-          "Pipelines CI/CD, IaC e observabilidade para ambientes nativos em nuvem.",
+          "CI/CD, automação, IaC e observabilidade para ambientes nativos em nuvem.",
         certifications:
-          "Professional · DOP-C02 · AWS Certified DevOps Engineer — Professional",
+          "DOP-C02 · AWS DevOps Engineer Professional",
         linkedin: "https://www.linkedin.com",
         github: "https://github.com",
       },
@@ -60,7 +60,7 @@ const directorySections: CloudSection[] = [
     id: "azure",
     title: "Microsoft Azure",
     subtitle:
-      "Especialistas com certificações oficiais na Microsoft Azure. Use este diretório para encontrar profissionais para projetos, consultorias, treinamentos e oportunidades.",
+      "Profissionais certificados em Azure para ambientes híbridos, identidades, redes, governança e segurança corporativa.",
     professionals: [
       {
         name: "Carlos Oliveira",
@@ -68,9 +68,9 @@ const directorySections: CloudSection[] = [
         location: "Curitiba, PR",
         availability: "available",
         summary:
-          "Ambientes híbridos, identidade, rede e segurança em Azure para empresas.",
+          "Identidade, redes, segurança, monitoramento e arquitetura híbrida Azure.",
         certifications:
-          "Foundational · AZ-900 · Microsoft Certified: Azure Fundamentals · Associate · AZ-104 · Microsoft Certified: Azure Administrator Associate",
+          "AZ‑900 · Azure Fundamentals · AZ‑104 · Azure Administrator Associate",
         linkedin: "https://www.linkedin.com",
       },
     ],
@@ -79,7 +79,7 @@ const directorySections: CloudSection[] = [
     id: "gcp",
     title: "Google Cloud",
     subtitle:
-      "Especialistas com certificações oficiais na Google Cloud. Use este diretório para encontrar profissionais para projetos, consultorias, treinamentos e oportunidades.",
+      "Engenheiros e arquitetos certificados para BigQuery, Data Engineering, ML e workloads em Google Cloud Platform.",
     professionals: [
       {
         name: "Ana Pereira",
@@ -87,9 +87,9 @@ const directorySections: CloudSection[] = [
         location: "Remoto · Brasil",
         availability: "available",
         summary:
-          "Pipelines de dados, BigQuery, machine learning em produção e governança.",
+          "Pipelines de dados, BigQuery, machine learning operacional e governança.",
         certifications:
-          "Professional · Google Cloud Professional Data Engineer",
+          "Google Cloud Professional Data Engineer",
         linkedin: "https://www.linkedin.com",
         github: "https://github.com",
         portfolio: "https://example.com",
@@ -100,7 +100,7 @@ const directorySections: CloudSection[] = [
     id: "oci",
     title: "Oracle Cloud",
     subtitle:
-      "Especialistas com certificações oficiais na Oracle Cloud. Use este diretório para encontrar profissionais para projetos, consultorias, treinamentos e oportunidades.",
+      "Profissionais especializados em OCI para projetos críticos, banco de dados, segurança e workloads corporativos.",
     professionals: [
       {
         name: "Ricardo Santos",
@@ -108,9 +108,9 @@ const directorySections: CloudSection[] = [
         location: "Porto Alegre, RS",
         availability: "open-to-opps",
         summary:
-          "Arquitetura em Oracle Cloud para workloads críticos e banco de dados.",
+          "Arquitetura Oracle Cloud para workloads críticos e alta disponibilidade.",
         certifications:
-          "Foundational · Oracle Cloud Infrastructure Foundations · Professional · Oracle Cloud Infrastructure Architect Professional",
+          "OCI Foundations · OCI Architect Professional",
         linkedin: "https://www.linkedin.com",
       },
     ],
@@ -118,20 +118,24 @@ const directorySections: CloudSection[] = [
 ];
 
 function availabilityLabel(status: Availability) {
-  if (status === "available") return "Disponível para projetos";
-  return "Ouvindo propostas";
+  return status === "available"
+    ? "Disponível para projetos"
+    : "Ouvindo propostas";
 }
 
 function availabilityClassName(status: Availability) {
-  if (status === "available") {
-    return "inline-flex items-center rounded-full bg-emerald-500/15 px-3 py-1 text-xs font-medium text-emerald-300 ring-1 ring-emerald-500/40";
-  }
-
-  return "inline-flex items-center rounded-full bg-amber-500/15 px-3 py-1 text-xs font-medium text-amber-300 ring-1 ring-amber-500/40";
+  return status === "available"
+    ? "inline-flex items-center rounded-full bg-emerald-500/15 px-3 py-1 text-xs font-medium text-emerald-300 ring-1 ring-emerald-500/40"
+    : "inline-flex items-center rounded-full bg-amber-500/15 px-3 py-1 text-xs font-medium text-amber-300 ring-1 ring-amber-500/40";
 }
 
-// Botão padrão do diretório (usado no topo e no rodapé)
-function DirectoryCtaButton({ href, children }: { href: string; children: string }) {
+function DirectoryCtaButton({
+  href,
+  children,
+}: {
+  href: string;
+  children: string;
+}) {
   return (
     <Link
       href={href}
@@ -156,94 +160,75 @@ export default function ProfessionalsDirectoryPage() {
   return (
     <main className="min-h-screen bg-slate-950 text-slate-50">
       <div className="mx-auto w-full max-w-5xl px-4 pt-24 pb-16 md:px-6 lg:px-0">
-        {/* Header */}
-        <header className="space-y-4">
+
+        {/* HERO • mais persuasivo e com foco total em cadastro */}
+        <header className="space-y-5">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-400">
-            Alta Cloud · Diretório
+            Diretório Oficial · Alta Cloud
           </p>
 
-          <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-            <div className="space-y-3">
-              <h1 className="text-3xl font-bold text-slate-50 sm:text-4xl">
-                Profissionais Certificados em Cloud
-              </h1>
-              <p className="max-w-2xl text-sm text-slate-300 sm:text-base">
-                Encontre especialistas certificados em{" "}
-                <span className="font-semibold">
-                  AWS, Azure, Google Cloud e Oracle
-                </span>{" "}
-                para projetos, consultorias, treinamentos e oportunidades de
-                carreira. Esta primeira versão do diretório é{" "}
-                <span className="font-semibold">
-                  gratuita para empresas e profissionais
-                </span>{" "}
-                enquanto consolidamos a base inicial.
-              </p>
-            </div>
+          <h1 className="text-3xl font-bold sm:text-4xl">
+            Profissionais Certificados em Cloud — Encontre ou Seja Encontrado
+          </h1>
 
-            {/* CTA topo – botão + tudo na mesma linha */}
-            <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-3">
-              <DirectoryCtaButton href="/profissionais/inscricao?from=directory">
-                Quero aparecer na lista
-              </DirectoryCtaButton>
+          <p className="max-w-2xl text-sm text-slate-300 sm:text-base">
+            Aqui você descobre especialistas certificados em{" "}
+            <strong>AWS, Azure, Google Cloud e Oracle</strong> —
+            prontos para projetos, vagas, consultorias e parcerias.  
+            Se você trabalha com cloud, esta é sua oportunidade de ganhar
+            **visibilidade real**, gratuita e de alto impacto.
+          </p>
 
-              {/* Texto explicativo foi removido daqui.
-                  Agora essa mensagem aparece como popup
-                  na página /profissionais/inscricao. */}
-            </div>
-          </div>
+          <DirectoryCtaButton href="/profissionais/inscricao?from=hero">
+            Quero aparecer no diretório
+          </DirectoryCtaButton>
         </header>
 
-        {/* Como usar o diretório */}
-        <section className="mt-8 grid gap-6 rounded-2xl border border-slate-800 bg-slate-900/60 p-5 sm:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)] sm:p-6">
-          <div className="space-y-2">
-            <h2 className="text-sm font-semibold text-slate-100 sm:text-base">
-              Como usar este diretório
+        {/* COMO FUNCIONA • agora mais direto e convincente */}
+        <section className="mt-10 grid gap-6 rounded-2xl border border-slate-800 bg-slate-900/60 p-5 sm:grid-cols-2 sm:p-6">
+          <div className="space-y-3">
+            <h2 className="text-base font-semibold text-slate-100">
+              Como funciona
             </h2>
-            <ol className="mt-1 list-decimal space-y-1 pl-5 text-sm text-slate-300 sm:text-[0.95rem]">
+            <ol className="mt-1 list-decimal space-y-2 pl-5 text-sm text-slate-300">
               <li>
-                <span className="font-medium">Escolha a nuvem:</span> navegue
-                pelas seções de AWS, Azure, Google Cloud ou Oracle.
+                Escolha a nuvem e explore os perfis certificados disponíveis.
               </li>
               <li>
-                <span className="font-medium">Avalie o perfil:</span> veja
-                certificações, resumo profissional e links de contato.
+                Veja experiência, certificações e links profissionais.
               </li>
               <li>
-                <span className="font-medium">Converse direto:</span> use os
-                links do próprio profissional para falar sobre vagas, projetos
-                ou parcerias.
+                Fale diretamente com o especialista — sem intermediários.
               </li>
             </ol>
           </div>
 
           <div className="space-y-2 rounded-xl border border-slate-800 bg-slate-950/60 p-4 text-sm text-slate-300">
             <h3 className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
-              Curadoria em evolução
+              Curadoria e qualidade
             </h3>
-            <p className="mt-1">
-              Os dados são informados pelos próprios profissionais e passam por
-              uma revisão básica da equipe Alta Cloud antes de serem
-              publicados. Em breve, novos recursos de destaque, filtros
-              avançados e recomendações inteligentes.
+            <p>
+              Todos os perfis passam por validação básica antes de entrar no
+              diretório. Em breve, filtros avançados, ranking e novos recursos
+              de visibilidade.
             </p>
           </div>
         </section>
 
-        {/* Primeiro banner de anúncio */}
+        {/* Ads */}
         <div className="mt-8">
           <AdsBanner position="directory_top" />
         </div>
 
-        {/* Seções por nuvem */}
-        <div className="mt-10 space-y-12">
+        {/* LISTAGEM */}
+        <div className="mt-12 space-y-12">
           {directorySections.map((section, index) => (
             <section key={section.id} id={section.id} className="space-y-4">
               <header className="space-y-2">
-                <h2 className="text-lg font-semibold text-slate-50 sm:text-xl">
+                <h2 className="text-lg font-semibold sm:text-xl">
                   {section.title}
                 </h2>
-                <p className="max-w-2xl text-sm text-slate-300 sm:text-[0.95rem]">
+                <p className="max-w-2xl text-sm text-slate-300">
                   {section.subtitle}
                 </p>
                 <p className="text-xs font-medium text-slate-400">
@@ -261,7 +246,7 @@ export default function ProfessionalsDirectoryPage() {
                     className="flex h-full flex-col justify-between rounded-2xl border border-slate-800 bg-slate-900/70 p-4 shadow-sm shadow-slate-950/40"
                   >
                     <div className="space-y-3">
-                      <div className="flex flex-wrap items-start justify-between gap-2">
+                      <div className="flex items-start justify-between">
                         <div>
                           <h3 className="text-base font-semibold text-slate-50">
                             {pro.name}
@@ -319,7 +304,6 @@ export default function ProfessionalsDirectoryPage() {
                 ))}
               </div>
 
-              {/* Banners adicionais entre blocos */}
               {index === 0 && (
                 <div className="mt-6">
                   <AdsBanner position="directory_aws_after" />
@@ -334,22 +318,21 @@ export default function ProfessionalsDirectoryPage() {
           ))}
         </div>
 
-        {/* CTA final */}
-        <section className="mt-12 rounded-2xl border border-slate-800 bg-slate-900/70 p-5 sm:p-6">
+        {/* CTA FINAL — persuasivo */}
+        <section className="mt-14 rounded-2xl border border-slate-800 bg-slate-900/70 p-6">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div className="space-y-1.5">
-              <h2 className="text-base font-semibold text-slate-50 sm:text-lg">
-                Quer fazer parte do diretório?
+              <h2 className="text-base font-semibold sm:text-lg">
+                Quer receber mais oportunidades?
               </h2>
               <p className="max-w-xl text-sm text-slate-300">
-                Se você é profissional de cloud com certificações oficiais e
-                quer mais visibilidade para projetos, vagas e parcerias, envie
-                seus dados para a curadoria do Alta Cloud.
+                Inscreva-se no diretório oficial da Alta Cloud e seja encontrado
+                por empresas, recrutadores e parceiros — visibilidade gratuita.
               </p>
             </div>
 
-            <DirectoryCtaButton href="/profissionais/inscricao?from=directory">
-              Quero aparecer na lista
+            <DirectoryCtaButton href="/profissionais/inscricao?from=footer">
+              Quero aparecer no diretório
             </DirectoryCtaButton>
           </div>
         </section>
