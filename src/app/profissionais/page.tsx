@@ -1,9 +1,48 @@
 // src/app/profissionais/page.tsx
+
+import { Metadata } from "next";
 import Link from "next/link";
-import { AdsBanner } from "../components/ads/AdsBanner";
+import { AdsBanner } from "@/app/components/ads/AdsBanner"; // <-- CORRIGIDO: Usando o alias @/
+import { DirectoryCard } from "@/app/components/DirectoryCard"; // <-- CORRIGIDO: Usando o alias @/
 
+// --- Bloco de Metadata ---
+export const metadata: Metadata = {
+  title: "Diretório de Profissionais Cloud | AWS, Azure, GCP, OCI - Alta Cloud",
+  description: "Encontre ou cadastre-se no diretório oficial de profissionais certificados em AWS, Azure, Google Cloud e Oracle Cloud. Conecte-se com talentos Cloud ou divulgue seu perfil para o mercado.",
+  keywords: [
+    "Diretório Profissionais Cloud", "Profissionais AWS", "Profissionais Azure",
+    "Profissionais Google Cloud", "Profissionais Oracle Cloud", "Consultores Cloud",
+    "Especialistas Cloud", "Certificações Cloud", "Vagas Cloud", "Recrutamento Cloud",
+    "Freelancer Cloud", "AWS Certified", "Azure Certified", "GCP Certified", "OCI Certified",
+    "Encontrar Profissional Cloud", "Cadastrar Profissional Cloud"
+  ],
+  openGraph: {
+    title: "Diretório de Profissionais Cloud | AWS, Azure, GCP, OCI - Alta Cloud",
+    description: "Encontre ou cadastre-se no diretório oficial de profissionais certificados em AWS, Azure, Google Cloud e Oracle Cloud. Conecte-se com talentos Cloud ou divulgue seu perfil para o mercado.",
+    url: "https://altacloud.com.br/profissionais",
+    siteName: "Alta Cloud",
+    images: [
+      {
+        url: "https://altacloud.com.br/diretorio-cover.webp",
+        width: 1200,
+        height: 630,
+        alt: "Diretório de Profissionais Cloud - Alta Cloud",
+      },
+    ],
+    locale: "pt_BR",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Diretório de Profissionais Cloud | AWS, Azure, GCP, OCI - Alta Cloud",
+    description: "Encontre ou cadastre-se no diretório oficial de profissionais certificados em AWS, Azure, Google Cloud e Oracle Cloud. Conecte-se com talentos Cloud ou divulgue seu perfil para o mercado.",
+    images: ["https://altacloud.com.br/diretorio-cover.webp"],
+  },
+};
+// --- Fim do Bloco de Metadata ---
+
+// Tipos para os dados dos profissionais
 type Availability = "available" | "open-to-opps";
-
 type Professional = {
   name: string;
   role: string;
@@ -15,7 +54,6 @@ type Professional = {
   github?: string;
   portfolio?: string;
 };
-
 type CloudSection = {
   id: string;
   title: string;
@@ -23,6 +61,7 @@ type CloudSection = {
   professionals: Professional[];
 };
 
+// Dados de exemplo para o diretório
 const directorySections: CloudSection[] = [
   {
     id: "aws",
@@ -117,18 +156,7 @@ const directorySections: CloudSection[] = [
   },
 ];
 
-function availabilityLabel(status: Availability) {
-  return status === "available"
-    ? "Disponível para projetos"
-    : "Ouvindo propostas";
-}
-
-function availabilityClassName(status: Availability) {
-  return status === "available"
-    ? "inline-flex items-center rounded-full bg-emerald-500/15 px-3 py-1 text-xs font-medium text-emerald-300 ring-1 ring-emerald-500/40"
-    : "inline-flex items-center rounded-full bg-amber-500/15 px-3 py-1 text-xs font-medium text-amber-300 ring-1 ring-amber-500/40";
-}
-
+// Componente de botão CTA (DirectoryCtaButton)
 function DirectoryCtaButton({
   href,
   children,
@@ -156,21 +184,19 @@ function DirectoryCtaButton({
   );
 }
 
-export default function ProfessionalsDirectoryPage() {
+// Componente principal da página de Profissionais
+export default function ProfissionaisPage() {
   return (
     <main className="min-h-screen bg-slate-950 text-slate-50">
       <div className="mx-auto w-full max-w-5xl px-4 pt-24 pb-16 md:px-6 lg:px-0">
-
         {/* HERO • mais persuasivo e com foco total em cadastro */}
         <header className="space-y-5">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-400">
             Diretório Oficial · Alta Cloud
           </p>
-
           <h1 className="text-3xl font-bold sm:text-4xl">
             Profissionais Certificados em Cloud — Encontre ou Seja Encontrado
           </h1>
-
           <p className="max-w-2xl text-sm text-slate-300 sm:text-base">
             Aqui você descobre especialistas certificados em{" "}
             <strong>AWS, Azure, Google Cloud e Oracle</strong> —
@@ -178,7 +204,6 @@ export default function ProfessionalsDirectoryPage() {
             Se você trabalha com cloud, esta é sua oportunidade de ganhar
             **visibilidade real**, gratuita e de alto impacto.
           </p>
-
           <DirectoryCtaButton href="/profissionais/inscricao?from=hero">
             Quero aparecer no diretório
           </DirectoryCtaButton>
@@ -202,7 +227,6 @@ export default function ProfessionalsDirectoryPage() {
               </li>
             </ol>
           </div>
-
           <div className="space-y-2 rounded-xl border border-slate-800 bg-slate-950/60 p-4 text-sm text-slate-300">
             <h3 className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
               Curadoria e qualidade
@@ -238,72 +262,21 @@ export default function ProfessionalsDirectoryPage() {
                     : "profissionais listados"}
                 </p>
               </header>
-
               <div className="grid gap-4 md:grid-cols-2">
                 {section.professionals.map((pro) => (
-                  <article
+                  <DirectoryCard
                     key={pro.name}
-                    className="flex h-full flex-col justify-between rounded-2xl border border-slate-800 bg-slate-900/70 p-4 shadow-sm shadow-slate-950/40"
-                  >
-                    <div className="space-y-3">
-                      <div className="flex items-start justify-between">
-                        <div>
-                          <h3 className="text-base font-semibold text-slate-50">
-                            {pro.name}
-                          </h3>
-                          <p className="text-xs text-slate-400">{pro.role}</p>
-                        </div>
-                        <span className={availabilityClassName(pro.availability)}>
-                          {availabilityLabel(pro.availability)}
-                        </span>
-                      </div>
-
-                      <p className="text-xs text-slate-400">{pro.location}</p>
-
-                      <p className="text-sm text-slate-200">{pro.summary}</p>
-
-                      <p className="text-xs text-slate-400">
-                        <span className="font-semibold">Certificações: </span>
-                        {pro.certifications}
-                      </p>
-                    </div>
-
-                    <div className="mt-4 flex flex-wrap gap-2">
-                      {pro.linkedin && (
-                        <a
-                          href={pro.linkedin}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="inline-flex items-center rounded-full border border-slate-700 bg-slate-900 px-3 py-1 text-xs font-medium text-slate-200 hover:border-cyan-400 hover:text-cyan-300"
-                        >
-                          LinkedIn
-                        </a>
-                      )}
-                      {pro.github && (
-                        <a
-                          href={pro.github}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="inline-flex items-center rounded-full border border-slate-700 bg-slate-900 px-3 py-1 text-xs font-medium text-slate-200 hover:border-cyan-400 hover:text-cyan-300"
-                        >
-                          GitHub
-                        </a>
-                      )}
-                      {pro.portfolio && (
-                        <a
-                          href={pro.portfolio}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="inline-flex items-center rounded-full border border-slate-700 bg-slate-900 px-3 py-1 text-xs font-medium text-slate-200 hover:border-cyan-400 hover:text-cyan-300"
-                        >
-                          Portfólio
-                        </a>
-                      )}
-                    </div>
-                  </article>
+                    name={pro.name}
+                    cloud={section.title}
+                    certifications={pro.certifications.split(" · ")}
+                    location={pro.location}
+                    linkedin={pro.linkedin}
+                    github={pro.github}
+                    portfolio={pro.portfolio}
+                    summary={pro.summary}
+                  />
                 ))}
               </div>
-
               {index === 0 && (
                 <div className="mt-6">
                   <AdsBanner position="directory_aws_after" />
@@ -319,7 +292,7 @@ export default function ProfessionalsDirectoryPage() {
         </div>
 
         {/* CTA FINAL — persuasivo */}
-        <section className="mt-14 rounded-2xl border border-slate-800 bg-slate-900/70 p-6">
+        <section className="mt-14 rounded-2xl border border-slate-800 bg-linear-to-r from-slate-900 via-slate-950 to-slate-900 p-6">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div className="space-y-1.5">
               <h2 className="text-base font-semibold sm:text-lg">
@@ -330,7 +303,6 @@ export default function ProfessionalsDirectoryPage() {
                 por empresas, recrutadores e parceiros — visibilidade gratuita.
               </p>
             </div>
-
             <DirectoryCtaButton href="/profissionais/inscricao?from=footer">
               Quero aparecer no diretório
             </DirectoryCtaButton>

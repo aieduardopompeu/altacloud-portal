@@ -1,7 +1,49 @@
-﻿// src/app/page.tsx
-import Image from "next/image";
+// src/app/page.tsx
+
+import { Metadata } from "next";
 import Link from "next/link";
-import { AdsBanner } from "./components/ads/AdsBanner";
+import Image from "next/image";
+import { AdsBanner } from "@/app/components/ads/AdsBanner"; // <-- CORRIGIDO: Usando o alias @/
+import { BottomStickyAd } from "@/app/components/ads/BottomStickyAd"; // <-- CORRIGIDO: Usando o alias @/
+import { DirectoryCard } from "@/app/components/DirectoryCard"; // <-- CORRIGIDO: Usando o alias @/
+import { TrackCard } from "@/app/components/TrackCard";       // <-- CORRIGIDO: Usando o alias @/
+import { ArticleCard } from "@/app/components/ArticleCard";     // <-- CORRIGIDO: Usando o alias @/
+
+// --- Bloco de Metadata ---
+export const metadata: Metadata = {
+  title: "Alta Cloud | Seu Portal de Conhecimento e Profissionais Cloud",
+  description: "Descubra o universo Cloud com o Alta Cloud: artigos, trilhas de aprendizado em AWS, Azure, GCP, OCI e um diretório exclusivo de profissionais certificados. Conecte-se, aprenda e evolua na nuvem.",
+  keywords: [
+    "Alta Cloud", "AWS", "Azure", "Google Cloud", "Oracle Cloud", "GCP", "OCI",
+    "Cloud Computing", "Profissionais Cloud", "Certificações Cloud", "Trilhas de Aprendizado",
+    "Artigos Cloud", "Diretório de Profissionais AWS", "Diretório de Profissionais Azure",
+    "Diretório de Profissionais GCP", "Diretório de Profissionais OCI", "Tecnologia Cloud",
+    "Carreira Cloud", "Desenvolvimento Cloud", "Infraestrutura Cloud"
+  ],
+  openGraph: {
+    title: "Alta Cloud | Seu Portal de Conhecimento e Profissionais Cloud",
+    description: "Descubra o universo Cloud com o Alta Cloud: artigos, trilhas de aprendizado em AWS, Azure, GCP, OCI e um diretório exclusivo de profissionais certificados. Conecte-se, aprenda e evolua na nuvem.",
+    url: "https://altacloud.com.br",
+    siteName: "Alta Cloud",
+    images: [
+      {
+        url: "https://altacloud.com.br/altacloud-cover.webp",
+        width: 1200,
+        height: 630,
+        alt: "Alta Cloud - Portal de Conhecimento e Profissionais Cloud",
+      },
+    ],
+    locale: "pt_BR",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Alta Cloud | Seu Portal de Conhecimento e Profissionais Cloud",
+    description: "Descubra o universo Cloud com o Alta Cloud: artigos, trilhas de aprendizado em AWS, Azure, GCP, OCI e um diretório exclusivo de profissionais certificados. Conecte-se, aprenda e evolua na nuvem.",
+    images: ["https://altacloud.com.br/altacloud-cover.webp"],
+  },
+};
+// --- Fim do Bloco de Metadata ---
 
 export default function HomePage() {
   return (
@@ -13,20 +55,17 @@ export default function HomePage() {
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-sky-400">
               Alta Cloud · Cloud · AWS · DevOps
             </p>
-
             <h1 className="text-3xl font-bold tracking-tight md:text-4xl lg:text-5xl">
               Aprenda Cloud de forma clara,
               <span className="block text-sky-400">
                 sem atalhos mágicos nem enrolação.
               </span>
             </h1>
-
             <p className="max-w-xl text-sm text-slate-300 md:text-base">
               Trilhas guiadas, conteúdo direto ao ponto e foco na prática:
               fundamentos, IAM, S3, EC2, VPC e mais. Tudo organizado para você
               construir uma base sólida em computação em nuvem, passo a passo.
             </p>
-
             {/* CTAs */}
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
               <Link
@@ -35,7 +74,6 @@ export default function HomePage() {
               >
                 Começar pela trilha Fundamentos
               </Link>
-
               <Link
                 href="/trilhas"
                 className="inline-flex items-center justify-center rounded-lg border border-slate-600 px-5 py-2.5 text-sm font-semibold text-slate-100 transition hover:border-sky-500 hover:text-sky-300"
@@ -43,14 +81,12 @@ export default function HomePage() {
                 Ver todas as trilhas
               </Link>
             </div>
-
             <div className="flex flex-wrap gap-4 pt-2 text-xs text-slate-400">
               <span>✔ Conteúdo em português</span>
               <span>✔ Sequência pensada para iniciantes</span>
               <span>✔ Foco em AWS hoje, aberto a multi-cloud</span>
             </div>
           </div>
-
           {/* Imagem */}
           <div className="w-full overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/70 shadow-xl">
             <Image
@@ -63,15 +99,13 @@ export default function HomePage() {
             />
           </div>
         </section>
-
         {/* ADS – logo abaixo do hero (home_top) */}
         <div className="mt-8">
-         <AdsBanner position="home_hero" />
+          <AdsBanner position="home_hero" />
         </div>
-
         {/* DESTAQUE – DIRETÓRIO DE PROFISSIONAIS */}
         <section className="mt-8">
-          <div className="rounded-2xl border border-cyan-500/30 bg-gradient-to-r from-slate-900 via-slate-950 to-slate-900 px-6 py-6 shadow-lg shadow-cyan-500/15 sm:px-8 sm:py-8">
+          <div className="rounded-2xl border border-cyan-500/30 bg-linear-to-r from-slate-900 via-slate-950 to-slate-900 px-6 py-6 shadow-lg shadow-cyan-500/15 sm:px-8 sm:py-8">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               <div className="space-y-2">
                 <p className="text-xs font-semibold uppercase tracking-[0.25em] text-cyan-400">
@@ -93,7 +127,6 @@ export default function HomePage() {
                   destaque e indicações premium.
                 </p>
               </div>
-
               <div className="flex flex-col items-start gap-3 sm:items-end">
                 <Link
                   href="/profissionais"
@@ -109,12 +142,10 @@ export default function HomePage() {
             </div>
           </div>
         </section>
-
-        {/* ADS – entre diretório e trilhas (home_between_tracks) */}
+        {/* ADS – entre diretório e trilhas (home_between_sections) */}
         <div className="mt-8">
           <AdsBanner position="home_between_sections" />
         </div>
-
         {/* TRILHAS EM DESTAQUE */}
         <section className="mt-10 space-y-5">
           <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
@@ -127,7 +158,6 @@ export default function HomePage() {
                 de cloud.
               </p>
             </div>
-
             <Link
               href="/trilhas"
               className="text-sm font-semibold text-sky-400 hover:text-sky-300"
@@ -135,7 +165,6 @@ export default function HomePage() {
               Ver todas as trilhas →
             </Link>
           </div>
-
           <div className="grid gap-6 md:grid-cols-3">
             {/* Card Fundamentos */}
             <Link
@@ -164,7 +193,6 @@ export default function HomePage() {
                 </span>
               </div>
             </Link>
-
             {/* Card IAM */}
             <Link
               href="/trilhas/iam"
@@ -192,7 +220,6 @@ export default function HomePage() {
                 </span>
               </div>
             </Link>
-
             {/* Card S3 */}
             <Link
               href="/trilhas/s3"
@@ -222,12 +249,12 @@ export default function HomePage() {
             </Link>
           </div>
         </section>
-
         {/* ADS – rodapé da home (home_bottom) – controlado por enabled no adsConfig */}
         <div className="mt-10">
           <AdsBanner position="home_tracks_bottom" />
         </div>
       </div>
+      <BottomStickyAd />
     </main>
   );
 }
