@@ -7,11 +7,15 @@ export type AdPosition =
   | "directory_aws_after"
   | "home_between_sections"
   | "home_tracks_bottom"
+  | "home_hero"
+  | "track_top"
   | "track_middle"
   | "track_bottom"
   | "article_middle"
+  | "article_top"
   | "inscricao_top"
-  | "inscricao_bottom";
+  | "inscricao_bottom"
+  | "bottom_sticky";
 
 type AdConfig = {
   enabled: boolean;
@@ -55,8 +59,20 @@ export const adsConfig: Record<AdPosition, AdConfig> = {
     format: "auto",
     fullWidthResponsive: true,
   },
+  home_hero: {
+    enabled: true,
+    adSlot: "6684581396",
+    format: "auto",
+    fullWidthResponsive: true,
+  },
 
   /* ====== TRILHAS ====== */
+  track_top: {
+    enabled: true,
+    adSlot: "6684581396",
+    format: "auto",
+    fullWidthResponsive: true,
+  },
   track_middle: {
     enabled: true,
     adSlot: "6684581396",
@@ -78,6 +94,13 @@ export const adsConfig: Record<AdPosition, AdConfig> = {
     fullWidthResponsive: true,
   },
 
+    article_top: {
+    enabled: true,
+    adSlot: "6684581396",
+    format: "auto",
+    fullWidthResponsive: true,
+  },
+
   /* ====== INSCRIÇÃO DE PROFISSIONAIS ====== */
   inscricao_top: {
     enabled: true,
@@ -86,6 +109,13 @@ export const adsConfig: Record<AdPosition, AdConfig> = {
     fullWidthResponsive: true,
   },
   inscricao_bottom: {
+    enabled: true,
+    adSlot: "6684581396",
+    format: "auto",
+    fullWidthResponsive: true,
+  },
+
+    bottom_sticky: {
     enabled: true,
     adSlot: "6684581396",
     format: "auto",

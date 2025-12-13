@@ -3,13 +3,14 @@
 
 import { useEffect, useState } from "react";
 import { AdsBanner } from "./AdsBanner";
+import type { AdPosition } from "@/config/ads";
 
 const CLOSE_KEY = "altacloud_bottom_ad_closed";
+const POSITION: AdPosition = "bottom_sticky";
 
 export function BottomStickyAd() {
   const [visible, setVisible] = useState(false);
 
-  // Mostra o banner alguns segundos depois, se o usuário não tiver fechado
   useEffect(() => {
     if (typeof window === "undefined") return;
 
@@ -25,15 +26,16 @@ export function BottomStickyAd() {
   return (
     <div className="fixed inset-x-0 bottom-0 z-40 border-t border-slate-800 bg-slate-950/95 shadow-[0_-8px_30px_rgba(0,0,0,0.7)]">
       <div className="mx-auto flex max-w-6xl items-start gap-3 px-4 py-3 md:px-6">
-        {/* Texto discreto de apoio */}
+
+        {/* Texto discreto */}
         <div className="hidden text-xs text-slate-400 md:block">
           <p className="font-semibold text-slate-300">Apoie o Alta Cloud</p>
           <p>Este conteúdo é mantido com a ajuda de parceiros e anúncios.</p>
         </div>
 
-        {/* Anúncio propriamente dito */}
+        {/* ANÚNCIO */}
         <div className="flex-1">
-          <AdsBanner position="bottom_sticky" className="w-full" />
+          <AdsBanner position={POSITION} className="w-full" />
         </div>
 
         {/* Botão de fechar */}
@@ -50,6 +52,7 @@ export function BottomStickyAd() {
         >
           Fechar
         </button>
+
       </div>
     </div>
   );
