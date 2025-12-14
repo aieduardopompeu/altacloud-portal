@@ -56,7 +56,7 @@ export default function HomePage() {
             <h1 className="mt-4 text-4xl font-bold leading-tight text-slate-50 sm:text-5xl">
               Aprenda Cloud de forma clara!
               <br />
-              Sem atalhos mágicos nem enrolação.
+              <span className="text-sky-400">sem atalhos mágicos nem enrolação.</span>
             </h1>
 
             <h2 className="mt-4 text-lg font-semibold text-cyan-400 sm:text-xl">
