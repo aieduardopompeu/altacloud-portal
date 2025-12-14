@@ -1,9 +1,60 @@
-// src/app/profissionais/inscricao/page.tsx
+"use client";
 
 import Link from "next/link";
+import { useState } from "react";
 import { AdsBanner } from "@/app/components/ads/AdsBanner";
 
 export default function InscricaoProfissionaisPage() {
+  const [loading, setLoading] = useState(false);
+  const [ok, setOk] = useState<string | null>(null);
+  const [err, setErr] = useState<string | null>(null);
+
+  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setOk(null);
+    setErr(null);
+    setLoading(true);
+
+    const form = e.currentTarget;
+    const fd = new FormData(form);
+
+    const payload = {
+      nome: String(fd.get("nome") || "").trim(),
+      email: String(fd.get("email") || "").trim(),
+      localizacao: String(fd.get("localizacao") || "").trim(),
+      nuvem: String(fd.get("nuvem") || "").trim(),
+      certificacoes: String(fd.get("certificacoes") || "").trim(),
+      resumo: String(fd.get("resumo") || "").trim(),
+      linkedin: String(fd.get("linkedin") || "").trim(),
+      github: String(fd.get("github") || "").trim(),
+      portfolio: String(fd.get("portfolio") || "").trim(),
+      company: String(fd.get("company") || "").trim(), // honeypot anti-spam
+    };
+
+    try {
+      const res = await fetch("/api/profissionais/inscricao", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      const data = (await res.json()) as { ok: boolean; error?: string };
+
+      if (!res.ok || !data.ok) {
+        setErr(data.error || "Não foi possível enviar sua inscrição.");
+        setLoading(false);
+        return;
+      }
+
+      setOk("Inscrição enviada com sucesso. Em breve seu perfil será analisado.");
+      form.reset();
+      setLoading(false);
+    } catch {
+      setErr("Erro de rede ao enviar. Tente novamente.");
+      setLoading(false);
+    }
+  }
+
   return (
     <main className="min-h-screen bg-slate-950 text-slate-50">
       <div className="mx-auto w-full max-w-3xl px-4 pt-24 pb-20 md:px-6">
@@ -68,11 +119,17 @@ export default function InscricaoProfissionaisPage() {
         <section className="mt-10 rounded-2xl border border-slate-800 bg-slate-900/60 p-6">
           <h2 className="text-lg font-semibold mb-4">Formulário de Inscrição</h2>
 
-          <form
-            className="space-y-5 text-sm"
-            action="https://formsubmit.co/contato@altacloud.com.br"
-            method="POST"
-          >
+          <form className="space-y-5 text-sm" onSubmit={onSubmit}>
+            {/* Honeypot anti-spam (não remover) */}
+            <input
+              type="text"
+              name="company"
+              tabIndex={-1}
+              autoComplete="off"
+              className="hidden"
+              aria-hidden="true"
+            />
+
             {/* Nome */}
             <div className="flex flex-col gap-1">
               <label className="text-slate-200 font-medium">Nome completo</label>
@@ -86,7 +143,7 @@ export default function InscricaoProfissionaisPage() {
 
             {/* E-mail */}
             <div className="flex flex-col gap-1">
-              <label className="text-slate-200 font-medium">E‑mail</label>
+              <label className="text-slate-200 font-medium">E-mail</label>
               <input
                 required
                 name="email"
@@ -114,6 +171,7 @@ export default function InscricaoProfissionaisPage() {
                 required
                 name="nuvem"
                 className="rounded-lg bg-slate-800 px-3 py-2 text-slate-100 border border-slate-700"
+                defaultValue=""
               >
                 <option value="">Selecione</option>
                 <option value="AWS">AWS</option>
@@ -180,12 +238,25 @@ export default function InscricaoProfissionaisPage() {
               />
             </div>
 
+            {err && (
+              <div className="rounded-xl border border-red-900/40 bg-red-950/30 px-4 py-3 text-sm text-red-200">
+                {err}
+              </div>
+            )}
+
+            {ok && (
+              <div className="rounded-xl border border-emerald-900/40 bg-emerald-950/30 px-4 py-3 text-sm text-emerald-200">
+                {ok}
+              </div>
+            )}
+
             {/* Submit */}
             <button
               type="submit"
-              className="w-full mt-6 rounded-full bg-cyan-500 px-5 py-3 font-semibold text-slate-950 hover:bg-cyan-400 transition"
+              disabled={loading}
+              className="w-full mt-6 rounded-full bg-cyan-500 px-5 py-3 font-semibold text-slate-950 hover:bg-cyan-400 transition disabled:opacity-60 disabled:cursor-not-allowed"
             >
-              Enviar inscrição
+              {loading ? "Enviando..." : "Enviar inscrição"}
             </button>
           </form>
         </section>
@@ -197,10 +268,7 @@ export default function InscricaoProfissionaisPage() {
 
         {/* Link de voltar */}
         <div className="mt-10 text-center">
-          <Link
-            href="/profissionais"
-            className="text-cyan-400 hover:text-cyan-300 text-sm"
-          >
+          <Link href="/profissionais" className="text-cyan-400 hover:text-cyan-300 text-sm">
             ← Voltar ao diretório
           </Link>
         </div>
