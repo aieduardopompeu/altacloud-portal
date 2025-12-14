@@ -1,0 +1,42 @@
+﻿{
+    "include":  [
+                    "next-env.d.ts",
+                    ".next/types/**/*.ts",
+                    ".next/dev/types/**/*.ts",
+                    "**/*.ts",
+                    "**/*.tsx"
+                ],
+    "exclude":  [
+                    "node_modules"
+                ],
+    "compilerOptions":  {
+                        "noEmit":  true,
+                        "baseUrl":  ".",
+                        "strict":  false,
+                        "plugins":  [
+                                         {
+                                             "name":  "next"
+                                         }
+                                     ],
+                        "module":  "esnext",
+                        "incremental":  true,
+                        "moduleResolution":  "node",
+                        "isolatedModules":  true,
+                        "skipLibCheck":  true,
+                        "allowJs":  true,
+                        "target":  "ES2017",
+                        "resolveJsonModule":  true,
+                        "esModuleInterop":  true,
+                        "paths":  {
+                                      "@/*":  [
+                                                  "src/*"
+                                              ]
+                                  },
+                        "lib":  [
+                                    "dom",
+                                    "dom.iterable",
+                                    "esnext"
+                                ],
+                        "jsx":  "react-jsx"
+                        }
+}

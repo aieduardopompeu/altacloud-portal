@@ -2,8 +2,7 @@
 
 import { Metadata } from "next";
 import Link from "next/link";
-import { AdsBanner } from "@/app/components/ads/AdsBanner"; // <-- CORRIGIDO: Usando o alias @/
-import { DirectoryCard } from "@/app/components/DirectoryCard"; // <-- CORRIGIDO: Usando o alias @/
+import { AdsBanner } from "../components/ads/AdsBanner"; // <-- CORRIGIDO: Caminho relativo correto
 
 // --- Bloco de Metadata ---
 export const metadata: Metadata = {
@@ -264,17 +263,58 @@ export default function ProfissionaisPage() {
               </header>
               <div className="grid gap-4 md:grid-cols-2">
                 {section.professionals.map((pro) => (
-                  <DirectoryCard
-                    key={pro.name}
-                    name={pro.name}
-                    cloud={section.title}
-                    certifications={pro.certifications.split(" · ")}
-                    location={pro.location}
-                    linkedin={pro.linkedin}
-                    github={pro.github}
-                    portfolio={pro.portfolio}
-                    summary={pro.summary}
-                  />
+                  <div
+  key={pro.name}
+  className="rounded-2xl border border-slate-800 bg-slate-900/40 p-5"
+>
+  <div className="flex items-start justify-between gap-3">
+    <div>
+      <h3 className="text-lg font-semibold text-white">{pro.name}</h3>
+      <p className="text-sm text-slate-300">
+        {section.title} {pro.location ? `• ${pro.location}` : ""}
+      </p>
+    </div>
+  </div>
+
+  {pro.summary && (
+    <p className="mt-3 text-sm leading-relaxed text-slate-300">{pro.summary}</p>
+  )}
+
+  {pro.certifications && (
+    <div className="mt-4 flex flex-wrap gap-2">
+      {pro.certifications
+        .split(" • ")
+        .filter(Boolean)
+        .map((c) => (
+          <span
+            key={c}
+            className="rounded-full border border-slate-700 bg-slate-950/40 px-3 py-1 text-xs text-slate-200"
+          >
+            {c}
+          </span>
+        ))}
+    </div>
+  )}
+
+  <div className="mt-4 flex flex-wrap gap-3 text-sm">
+    {pro.linkedin && (
+      <a className="text-sky-300 hover:underline" href={pro.linkedin}>
+        LinkedIn
+      </a>
+    )}
+    {pro.github && (
+      <a className="text-sky-300 hover:underline" href={pro.github}>
+        GitHub
+      </a>
+    )}
+    {pro.portfolio && (
+      <a className="text-sky-300 hover:underline" href={pro.portfolio}>
+        Portfólio
+      </a>
+    )}
+  </div>
+</div>
+
                 ))}
               </div>
               {index === 0 && (

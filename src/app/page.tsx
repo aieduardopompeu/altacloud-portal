@@ -3,11 +3,8 @@
 import { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
-import { AdsBanner } from "@/app/components/ads/AdsBanner"; // <-- CORRIGIDO: Usando o alias @/
-import { BottomStickyAd } from "@/app/components/ads/BottomStickyAd"; // <-- CORRIGIDO: Usando o alias @/
-import { DirectoryCard } from "@/app/components/DirectoryCard"; // <-- CORRIGIDO: Usando o alias @/
-import { TrackCard } from "@/app/components/TrackCard";       // <-- CORRIGIDO: Usando o alias @/
-import { ArticleCard } from "@/app/components/ArticleCard";     // <-- CORRIGIDO: Usando o alias @/
+import { AdsBanner } from "./components/ads/AdsBanner"; // <-- CORRIGIDO: Caminho relativo correto
+import { BottomStickyAd } from "./components/ads/BottomStickyAd"; // <-- CORRIGIDO: Caminho relativo correto
 
 // --- Bloco de Metadata ---
 export const metadata: Metadata = {
