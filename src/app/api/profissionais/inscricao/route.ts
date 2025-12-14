@@ -128,6 +128,51 @@ export async function POST(req: Request) {
       text,
       html,
     });
+    
+// E-mail de confirmação para o profissional
+await resend.emails.send({
+  from: FROM,
+  to: [email],
+  subject: "Recebemos sua inscrição no Diretório Alta Cloud",
+  html: `
+    <div style="font-family: Arial, sans-serif; line-height:1.6; color:#0f172a">
+      <h2 style="color:#0284c7">Inscrição recebida com sucesso</h2>
+
+      <p>Olá <strong>${esc(nome)}</strong>,</p>
+
+      <p>
+        Recebemos sua inscrição para o
+        <strong>Diretório de Profissionais da Alta Cloud</strong>.
+      </p>
+
+      <p>
+        Nossa equipe irá analisar suas informações e, se estiver tudo certo,
+        seu perfil será publicado no diretório.
+      </p>
+
+      <p style="margin-top:16px">
+        <strong>Resumo enviado:</strong><br/>
+        ${esc(resumo).replace(/\n/g, "<br/>")}
+      </p>
+
+      <hr style="margin:24px 0"/>
+
+      <p style="font-size:14px; color:#475569">
+        🔹 Esse processo é gratuito<br/>
+        🔹 Você será avisado caso seu perfil seja publicado<br/>
+        🔹 Dúvidas? Responda este e-mail
+      </p>
+
+      <p style="margin-top:24px">
+        Atenciosamente,<br/>
+        <strong>Equipe Alta Cloud</strong><br/>
+        <a href="https://www.altacloud.com.br" target="_blank">
+          www.altacloud.com.br
+        </a>
+      </p>
+    </div>
+  `,
+});
 
     if (error) {
       return NextResponse.json({ ok: false, error: "Falha ao enviar e-mail (Resend)." }, { status: 502 });
