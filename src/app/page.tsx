@@ -49,20 +49,26 @@ export default function HomePage() {
         {/* HERO */}
         <section className="grid gap-10 md:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] md:items-center">
           <div className="space-y-6">
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-sky-400">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-400">
               Alta Cloud · Cloud · AWS · DevOps
             </p>
-            <h1 className="text-3xl font-bold tracking-tight md:text-4xl lg:text-5xl">
-              Aprenda Cloud de forma clara,
-              <span className="block text-sky-400">
-                sem atalhos mágicos nem enrolação.
-              </span>
+
+            <h1 className="mt-4 text-4xl font-bold leading-tight text-slate-50 sm:text-5xl">
+              Aprenda Cloud de forma clara!
+              <br />
+              Sem atalhos mágicos nem enrolação.
             </h1>
-            <p className="max-w-xl text-sm text-slate-300 md:text-base">
-              Trilhas guiadas, conteúdo direto ao ponto e foco na prática:
-              fundamentos, IAM, S3, EC2, VPC e mais. Tudo organizado para você
-              construir uma base sólida em computação em nuvem, passo a passo.
+
+            <h2 className="mt-4 text-lg font-semibold text-cyan-400 sm:text-xl">
+              Alta Cloud — conhecimento que vira relacionamento
+            </h2>
+
+            <p className="mt-4 max-w-xl text-sm text-slate-300 md:text-base">
+              Trilhas guiadas, conteúdo direto ao ponto e foco na prática: fundamentos, IAM,
+              S3, EC2, VPC e mais. Tudo organizado para você construir uma base sólida em
+              computação em nuvem, passo a passo.
             </p>
+
             {/* CTAs */}
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
               <Link
@@ -78,12 +84,14 @@ export default function HomePage() {
                 Ver todas as trilhas
               </Link>
             </div>
+
             <div className="flex flex-wrap gap-4 pt-2 text-xs text-slate-400">
               <span>✔ Conteúdo em português</span>
               <span>✔ Sequência pensada para iniciantes</span>
               <span>✔ Foco em AWS hoje, aberto a multi-cloud</span>
             </div>
           </div>
+
           {/* Imagem */}
           <div className="w-full overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/70 shadow-xl">
             <Image
