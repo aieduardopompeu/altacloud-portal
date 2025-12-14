@@ -128,48 +128,108 @@ export async function POST(req: Request) {
       text,
       html,
     });
-    
+
 // E-mail de confirmação para o profissional
 await resend.emails.send({
   from: FROM,
   to: [email],
-  subject: "Recebemos sua inscrição no Diretório Alta Cloud",
+  subject: "Seu cadastro foi recebido pela equipe da Alta Cloud",
   html: `
-    <div style="font-family: Arial, sans-serif; line-height:1.6; color:#0f172a">
-      <h2 style="color:#0284c7">Inscrição recebida com sucesso</h2>
+    <div style="margin:0; padding:0; background:#f8fafc;">
+      <div style="max-width:640px; margin:0 auto; padding:24px 16px;">
+        
+        <!-- Header / Branding -->
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; padding:12px 4px;">
+        <div style="display:flex; align-items:center; gap:10px;">
+            <img
+            src="https://www.altacloud.com.br/logo-altacloud.png"
+            width="42"
+            height="42"
+            alt="Alta Cloud"
+            style="display:block; border-radius:10px;"
+            />
+            <div style="font-family:Arial, sans-serif;">
+            <div style="font-size:18px; font-weight:700; color:#0f172a;">
+                Alta Cloud
+            </div>
+            <div style="font-size:12px; color:#475569;">
+                Portal de Cloud • Trilhas • Profissionais
+            </div>
+            </div>
+        </div>
 
-      <p>Olá <strong>${esc(nome)}</strong>,</p>
-
-      <p>
-        Recebemos sua inscrição para o
-        <strong>Diretório de Profissionais da Alta Cloud</strong>.
-      </p>
-
-      <p>
-        Nossa equipe irá analisar suas informações e, se estiver tudo certo,
-        seu perfil será publicado no diretório.
-      </p>
-
-      <p style="margin-top:16px">
-        <strong>Resumo enviado:</strong><br/>
-        ${esc(resumo).replace(/\n/g, "<br/>")}
-      </p>
-
-      <hr style="margin:24px 0"/>
-
-      <p style="font-size:14px; color:#475569">
-        🔹 Esse processo é gratuito<br/>
-        🔹 Você será avisado caso seu perfil seja publicado<br/>
-        🔹 Dúvidas? Responda este e-mail
-      </p>
-
-      <p style="margin-top:24px">
-        Atenciosamente,<br/>
-        <strong>Equipe Alta Cloud</strong><br/>
-        <a href="https://www.altacloud.com.br" target="_blank">
-          www.altacloud.com.br
+        <a href="https://www.altacloud.com.br" target="_blank" rel="noopener noreferrer"
+            style="font-family:Arial, sans-serif; font-size:12px; color:#0284c7; text-decoration:none;">
+            altacloud.com.br
         </a>
-      </p>
+        </div>
+
+        <!-- Card -->
+        <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:16px; overflow:hidden;">
+          
+          <!-- Top bar -->
+          <div style="background:#0b1220; padding:16px 18px;">
+            <div style="font-family:Arial, sans-serif; font-size:16px; font-weight:700; color:#e2e8f0;">
+              Inscrição recebida com sucesso
+            </div>
+            <div style="font-family:Arial, sans-serif; font-size:12px; color:#94a3b8; margin-top:4px;">
+              Diretório de Profissionais • Alta Cloud
+            </div>
+          </div>
+
+          <!-- Body -->
+          <div style="padding:18px;">
+            <p style="margin:0 0 12px 0; font-family:Arial, sans-serif; font-size:14px; color:#0f172a;">
+              Olá <strong>${esc(nome)}</strong>,
+            </p>
+
+            <p style="margin:0 0 12px 0; font-family:Arial, sans-serif; font-size:14px; color:#0f172a;">
+              Seu cadastro foi recebido pela equipe da <strong>Alta Cloud</strong>.
+              Vamos analisar suas informações e, se estiver tudo certo, seu perfil será publicado no diretório.
+            </p>
+
+            <div style="margin:14px 0; padding:12px 12px; background:#f1f5f9; border:1px solid #e2e8f0; border-radius:12px;">
+              <div style="font-family:Arial, sans-serif; font-size:12px; font-weight:700; color:#0f172a; margin-bottom:6px;">
+                Resumo enviado
+              </div>
+              <div style="font-family:Arial, sans-serif; font-size:13px; color:#0f172a;">
+                ${esc(resumo || "-").replace(/\n/g, "<br/>")}
+              </div>
+            </div>
+
+            <!-- CTA Button -->
+            <div style="margin-top:16px;">
+              <a href="https://www.altacloud.com.br/profissionais" target="_blank" rel="noopener noreferrer"
+                 style="display:inline-block; font-family:Arial, sans-serif; font-size:14px; font-weight:700;
+                        background:#06b6d4; color:#0b1220; text-decoration:none; padding:10px 14px; border-radius:999px;">
+                Ver Diretório de Profissionais
+              </a>
+            </div>
+
+            <hr style="margin:18px 0; border:none; border-top:1px solid #e2e8f0;" />
+
+            <ul style="margin:0; padding-left:18px; font-family:Arial, sans-serif; font-size:13px; color:#334155;">
+              <li style="margin:6px 0;">Esse processo é gratuito.</li>
+              <li style="margin:6px 0;">Você será avisado caso seu perfil seja publicado.</li>
+              <li style="margin:6px 0;">Dúvidas? Responda este e-mail.</li>
+            </ul>
+
+            <p style="margin:16px 0 0 0; font-family:Arial, sans-serif; font-size:13px; color:#475569;">
+              Atenciosamente,<br/>
+              <strong>Equipe Alta Cloud</strong><br/>
+              <a href="https://www.altacloud.com.br" target="_blank" rel="noopener noreferrer"
+                 style="color:#0284c7; text-decoration:none;">
+                www.altacloud.com.br
+              </a>
+            </p>
+          </div>
+        </div>
+
+        <!-- Footer -->
+        <div style="padding:14px 6px 0; font-family:Arial, sans-serif; font-size:11px; color:#64748b;">
+          Você recebeu este e-mail porque enviou seu cadastro no diretório de profissionais da Alta Cloud.
+        </div>
+      </div>
     </div>
   `,
 });
