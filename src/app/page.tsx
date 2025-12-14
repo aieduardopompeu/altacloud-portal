@@ -54,14 +54,14 @@ export default function HomePage() {
             </p>
 
             <h1 className="mt-4 text-4xl font-bold leading-tight text-slate-50 sm:text-5xl">
-              Aprenda Cloud de forma clara!
+              Aprenda Cloud de forma clara,
               <br />
-              <span className="text-sky-400">sem atalhos mágicos nem enrolação.</span>
+              <span className="text-cyan-400">sem atalhos mágicos nem enrolação.</span>
             </h1>
 
-            <h2 className="mt-4 text-lg font-semibold text-cyan-400 sm:text-xl">
+            <p className="mt-4 text-sm sm:text-base font-semibold text-cyan-400">
               Alta Cloud — conhecimento que vira relacionamento
-            </h2>
+            </p>
 
             <p className="mt-4 max-w-xl text-sm text-slate-300 md:text-base">
               Trilhas guiadas, conteúdo direto ao ponto e foco na prática: fundamentos, IAM,
