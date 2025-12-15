@@ -29,7 +29,7 @@ export function BottomStickyAd() {
 
         {/* Texto discreto */}
         <div className="hidden text-xs text-slate-400 md:block">
-          <p className="font-semibold text-slate-300">Apoie o Alta Cloud</p>
+          <p className="font-semibold text-slate-300">Apoie a Alta Cloud</p>
           <p>Este conteúdo é mantido com a ajuda de parceiros e anúncios.</p>
         </div>
 
