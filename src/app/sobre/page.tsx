@@ -1,4 +1,6 @@
 ﻿// src/app/sobre/page.tsx
+import { AdsBanner } from "@/app/components/ads/AdsBanner";
+
 export default function SobrePage() {
   return (
     <main className="min-h-screen bg-slate-950 text-slate-50">
@@ -16,6 +18,11 @@ export default function SobrePage() {
             mágicos.
           </p>
         </header>
+
+        {/* ANÚNCIO: topo da página (após o header) */}
+        <div className="my-8">
+          <AdsBanner position="article_top" className="w-full" />
+        </div>
 
         <section className="mt-10 grid gap-8 md:grid-cols-2">
           <div className="space-y-4 text-sm text-slate-300 md:text-base">
@@ -76,6 +83,11 @@ export default function SobrePage() {
             </ul>
           </div>
         </section>
+
+        {/* ANÚNCIO: meio da página (antes do bloco final) */}
+        <div className="mt-12">
+          <AdsBanner position="article_middle" className="w-full" />
+        </div>
 
         <section className="mt-14 space-y-4 text-sm text-slate-300 md:text-base">
           <h2 className="text-sm font-semibold text-slate-50 md:text-lg">
