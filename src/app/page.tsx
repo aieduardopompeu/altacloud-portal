@@ -59,9 +59,27 @@ export default function HomePage() {
               <span className="text-cyan-400">sem atalhos mágicos nem enrolação.</span>
             </h1>
 
-            <p className="mt-4 text-sm sm:text-base font-semibold text-cyan-400">
-              Alta Cloud — conhecimento que vira relacionamento
-            </p>
+            <div className="mt-8">
+              <div
+                className="
+                  flex w-full items-center justify-center gap-3
+                  rounded-xl border border-slate-700/60 bg-slate-900/40
+                  px-5 py-4 backdrop-blur
+                  text-base leading-tight
+                  sm:inline-flex sm:w-auto sm:px-5 sm:py-3 sm:text-sm sm:leading-normal
+                "
+              >
+                {/* some no mobile, aparece no desktop */}
+                <span className="hidden sm:inline-block h-2 w-2 flex-none rounded-full bg-cyan-400/80" />
+
+                <span className="text-center text-slate-200">
+                  <span className="font-semibold text-slate-50">Alta Cloud</span>
+                  <span className="text-slate-400"> — </span>
+                  conhecimento que vira{" "}
+                  <span className="font-semibold text-cyan-300">relacionamento.</span>
+                </span>
+              </div>
+            </div>
 
             <p className="mt-4 max-w-xl text-sm text-slate-300 md:text-base">
               Trilhas guiadas, conteúdo direto ao ponto e foco na prática: fundamentos, IAM,
