@@ -1,4 +1,6 @@
 ﻿// src/app/glossario/page.tsx
+import { AdsBanner } from "@/app/components/ads/AdsBanner";
+
 type Term = {
   term: string;
   alias?: string;
@@ -79,39 +81,46 @@ export default function GlossarioPage() {
           </p>
         </header>
 
-        <section className="mt-10 grid gap-5 md:grid-cols-2">
-          {terms.map((item) => (
-            <article
-              key={item.term}
-              className="rounded-xl border border-slate-800 bg-slate-900/80 p-4"
-            >
-              <div className="flex items-start justify-between gap-3">
-                <div>
-                  <h2 className="text-sm font-semibold text-slate-50 md:text-base">
-                    {item.term}
-                  </h2>
-                  {item.alias && (
-                    <p className="text-xs text-slate-400">
-                      {item.alias}
-                    </p>
-                  )}
-                </div>
-                <span className="rounded-full bg-slate-800 px-3 py-1 text-[10px] font-medium uppercase tracking-wide text-slate-300">
-                  {item.category}
-                </span>
-              </div>
+        {/* ANÚNCIO: topo da página */}
+        <div className="my-8">
+          <AdsBanner position="article_top" className="w-full" />
+        </div>
 
-              <p className="mt-3 text-sm text-slate-300">
-                {item.description}
-              </p>
-            </article>
+        <section className="mt-10 grid gap-5 md:grid-cols-2">
+          {terms.map((item, idx) => (
+            <div key={item.term} className="contents">
+              <article className="rounded-xl border border-slate-800 bg-slate-900/80 p-4">
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <h2 className="text-sm font-semibold text-slate-50 md:text-base">
+                      {item.term}
+                    </h2>
+                    {item.alias && (
+                      <p className="text-xs text-slate-400">{item.alias}</p>
+                    )}
+                  </div>
+                  <span className="rounded-full bg-slate-800 px-3 py-1 text-[10px] font-medium uppercase tracking-wide text-slate-300">
+                    {item.category}
+                  </span>
+                </div>
+
+                <p className="mt-3 text-sm text-slate-300">{item.description}</p>
+              </article>
+
+              {/* ANÚNCIO: depois do 2º card (span total no desktop) */}
+              {idx === 1 && (
+                <div className="my-2 md:col-span-2">
+                  <AdsBanner position="article_middle" className="w-full" />
+                </div>
+              )}
+            </div>
           ))}
         </section>
 
         <p className="mt-8 text-xs text-slate-500">
-          Você pode ampliar este glossário aos poucos, adicionando termos à
-          lista <code>terms</code> neste arquivo ou movendo para uma fonte de
-          dados externa no futuro.
+          Você pode ampliar este glossário aos poucos, adicionando termos à lista{" "}
+          <code>terms</code> neste arquivo ou movendo para uma fonte de dados
+          externa no futuro.
         </p>
       </div>
     </main>
