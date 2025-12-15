@@ -1,5 +1,6 @@
 ﻿// src/app/components/layout/ArticleLayout.tsx
 import type { ReactNode } from "react";
+import Link from "next/link";
 import { AdsBanner } from "../ads/AdsBanner";
 
 type ArticleLayoutProps = {
@@ -54,6 +55,16 @@ export function ArticleLayout({
           {/* CONTEÚDO DO ARTIGO */}
           <div className="space-y-4 text-sm leading-relaxed text-slate-200 md:text-base">
             {children}
+
+            {/* Voltar para Artigos */}
+            <div className="mt-10 border-t border-slate-800 pt-6">
+              <Link
+                href="/artigos"
+                className="inline-flex items-center gap-2 rounded-full border border-slate-700 bg-slate-950/40 px-4 py-2 text-sm font-semibold text-slate-100 transition hover:border-sky-500 hover:text-sky-300"
+              >
+                ← Voltar para Artigos
+              </Link>
+            </div>
           </div>
         </article>
       </div>
