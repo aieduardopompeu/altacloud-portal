@@ -1,5 +1,5 @@
 ﻿// src/app/noticias/page.tsx
-import Link from "next/link";
+import { AdsBanner } from "@/app/components/ads/AdsBanner";
 
 type NewsItem = {
   title: string;
@@ -49,24 +49,35 @@ export default function NoticiasPage() {
           </p>
         </header>
 
+        {/* ANÚNCIO: topo da página */}
+        <div className="my-8">
+          <AdsBanner position="article_top" className="w-full" />
+        </div>
+
         <section className="mt-10 space-y-5">
           {newsItems.map((item, index) => (
-            <article
-              key={index}
-              className="rounded-xl border border-slate-800 bg-slate-900/80 p-5 shadow-lg"
-            >
-              <div className="flex flex-wrap items-center gap-2 text-xs text-slate-400">
-                <span className="rounded-full bg-sky-500/10 px-3 py-1 font-medium text-sky-300 ring-1 ring-sky-500/40">
-                  {item.tag}
-                </span>
-                <span>{item.date}</span>
-              </div>
+            <div key={`${item.title}-${index}`} className="space-y-5">
+              <article className="rounded-xl border border-slate-800 bg-slate-900/80 p-5 shadow-lg">
+                <div className="flex flex-wrap items-center gap-2 text-xs text-slate-400">
+                  <span className="rounded-full bg-sky-500/10 px-3 py-1 font-medium text-sky-300 ring-1 ring-sky-500/40">
+                    {item.tag}
+                  </span>
+                  <span>{item.date}</span>
+                </div>
 
-              <h2 className="mt-3 text-base font-semibold md:text-lg">
-                {item.title}
-              </h2>
-              <p className="mt-2 text-sm text-slate-300">{item.subtitle}</p>
-            </article>
+                <h2 className="mt-3 text-base font-semibold md:text-lg">
+                  {item.title}
+                </h2>
+                <p className="mt-2 text-sm text-slate-300">{item.subtitle}</p>
+              </article>
+
+              {/* ANÚNCIO: depois da 2ª notícia */}
+              {index === 1 && (
+                <div className="my-2">
+                  <AdsBanner position="article_middle" className="w-full" />
+                </div>
+              )}
+            </div>
           ))}
         </section>
 
