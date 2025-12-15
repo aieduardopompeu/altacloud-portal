@@ -2,7 +2,6 @@
 import type { Metadata } from "next";
 import Script from "next/script";
 import { ArticleLayout } from "../../components/layout/ArticleLayout";
-import { AdsBanner } from "../../components/ads/AdsBanner";
 
 const articleSlug = "guia-cloud-computing-para-iniciantes";
 const articleUrl = `https://altacloud.com.br/artigos/${articleSlug}`;
@@ -31,9 +30,7 @@ const jsonLd = {
   },
   datePublished: "2025-01-01T00:00:00-03:00",
   dateModified: "2025-01-01T00:00:00-03:00",
-  image: [
-    "https://altacloud.com.br/og/guia-cloud-computing-para-iniciantes.png",
-  ],
+  image: ["https://altacloud.com.br/og/guia-cloud-computing-para-iniciantes.png"],
 };
 
 export const metadata: Metadata = {
@@ -72,20 +69,17 @@ export default function Page() {
         readingTime="12 min"
         date="Jan 2025"
       >
-        {/* Anúncio topo do artigo (controlado por article_top no adsConfig) */}
-        <AdsBanner position="article_top" className="my-6" />
-
         <p>
           Se você está começando na área de tecnologia ou migrando de
           infraestrutura tradicional, entender cloud computing não é mais um
           diferencial — é praticamente obrigatório. A boa notícia é que, com uma
-          base bem estruturada, a nuvem deixa de ser um bicho de sete cabeças
-          e passa a ser uma aliada estratégica.
+          base bem estruturada, a nuvem deixa de ser um bicho de sete cabeças e
+          passa a ser uma aliada estratégica.
         </p>
 
         <p>
-          Neste guia, vamos passar pelos conceitos essenciais de forma direta:
-          o que é cloud, quais são os principais modelos de serviço, como os
+          Neste guia, vamos passar pelos conceitos essenciais de forma direta: o
+          que é cloud, quais são os principais modelos de serviço, como os
           provedores se organizam e quais caminhos você pode seguir para
           aprender na prática.
         </p>
@@ -126,9 +120,9 @@ export default function Page() {
             aplicações e dados.
           </li>
           <li>
-            <strong>PaaS (Platform as a Service)</strong>: o provedor oferece
-            uma plataforma gerenciada para você focar na aplicação. Banco de
-            dados, runtime, escalabilidade e parte da segurança são delegados.
+            <strong>PaaS (Platform as a Service)</strong>: o provedor oferece uma
+            plataforma gerenciada para você focar na aplicação. Banco de dados,
+            runtime, escalabilidade e parte da segurança são delegados.
           </li>
           <li>
             <strong>SaaS (Software as a Service)</strong>: você simplesmente usa
@@ -139,29 +133,25 @@ export default function Page() {
         </ul>
 
         <p>
-          Com o tempo, você vai perceber que esses modelos se combinam e que,
-          na prática, muitas soluções misturam características de mais de um
-          modelo.
+          Com o tempo, você vai perceber que esses modelos se combinam e que, na
+          prática, muitas soluções misturam características de mais de um modelo.
         </p>
 
         <h2 className="mt-6 text-lg font-semibold text-slate-50">
           Principais provedores de nuvem
         </h2>
 
-        <p>
-          Hoje, três grandes players dominam o mercado global de nuvem pública:
-        </p>
+        <p>Hoje, três grandes players dominam o mercado global de nuvem pública:</p>
 
         <ul className="list-disc pl-5 space-y-1">
           <li>
-            <strong>AWS (Amazon Web Services)</strong>: pioneira em cloud
-            pública, com um ecossistema enorme de serviços e forte presença
-            corporativa.
+            <strong>AWS (Amazon Web Services)</strong>: pioneira em cloud pública,
+            com um ecossistema enorme de serviços e forte presença corporativa.
           </li>
           <li>
-            <strong>Microsoft Azure</strong>: muito integrada ao mundo
-            Microsoft, excelente opção para empresas que já utilizam Windows,
-            Active Directory e ferramentas da suíte Microsoft 365.
+            <strong>Microsoft Azure</strong>: muito integrada ao mundo Microsoft,
+            excelente opção para empresas que já utilizam Windows, Active
+            Directory e ferramentas da suíte Microsoft 365.
           </li>
           <li>
             <strong>Google Cloud Platform (GCP)</strong>: forte em dados,
@@ -197,8 +187,8 @@ export default function Page() {
             estática ou uma API pequena.
           </li>
           <li>
-            Entender como funciona cobrança, limites do free tier e boas
-            práticas para evitar surpresas na fatura.
+            Entender como funciona cobrança, limites do free tier e boas práticas
+            para evitar surpresas na fatura.
           </li>
           <li>
             Escolher um roadmap de certificação iniciante e usá-lo como guia de
@@ -216,10 +206,7 @@ export default function Page() {
           Próximos passos dentro do Alta Cloud
         </h2>
 
-        <p>
-          Se este conteúdo fez sentido para você, os próximos passos naturais
-          são:
-        </p>
+        <p>Se este conteúdo fez sentido para você, os próximos passos naturais são:</p>
 
         <ul className="list-disc pl-5 space-y-1">
           <li>Explorar a trilha específica do provedor que você escolheu;</li>
@@ -228,9 +215,7 @@ export default function Page() {
             Acompanhar as notícias de cloud para entender como o mercado está
             evoluindo;
           </li>
-          <li>
-            Salvar este guia nos favoritos para revisitar sempre que precisar.
-          </li>
+          <li>Salvar este guia nos favoritos para revisitar sempre que precisar.</li>
         </ul>
 
         <p>
