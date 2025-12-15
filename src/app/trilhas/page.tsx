@@ -2,6 +2,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { AdsBanner } from "@/app/components/ads/AdsBanner";
 
 export const metadata: Metadata = {
   title: "Trilhas de Aprendizado em Cloud | Alta Cloud",
@@ -27,6 +28,11 @@ export default function TrilhasPage() {
             segurança.
           </p>
         </header>
+
+        {/* ANÚNCIO: abaixo da descrição (alta visibilidade, baixo incômodo) */}
+        <div className="mb-8">
+          <AdsBanner position="track_top" className="w-full" />
+        </div>
 
         {/* Grid de trilhas */}
         <section>
@@ -200,6 +206,11 @@ export default function TrilhasPage() {
             </Link>
           </div>
         </section>
+
+        {/* ANÚNCIO: final da página (boa taxa de viewability) */}
+        <div className="mt-10">
+          <AdsBanner position="track_bottom" className="w-full" />
+        </div>
       </div>
     </main>
   );
