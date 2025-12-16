@@ -15,7 +15,9 @@ export type AdPosition =
   | "article_top"
   | "inscricao_top"
   | "inscricao_bottom"
-  | "bottom_sticky";
+  | "bottom_sticky"
+  | "contact_sidebar"
+  | "contact_between";
 
 type AdConfig = {
   enabled: boolean;
@@ -29,7 +31,7 @@ export const adsConfig: Record<AdPosition, AdConfig> = {
   /* ====== DIRETÓRIO DE PROFISSIONAIS ====== */
   directory_top: {
     enabled: true,
-    adSlot: "6664851396", // use aqui o slot real que você já usa
+    adSlot: "6664851396",
     format: "auto",
     fullWidthResponsive: true,
   },
@@ -93,8 +95,7 @@ export const adsConfig: Record<AdPosition, AdConfig> = {
     format: "in-article",
     fullWidthResponsive: true,
   },
-
-    article_top: {
+  article_top: {
     enabled: true,
     adSlot: "6664851396",
     format: "auto",
@@ -104,7 +105,7 @@ export const adsConfig: Record<AdPosition, AdConfig> = {
   /* ====== INSCRIÇÃO DE PROFISSIONAIS ====== */
   inscricao_top: {
     enabled: true,
-    adSlot: "6664851396", // pode ser o mesmo slot das outras posições
+    adSlot: "6664851396",
     format: "auto",
     fullWidthResponsive: true,
   },
@@ -115,7 +116,22 @@ export const adsConfig: Record<AdPosition, AdConfig> = {
     fullWidthResponsive: true,
   },
 
-    bottom_sticky: {
+  /* ====== BOTTOM STICKY ====== */
+  bottom_sticky: {
+    enabled: true,
+    adSlot: "6664851396",
+    format: "auto",
+    fullWidthResponsive: true,
+  },
+
+  /* ====== CONTATO ====== */
+  contact_between: {
+    enabled: true,
+    adSlot: "6664851396",
+    format: "auto",
+    fullWidthResponsive: true,
+  },
+  contact_sidebar: {
     enabled: true,
     adSlot: "6664851396",
     format: "auto",

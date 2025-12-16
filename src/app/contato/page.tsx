@@ -1,4 +1,6 @@
 ﻿// src/app/contato/page.tsx
+import { AdsBanner } from "@/app/components/ads/AdsBanner";
+
 export default function ContatoPage() {
   return (
     <main className="min-h-screen bg-slate-950 text-slate-50">
@@ -11,9 +13,8 @@ export default function ContatoPage() {
             Contato e sugestões
           </h1>
           <p className="max-w-2xl text-sm text-slate-300 md:text-base">
-            Tem sugestão de trilha, encontrou algo que pode ser melhorado ou
-            quer compartilhar sua experiência estudando cloud? Manda uma
-            mensagem.
+            Tem sugestão de trilha, encontrou algo que pode ser melhorado ou quer
+            compartilhar sua experiência estudando cloud? Manda uma mensagem.
           </p>
         </header>
 
@@ -100,6 +101,11 @@ export default function ContatoPage() {
             </form>
           </div>
 
+          {/* ANÚNCIO (MOBILE): entre "Enviar mensagem" e "Como posso te ajudar?" */}
+          <div className="md:hidden">
+            <AdsBanner position="contact_between" className="w-full" />
+          </div>
+
           {/* Informações extras */}
           <div className="space-y-5 text-sm text-slate-300 md:text-base">
             <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-4">
@@ -122,6 +128,11 @@ export default function ContatoPage() {
                 imediatas. Mas toda sugestão é lida e considerada na evolução do
                 portal.
               </p>
+            </div>
+
+            {/* ANÚNCIO (DESKTOP): abaixo de "Tempo de resposta" */}
+            <div className="hidden md:block">
+              <AdsBanner position="contact_sidebar" className="w-full" />
             </div>
           </div>
         </section>
