@@ -9,7 +9,7 @@ import { useState } from "react";
 const mainLinks = [
   { href: "/", label: "Início" },
   { href: "/trilhas", label: "Trilhas" },
-  { href: "/profissionais", label: "Profissionais" }, // NOVO
+  { href: "/profissionais", label: "Profissionais" },
   { href: "/artigos", label: "Artigos" },
   { href: "/noticias", label: "Notícias" },
   { href: "/glossario", label: "Glossário" },
@@ -23,13 +23,20 @@ const tracks = [
   { href: "/trilhas/s3", label: "Amazon S3" },
   { href: "/trilhas/ec2", label: "Amazon EC2" },
   { href: "/trilhas/vpc", label: "VPC" },
-  { href: "/trilhas/devops", label: "DevOps" }, // ⬅ ADICIONADO
+  { href: "/trilhas/devops", label: "DevOps" },
+];
+
+const providerIcons = [
+  { src: "/icons/aws.svg", label: "AWS" },
+  { src: "/icons/azure.svg", label: "Azure" },
+  { src: "/icons/gcp.svg", label: "Google Cloud" },
+  { src: "/icons/ibm.svg", label: "IBM Cloud" },
 ];
 
 export function Header() {
   const pathname = usePathname();
   const [openMenu, setOpenMenu] = useState(false);
-  const [openTracks, setOpenTracks] = useState(false); // usado para desktop E mobile
+  const [openTracks, setOpenTracks] = useState(false);
 
   const isActive = (href: string) => {
     if (href === "/") return pathname === "/";
@@ -52,36 +59,25 @@ export function Header() {
             />
           </Link>
 
-          {/* CLOUD PROVIDERS */}
+          {/* CLOUD PROVIDERS (desktop) */}
           <div className="hidden items-center gap-4 md:flex">
-            <Image
-              src="/icons/aws.svg"
-              alt="AWS"
-              width={56}
-              height={28}
-              className="invert brightness-200"
-            />
-            <Image
-              src="/icons/azure.svg"
-              alt="Azure"
-              width={56}
-              height={28}
-              className="invert brightness-200"
-            />
-            <Image
-              src="/icons/gcp.svg"
-              alt="Google Cloud"
-              width={56}
-              height={28}
-              className="invert brightness-200"
-            />
-            <Image
-              src="/icons/ibm.svg"
-              alt="IBM Cloud"
-              width={56}
-              height={28}
-              className="invert brightness-200"
-            />
+            {providerIcons.map((p) => (
+              <div key={p.label} className="relative group">
+                <Image
+                  src={p.src}
+                  alt={p.label}
+                  title={p.label} // fallback: tooltip nativo do navegador
+                  width={56}
+                  height={28}
+                  className="invert brightness-200 cursor-help"
+                />
+
+                {/* Tooltip estilizado */}
+                <span className="pointer-events-none absolute left-1/2 top-full z-50 mt-2 -translate-x-1/2 whitespace-nowrap rounded-md border border-slate-700 bg-slate-950 px-2 py-1 text-[11px] font-semibold text-slate-100 opacity-0 shadow-lg transition-opacity duration-150 group-hover:opacity-100">
+                  {p.label}
+                </span>
+              </div>
+            ))}
           </div>
         </div>
 
@@ -90,7 +86,6 @@ export function Header() {
           {mainLinks.map((link) =>
             link.href === "/trilhas" ? (
               <div key={link.href} className="relative">
-                {/* Botão Trilhas (abre por clique no desktop) */}
                 <button
                   type="button"
                   className={`flex items-center gap-1 text-sm transition hover:text-sky-400 ${
@@ -104,7 +99,6 @@ export function Header() {
                   <span className="text-xs">{openTracks ? "▴" : "▾"}</span>
                 </button>
 
-                {/* Dropdown Trilhas (desktop) */}
                 {openTracks && (
                   <div className="absolute right-0 top-full z-30 mt-3 w-64 rounded-xl border border-slate-800 bg-slate-900/95 p-2 shadow-xl">
                     {tracks.map((track) => (
@@ -142,7 +136,7 @@ export function Header() {
           className="inline-flex items-center gap-2 rounded-full bg-sky-600 px-4 py-2 text-xs font-semibold text-white shadow-md hover:bg-sky-500 md:hidden"
           onClick={() => {
             setOpenMenu((v) => !v);
-            if (!openMenu) setOpenTracks(false); // fecha trilhas ao abrir menu
+            if (!openMenu) setOpenTracks(false);
           }}
         >
           <span>Menu</span>
@@ -171,9 +165,7 @@ export function Header() {
                     onClick={() => setOpenTracks((v) => !v)}
                   >
                     <span>{link.label}</span>
-                    <span className="text-xs">
-                      {openTracks ? "▴" : "▾"}
-                    </span>
+                    <span className="text-xs">{openTracks ? "▴" : "▾"}</span>
                   </button>
 
                   {openTracks && (
