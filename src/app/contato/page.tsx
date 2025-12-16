@@ -1,7 +1,7 @@
 ﻿// src/app/contato/page.tsx
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { AdsBanner } from "@/app/components/ads/AdsBanner";
 
 type FormState = {
@@ -26,6 +26,18 @@ export default function ContatoPage() {
     null
   );
 
+  // Timer para auto-limpar o status (evita warning ao sair da página)
+  const statusTimerRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (statusTimerRef.current) {
+        window.clearTimeout(statusTimerRef.current);
+        statusTimerRef.current = null;
+      }
+    };
+  }, []);
+
   const canSubmit = useMemo(() => {
     return (
       form.nome.trim().length >= 2 &&
@@ -36,8 +48,15 @@ export default function ContatoPage() {
   }, [form, sending]);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault(); // ✅ evita POST para /contato (que gera 405)
+    e.preventDefault();
+
+    // limpa status anterior + timers anteriores
     setStatus(null);
+    if (statusTimerRef.current) {
+      window.clearTimeout(statusTimerRef.current);
+      statusTimerRef.current = null;
+    }
+
     setSending(true);
 
     try {
@@ -54,13 +73,20 @@ export default function ContatoPage() {
           ok: false,
           msg: data?.error ?? "Não foi possível enviar. Tente novamente.",
         });
+
+        // auto-limpa erro também (opcional)
+        statusTimerRef.current = window.setTimeout(() => setStatus(null), 8000);
         return;
       }
 
       setStatus({ ok: true, msg: "Mensagem enviada com sucesso. Obrigado!" });
       setForm({ nome: "", email: "", assunto: "", mensagem: "", company: "" });
+
+      // auto-limpa sucesso
+      statusTimerRef.current = window.setTimeout(() => setStatus(null), 6000);
     } catch {
       setStatus({ ok: false, msg: "Erro de rede. Tente novamente." });
+      statusTimerRef.current = window.setTimeout(() => setStatus(null), 8000);
     } finally {
       setSending(false);
     }
