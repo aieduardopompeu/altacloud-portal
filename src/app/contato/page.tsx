@@ -1,7 +1,71 @@
 ﻿// src/app/contato/page.tsx
+"use client";
+
+import { useMemo, useState } from "react";
 import { AdsBanner } from "@/app/components/ads/AdsBanner";
 
+type FormState = {
+  nome: string;
+  email: string;
+  assunto: string;
+  mensagem: string;
+  company: string; // honeypot anti-bot
+};
+
 export default function ContatoPage() {
+  const [form, setForm] = useState<FormState>({
+    nome: "",
+    email: "",
+    assunto: "",
+    mensagem: "",
+    company: "",
+  });
+
+  const [sending, setSending] = useState(false);
+  const [status, setStatus] = useState<null | { ok: boolean; msg: string }>(
+    null
+  );
+
+  const canSubmit = useMemo(() => {
+    return (
+      form.nome.trim().length >= 2 &&
+      form.email.trim().length >= 6 &&
+      form.mensagem.trim().length >= 10 &&
+      !sending
+    );
+  }, [form, sending]);
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault(); // ✅ evita POST para /contato (que gera 405)
+    setStatus(null);
+    setSending(true);
+
+    try {
+      const res = await fetch("/api/contato", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+
+      const data = await res.json().catch(() => ({} as any));
+
+      if (!res.ok || !data?.ok) {
+        setStatus({
+          ok: false,
+          msg: data?.error ?? "Não foi possível enviar. Tente novamente.",
+        });
+        return;
+      }
+
+      setStatus({ ok: true, msg: "Mensagem enviada com sucesso. Obrigado!" });
+      setForm({ nome: "", email: "", assunto: "", mensagem: "", company: "" });
+    } catch {
+      setStatus({ ok: false, msg: "Erro de rede. Tente novamente." });
+    } finally {
+      setSending(false);
+    }
+  }
+
   return (
     <main className="min-h-screen bg-slate-950 text-slate-50">
       <div className="mx-auto w-full max-w-6xl px-4 pb-16 pt-10 md:px-6 md:pt-16">
@@ -19,9 +83,20 @@ export default function ContatoPage() {
         </header>
 
         <section className="mt-10 grid gap-10 md:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
-          {/* Formulário (estático por enquanto) */}
+          {/* Formulário */}
           <div className="rounded-xl border border-slate-800 bg-slate-900/80 p-5 shadow-lg">
-            <form action="#" method="post" className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-4">
+              {/* honeypot */}
+              <input
+                type="text"
+                name="company"
+                value={form.company}
+                onChange={(e) => setForm({ ...form, company: e.target.value })}
+                className="hidden"
+                tabIndex={-1}
+                autoComplete="off"
+              />
+
               <div>
                 <label
                   htmlFor="nome"
@@ -33,8 +108,11 @@ export default function ContatoPage() {
                   id="nome"
                   name="nome"
                   type="text"
+                  value={form.nome}
+                  onChange={(e) => setForm({ ...form, nome: e.target.value })}
                   className="mt-1 w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-slate-50 outline-none transition focus:border-sky-500"
                   placeholder="Como posso te chamar?"
+                  required
                 />
               </div>
 
@@ -49,8 +127,11 @@ export default function ContatoPage() {
                   id="email"
                   name="email"
                   type="email"
+                  value={form.email}
+                  onChange={(e) => setForm({ ...form, email: e.target.value })}
                   className="mt-1 w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-slate-50 outline-none transition focus:border-sky-500"
                   placeholder="seuemail@exemplo.com"
+                  required
                 />
               </div>
 
@@ -65,6 +146,10 @@ export default function ContatoPage() {
                   id="assunto"
                   name="assunto"
                   type="text"
+                  value={form.assunto}
+                  onChange={(e) =>
+                    setForm({ ...form, assunto: e.target.value })
+                  }
                   className="mt-1 w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-slate-50 outline-none transition focus:border-sky-500"
                   placeholder="Sugestão, dúvida, feedback..."
                 />
@@ -81,32 +166,47 @@ export default function ContatoPage() {
                   id="mensagem"
                   name="mensagem"
                   rows={5}
+                  value={form.mensagem}
+                  onChange={(e) =>
+                    setForm({ ...form, mensagem: e.target.value })
+                  }
                   className="mt-1 w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-slate-50 outline-none transition focus:border-sky-500"
                   placeholder="Conta um pouco do que você precisa ou quer compartilhar."
+                  required
                 />
+                <p className="mt-1 text-xs text-slate-500">
+                  Mínimo recomendado: 10 caracteres.
+                </p>
               </div>
 
               <button
                 type="submit"
-                className="inline-flex items-center justify-center rounded-lg bg-sky-500 px-5 py-2.5 text-sm font-semibold text-slate-950 shadow-lg shadow-sky-500/30 transition hover:bg-sky-400"
+                disabled={!canSubmit}
+                className="inline-flex items-center justify-center rounded-lg bg-sky-500 px-5 py-2.5 text-sm font-semibold text-slate-950 shadow-lg shadow-sky-500/30 transition hover:bg-sky-400 disabled:cursor-not-allowed disabled:opacity-60"
               >
-                Enviar mensagem
+                {sending ? "Enviando..." : "Enviar mensagem"}
               </button>
 
-              <p className="text-xs text-slate-500">
-                Este formulário ainda não está ligado a um backend. No futuro,
-                ele pode ser conectado a um serviço de e-mail, planilha ou API
-                própria para receber as mensagens.
-              </p>
+              {status && (
+                <div
+                  className={`rounded-lg border p-3 text-sm ${
+                    status.ok
+                      ? "border-emerald-500/40 bg-emerald-500/10 text-emerald-200"
+                      : "border-rose-500/40 bg-rose-500/10 text-rose-200"
+                  }`}
+                >
+                  {status.msg}
+                </div>
+              )}
             </form>
           </div>
 
-          {/* ANÚNCIO (MOBILE): entre "Enviar mensagem" e "Como posso te ajudar?" */}
+          {/* ANÚNCIO (MOBILE): entre form e “Como posso te ajudar?” */}
           <div className="md:hidden">
             <AdsBanner position="contact_between" className="w-full" />
           </div>
 
-          {/* Informações extras */}
+          {/* Coluna direita */}
           <div className="space-y-5 text-sm text-slate-300 md:text-base">
             <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-4">
               <h2 className="text-sm font-semibold text-slate-50 md:text-base">
@@ -130,7 +230,7 @@ export default function ContatoPage() {
               </p>
             </div>
 
-            {/* ANÚNCIO (DESKTOP): abaixo de "Tempo de resposta" */}
+            {/* ANÚNCIO (DESKTOP): abaixo de “Tempo de resposta” */}
             <div className="hidden md:block">
               <AdsBanner position="contact_sidebar" className="w-full" />
             </div>
