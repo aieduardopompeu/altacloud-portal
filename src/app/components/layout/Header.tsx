@@ -57,29 +57,29 @@ export function Header() {
             <Image
               src="/icons/aws.svg"
               alt="AWS"
-              width={28}
-              height={14}
+              width={56}
+              height={28}
               className="invert brightness-200"
             />
             <Image
               src="/icons/azure.svg"
               alt="Azure"
-              width={28}
-              height={14}
+              width={56}
+              height={28}
               className="invert brightness-200"
             />
             <Image
               src="/icons/gcp.svg"
               alt="Google Cloud"
-              width={28}
-              height={14}
+              width={56}
+              height={28}
               className="invert brightness-200"
             />
             <Image
               src="/icons/ibm.svg"
               alt="IBM Cloud"
-              width={28}
-              height={14}
+              width={56}
+              height={28}
               className="invert brightness-200"
             />
           </div>
