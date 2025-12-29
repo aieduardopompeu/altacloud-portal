@@ -40,6 +40,26 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
+  const gaInit = [
+    "window.dataLayer = window.dataLayer || [];",
+    "function gtag(){dataLayer.push(arguments);}",
+    "gtag('js', new Date());",
+    `gtag('config', '${GA_ID}', { send_page_view: true });`,
+  ].join("\n");
+
+  const gaDebug = [
+    "(function(){",
+    "  try {",
+    "    var isLocalhost = location.hostname === 'localhost' || location.hostname === '127.0.0.1';",
+    "    var hasDebugParam = location.search.indexOf('_dbg=1') >= 0;",
+    "    if (!isLocalhost && !hasDebugParam) return;",
+    "    window.dataLayer = window.dataLayer || [];",
+    "    function gtag(){window.dataLayer.push(arguments);}",
+    "    gtag('set', 'debug_mode', true);",
+    "  } catch(e) {}",
+    "})();",
+  ].join("\n");
+
   return (
     <html lang="pt-BR">
       <body className="bg-slate-950 text-slate-50 antialiased">
@@ -66,36 +86,15 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <Script
           id="ga-init"
           strategy="afterInteractive"
-          dangerouslySetInnerHTML={{
-            __html: `
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('js', new Date());
-              gtag('config', '${GA_ID}', { send_page_view: true });
-            `,
-          }}
+          dangerouslySetInnerHTML={{ __html: gaInit }}
         />
-
-        {/* GA4 DEBUG */}
         <Script
           id="ga-debug"
           strategy="afterInteractive"
-          dangerouslySetInnerHTML={{
-            __html: `
-              (function() {
-                if (typeof window === 'undefined') return;
-                const isLocalhost = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
-                const hasDebugParam = location.search.includes('_dbg=1');
-                if (!isLocalhost && !hasDebugParam) return;
-                window.dataLayer = window.dataLayer || [];
-                function gtag(){window.dataLayer.push(arguments);}
-                gtag('set', 'debug_mode', true);
-              })();
-            `,
-          }}
+          dangerouslySetInnerHTML={{ __html: gaDebug }}
         />
 
-        {/* AdSense loader (1x global) */}
+        {/* AdSense (1x global) */}
         <Script
           id="adsense-script"
           async
