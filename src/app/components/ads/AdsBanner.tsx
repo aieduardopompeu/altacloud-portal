@@ -11,7 +11,7 @@ type AdsBannerProps = {
 
   /**
    * Controle fino de altura (opcional).
-   * Se não passar nada, usa o padrão do AdsContainer (90/120).
+   * Se não passar nada, usa o padrão do AdsContainer.
    */
   minHMobile?: number;
   minHDesktop?: number;
@@ -32,14 +32,15 @@ declare global {
 
 const ADSENSE_ID = "ca-pub-4436420746304287";
 
+// Ajuste aqui se você quiser esconder algumas posições no mobile.
+// Se você não usa isso, pode deixar vazio.
 const DESKTOP_ONLY_POSITIONS: AdPosition[] = [
-  "home_between_sections",
-  "home_tracks_bottom",
-  "directory_aws_after",
-  "directory_middle",
-  "track_middle",
-  "track_bottom",
-  "article_middle",
+  // Exemplo (adicione/remova conforme seu config real):
+  // "directory_top",
+  // "directory_middle",
+  // "track_top",
+  // "track_middle",
+  // "track_bottom",
 ];
 
 function getPushedSet(): Set<string> {
@@ -55,11 +56,10 @@ export function AdsBanner({
   minHDesktop,
   refreshKey,
 }: AdsBannerProps) {
-  const config = adsConfig[position];
+  const config = adsConfig?.[position];
 
-  if (!config || config.enabled === false) {
-    return null;
-  }
+  // Se não existe config para a posição ou está desabilitado, não renderiza.
+  if (!config || config.enabled === false) return null;
 
   const wrapperClasses = [
     DESKTOP_ONLY_POSITIONS.includes(position) ? "hidden md:block" : "",
@@ -68,34 +68,33 @@ export function AdsBanner({
     .filter(Boolean)
     .join(" ");
 
-  // Key estável para evitar push duplicado por re-render/hidratação
+  // Chave estável para impedir push duplicado por re-render/navegação
   const pushKey = useMemo(
     () => `${position}::${refreshKey ?? "static"}`,
     [position, refreshKey]
   );
 
-  // Ref do <ins> (garante que o elemento exista antes de push)
+  // Ref do <ins> — garante que o elemento exista antes do push
   const insRef = useRef<HTMLModElement | null>(null);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
     if (!config || config.enabled === false) return;
+    if (!insRef.current) return;
 
     const pushed = getPushedSet();
     if (pushed.has(pushKey)) return;
-
-    // precisa existir <ins> no DOM antes do push
-    if (!insRef.current) return;
 
     try {
       window.adsbygoogle = window.adsbygoogle || [];
       window.adsbygoogle.push({});
       pushed.add(pushKey);
     } catch {
-      // Silencioso por estabilidade (evita console spam e reações em cascata)
+      // Não loga erro para não poluir console (e evitar “tempestade” em produção)
     }
   }, [config, pushKey]);
 
+  // Monta props do <ins> conforme o seu config
   const insProps: any = {
     className: "adsbygoogle block w-full h-auto",
     style: { display: "block" as const },
@@ -103,6 +102,7 @@ export function AdsBanner({
     "data-ad-slot": config.adSlot,
   };
 
+  // Alguns configs usam "in-article"/"fluid"
   if (config.format === "in-article") {
     insProps.style = { display: "block", textAlign: "center" as const };
     insProps["data-ad-layout"] = "in-article";
