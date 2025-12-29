@@ -95,6 +95,7 @@ export function AdsBanner({
       "data-ad-client": ADSENSE_ID,
       "data-ad-slot": config.adSlot,
     };
+      base["data-adtest"] = "on";
 
     if (config.format === "in-article") {
       base.style = { display: "block", textAlign: "center" as const };
