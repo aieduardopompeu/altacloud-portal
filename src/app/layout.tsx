@@ -36,9 +36,7 @@ export const metadata: Metadata = {
       },
     ],
   },
-  icons: {
-    icon: "/favicon.ico",
-  },
+  icons: { icon: "/favicon.ico" },
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
@@ -72,11 +70,8 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             __html: `
               window.dataLayer = window.dataLayer || [];
               function gtag(){dataLayer.push(arguments);}
-
               gtag('js', new Date());
-              gtag('config', '${GA_ID}', {
-                send_page_view: true
-              });
+              gtag('config', '${GA_ID}', { send_page_view: true });
             `,
           }}
         />
@@ -89,31 +84,24 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             __html: `
               (function() {
                 if (typeof window === 'undefined') return;
-
-                const isLocalhost =
-                  location.hostname === 'localhost' ||
-                  location.hostname === '127.0.0.1';
-
+                const isLocalhost = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
                 const hasDebugParam = location.search.includes('_dbg=1');
-
                 if (!isLocalhost && !hasDebugParam) return;
-
                 window.dataLayer = window.dataLayer || [];
                 function gtag(){window.dataLayer.push(arguments);}
-
                 gtag('set', 'debug_mode', true);
               })();
             `,
           }}
         />
 
-        {/* ADSENSE GLOBAL (apenas 1x no app inteiro) */}
+        {/* AdSense loader (1x global) */}
         <Script
-          id="adsense-loader"
+          id="adsense-script"
           async
           strategy="afterInteractive"
-          src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_ID}`}
           crossOrigin="anonymous"
+          src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_ID}`}
         />
 
         <CookieBanner />
