@@ -44,24 +44,19 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="pt-BR">
-      <head>
+      <body className="bg-slate-950 text-slate-50 antialiased">
         {/* JSON-LD */}
         <Script
           id="ld-organization"
           type="application/ld+json"
           strategy="beforeInteractive"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(ldOrganization),
-          }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(ldOrganization) }}
         />
-
         <Script
           id="ld-website"
           type="application/ld+json"
           strategy="beforeInteractive"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(ldWebsite),
-          }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(ldWebsite) }}
         />
 
         {/* GA4 */}
@@ -70,7 +65,6 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
           strategy="afterInteractive"
         />
-
         <Script
           id="ga-init"
           strategy="afterInteractive"
@@ -113,18 +107,17 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           }}
         />
 
-        {/* ADSENSE GLOBAL */}
+        {/* ADSENSE GLOBAL (apenas 1x no app inteiro) */}
         <Script
-          id="adsense-script"
+          id="adsense-loader"
           async
           strategy="afterInteractive"
-          crossOrigin="anonymous"
           src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_ID}`}
+          crossOrigin="anonymous"
         />
-      </head>
 
-      <body className="bg-slate-950 text-slate-50 antialiased">
         <CookieBanner />
+
         <div className="flex min-h-screen flex-col">
           <Header />
           <main className="flex-1">{children}</main>
