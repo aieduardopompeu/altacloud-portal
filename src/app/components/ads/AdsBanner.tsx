@@ -8,11 +8,6 @@ import { AdsContainer } from "./AdsContainer";
 type AdsBannerProps = {
   position: AdPosition;
   className?: string;
-
-  /**
-   * Controle fino de altura (opcional).
-   * Se não passar nada, usa o padrão do AdsContainer (90/120).
-   */
   minHMobile?: number;
   minHDesktop?: number;
 };
@@ -27,8 +22,7 @@ const ADSENSE_ID = "ca-pub-4436420746304287";
 
 /**
  * Posições que devem existir somente em desktop/tablet.
- * IMPORTANTE: não podemos renderizar isso no mobile (mesmo hidden),
- * senão o push roda com availableWidth=0.
+ * Importante: não renderizar nem o <ins> no mobile.
  */
 const DESKTOP_ONLY_POSITIONS: AdPosition[] = [
   "home_between_sections",
@@ -49,7 +43,6 @@ function useIsDesktop(breakpointPx = 768) {
     const update = () => setIsDesktop(mq.matches);
     update();
 
-    // Compatibilidade
     if (typeof mq.addEventListener === "function") {
       mq.addEventListener("change", update);
       return () => mq.removeEventListener("change", update);
@@ -68,21 +61,34 @@ export function AdsBanner({
   minHMobile,
   minHDesktop,
 }: AdsBannerProps) {
-  const config = adsConfig[position];
+  /**
+   * HOOKS SEMPRE NO TOPO (para nunca variar o nº de hooks entre renders)
+   */
   const isDesktop = useIsDesktop(768);
+  const hostRef = useRef<HTMLDivElement | null>(null);
+  const pushedRef = useRef(false);
 
-  // 1) Se a posição é desktop-only, não monta no mobile.
-  const isDesktopOnly = DESKTOP_ONLY_POSITIONS.includes(position);
-  if (isDesktopOnly && !isDesktop) return null;
+  const config = adsConfig[position];
 
-  if (!config || config.enabled === false) return null;
+  const isDesktopOnly = useMemo(
+    () => DESKTOP_ONLY_POSITIONS.includes(position),
+    [position]
+  );
+
+  const shouldRender = useMemo(() => {
+    if (!config || config.enabled === false) return false;
+    if (isDesktopOnly && !isDesktop) return false;
+    return true;
+  }, [config, isDesktopOnly, isDesktop]);
 
   const wrapperClasses = useMemo(
     () => [className ?? ""].filter(Boolean).join(" "),
     [className]
   );
 
-  const insProps: any = useMemo(() => {
+  const insProps = useMemo(() => {
+    if (!config) return null;
+
     const base: any = {
       className: "adsbygoogle block w-full h-auto",
       style: { display: "block" as const },
@@ -104,15 +110,21 @@ export function AdsBanner({
     }
 
     return base;
-  }, [config.adSlot, config.format, config.fullWidthResponsive]);
+  }, [config]);
 
-  // 2) Push só quando estiver visível e com largura > 0
-  const hostRef = useRef<HTMLDivElement | null>(null);
-  const pushedRef = useRef(false);
-
+  /**
+   * Push do AdSense: só quando:
+   * - o componente deve renderizar
+   * - está em viewport
+   * - largura > 0 (mata o availableWidth=0)
+   */
   useEffect(() => {
+    if (!shouldRender) return;
     if (!hostRef.current) return;
-    if (pushedRef.current) return;
+    if (!insProps) return;
+
+    // evita push duplicado (SPA navigation / re-render)
+    pushedRef.current = false;
 
     const el = hostRef.current;
 
@@ -120,19 +132,16 @@ export function AdsBanner({
       if (pushedRef.current) return;
 
       const rect = el.getBoundingClientRect();
-      // Evita "availableWidth=0"
       if (!rect.width || rect.width <= 0) return;
 
       try {
         (window.adsbygoogle = window.adsbygoogle || []).push({});
         pushedRef.current = true;
-      } catch (e) {
-        // Mantém log limpo; se você quiser depurar:
-        // console.error(`Adsense push error on position: ${position}`, e);
+      } catch {
+        // Sem log para não poluir console em produção
       }
     };
 
-    // Observa quando entra em viewport
     const io = new IntersectionObserver(
       (entries) => {
         const entry = entries[0];
@@ -144,14 +153,19 @@ export function AdsBanner({
 
     io.observe(el);
 
-    // Fallback: tenta após pequeno delay (caso já esteja visível)
+    // fallback: tenta depois de pequeno delay (caso já esteja visível)
     const t = window.setTimeout(tryPush, 250);
 
     return () => {
       window.clearTimeout(t);
       io.disconnect();
     };
-  }, [position]);
+  }, [shouldRender, insProps]);
+
+  /**
+   * Depois de TODOS os hooks, pode retornar null com segurança.
+   */
+  if (!shouldRender || !insProps) return null;
 
   return (
     <div className={wrapperClasses} ref={hostRef}>
