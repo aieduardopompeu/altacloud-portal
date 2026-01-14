@@ -6,40 +6,7 @@ import { readdir } from "fs/promises";
 const SITE_URL = "https://www.altacloud.com.br";
 const APP_DIR = path.join(process.cwd(), "src", "app");
 
-// Artigos (opcional). Se o arquivo não existir, o sitemap continua funcionando.
-async function loadArticles(): Promise<Array<{ slug: string; date?: string }>> {
-  try {
-    const mod: any = await import("./data/articles");
-    const arr = mod?.articles ?? mod?.default;
-    return Array.isArray(arr) ? arr : [];
-  } catch {
-    return [];
-  }
-}
-
-// Glossário (opcional)
-async function loadGlossary(): Promise<Array<{ slug: string; date?: string }>> {
-  try {
-    const mod: any = await import("./data/glossario");
-    const arr =
-      mod?.glossario ?? mod?.glossary ?? mod?.terms ?? mod?.default ?? mod?.items;
-    return Array.isArray(arr) ? arr : [];
-  } catch {
-    return [];
-  }
-}
-
-// Trilhas (opcional)
-async function loadTracks(): Promise<Array<{ slug: string; date?: string }>> {
-  try {
-    const mod: any = await import("./data/trilhas");
-    const arr =
-      mod?.trilhas ?? mod?.tracks ?? mod?.items ?? mod?.default;
-    return Array.isArray(arr) ? arr : [];
-  } catch {
-    return [];
-  }
-}
+type SlugItem = { slug: string; date?: string };
 
 const EXCLUDE_DIRS = new Set([
   "api",
@@ -122,9 +89,37 @@ async function collectStaticRoutesFromAppDir(): Promise<string[]> {
     .sort();
 }
 
+// Import dinâmico SEM string literal (evita TS exigir o arquivo existir no build).
+async function safeImport(modulePath: string): Promise<any | null> {
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-implied-eval
+    const importer = new Function("p", "return import(p);") as (p: string) => Promise<any>;
+    return await importer(modulePath);
+  } catch {
+    return null;
+  }
+}
+
+function extractArray(mod: any): SlugItem[] {
+  if (!mod) return [];
+  const candidates = [
+    mod.articles,
+    mod.artigos,
+    mod.glossario,
+    mod.glossary,
+    mod.terms,
+    mod.trilhas,
+    mod.tracks,
+    mod.items,
+    mod.default,
+  ];
+  const arr = candidates.find((c) => Array.isArray(c));
+  return Array.isArray(arr) ? (arr as SlugItem[]) : [];
+}
+
 function makeEntriesFromSlugs(params: {
   basePath: string;
-  items: Array<{ slug: string; date?: string }>;
+  items: SlugItem[];
   now: Date;
   defaultPriority: number;
   maxAgeWeeklyDays: number;
@@ -162,7 +157,6 @@ function makeEntriesFromSlugs(params: {
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
 
-  // 1) Rotas estáticas do /app (páginas com page.tsx e sem [slug])
   const staticRoutes = await collectStaticRoutesFromAppDir();
 
   const highPriority = new Set([
@@ -181,16 +175,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: highPriority.has(route) ? 1 : 0.7,
   }));
 
-  // 2) Conteúdos dinâmicos (se existirem)
-  const [articles, glossary, tracks] = await Promise.all([
-    loadArticles(),
-    loadGlossary(),
-    loadTracks(),
+  // Tenta carregar módulos opcionais. Se não existirem, retorna [] sem quebrar build.
+  const [articlesMod, glossarioMod, trilhasMod] = await Promise.all([
+    safeImport("./data/articles"),
+    safeImport("./data/glossario"),
+    safeImport("./data/trilhas"),
   ]);
 
   const articleEntries = makeEntriesFromSlugs({
     basePath: "/artigos",
-    items: articles,
+    items: extractArray(articlesMod),
     now,
     defaultPriority: 0.8,
     maxAgeWeeklyDays: 30,
@@ -198,7 +192,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const glossaryEntries = makeEntriesFromSlugs({
     basePath: "/glossario",
-    items: glossary,
+    items: extractArray(glossarioMod),
     now,
     defaultPriority: 0.7,
     maxAgeWeeklyDays: 60,
@@ -206,13 +200,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const trackEntries = makeEntriesFromSlugs({
     basePath: "/trilhas",
-    items: tracks,
+    items: extractArray(trilhasMod),
     now,
     defaultPriority: 0.85,
     maxAgeWeeklyDays: 60,
   });
 
-  // 3) Dedup final por URL
   const all = [...staticEntries, ...articleEntries, ...glossaryEntries, ...trackEntries];
   const dedup = new Map<string, MetadataRoute.Sitemap[number]>();
   for (const item of all) dedup.set(item.url, item);
