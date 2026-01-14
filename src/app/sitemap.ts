@@ -3,19 +3,43 @@ import type { MetadataRoute } from "next";
 import path from "path";
 import { readdir } from "fs/promises";
 
-// Domínio canônico
 const SITE_URL = "https://www.altacloud.com.br";
-
-// Pasta do App Router
 const APP_DIR = path.join(process.cwd(), "src", "app");
 
-// Import do seu data source real
-import { articles } from "./data/articles";
+// Artigos (opcional). Se o arquivo não existir, o sitemap continua funcionando.
+async function loadArticles(): Promise<Array<{ slug: string; date?: string }>> {
+  try {
+    const mod: any = await import("./data/articles");
+    const arr = mod?.articles ?? mod?.default;
+    return Array.isArray(arr) ? arr : [];
+  } catch {
+    return [];
+  }
+}
 
-type ArticleMeta = {
-  slug: string;
-  date: string; // ex: "2025-11-26" ou "Jan 2025"
-};
+// Glossário (opcional)
+async function loadGlossary(): Promise<Array<{ slug: string; date?: string }>> {
+  try {
+    const mod: any = await import("./data/glossario");
+    const arr =
+      mod?.glossario ?? mod?.glossary ?? mod?.terms ?? mod?.default ?? mod?.items;
+    return Array.isArray(arr) ? arr : [];
+  } catch {
+    return [];
+  }
+}
+
+// Trilhas (opcional)
+async function loadTracks(): Promise<Array<{ slug: string; date?: string }>> {
+  try {
+    const mod: any = await import("./data/trilhas");
+    const arr =
+      mod?.trilhas ?? mod?.tracks ?? mod?.items ?? mod?.default;
+    return Array.isArray(arr) ? arr : [];
+  } catch {
+    return [];
+  }
+}
 
 const EXCLUDE_DIRS = new Set([
   "api",
@@ -24,7 +48,7 @@ const EXCLUDE_DIRS = new Set([
   "config",
   "styles",
   "public",
-  "data", // data não é rota
+  "data",
 ]);
 
 const PAGE_FILES = new Set(["page.tsx", "page.jsx", "page.mdx", "page.md"]);
@@ -43,22 +67,24 @@ function toUrlPath(relativeDir: string) {
   return normalized === "" ? "/" : `/${normalized}`;
 }
 
-// Tenta extrair uma data válida do seu campo `date`
-function parseArticleDate(input: string): Date | null {
+function parseISODate(input?: string): Date | null {
   if (!input) return null;
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(input)) return null;
+  const d = new Date(`${input}T00:00:00.000Z`);
+  return Number.isNaN(d.getTime()) ? null : d;
+}
 
-  // 1) ISO (YYYY-MM-DD)
-  const iso = new Date(input);
-  if (!Number.isNaN(iso.getTime()) && /^\d{4}-\d{2}-\d{2}/.test(input)) {
-    return iso;
-  }
+function daysBetween(a: Date, b: Date) {
+  const ms = Math.abs(b.getTime() - a.getTime());
+  return Math.floor(ms / (1000 * 60 * 60 * 24));
+}
 
-  // 2) "Jan 2025" (ou variações)
-  // Fallback: tenta parsear como "01 <input>"
-  const loose = new Date(`01 ${input}`);
-  if (!Number.isNaN(loose.getTime())) return loose;
-
-  return null;
+function normalizeSlug(raw: unknown): string | null {
+  if (typeof raw !== "string") return null;
+  const slug = raw.trim().replace(/^\/+/, "").replace(/\/+$/, "");
+  if (!slug) return null;
+  if (slug.includes(" ")) return null;
+  return slug;
 }
 
 async function collectStaticRoutesFromAppDir(): Promise<string[]> {
@@ -72,10 +98,7 @@ async function collectStaticRoutesFromAppDir(): Promise<string[]> {
     const segments = currentRel ? currentRel.split(path.sep) : [];
     const isDynamic = segments.some(hasDynamicSegment);
 
-    // Adiciona somente rotas renderizáveis e não-dinâmicas
-    if (hasPage && !isDynamic) {
-      routes.push(toUrlPath(currentRel));
-    }
+    if (hasPage && !isDynamic) routes.push(toUrlPath(currentRel));
 
     for (const entry of entries) {
       if (!entry.isDirectory()) continue;
@@ -94,18 +117,52 @@ async function collectStaticRoutesFromAppDir(): Promise<string[]> {
 
   await walk(APP_DIR, "");
 
-  // remove duplicatas e rotas que você não quer indexar
-  const unique = Array.from(new Set(routes))
+  return Array.from(new Set(routes))
     .filter((p) => !p.startsWith("/admin"))
     .sort();
+}
 
-  return unique;
+function makeEntriesFromSlugs(params: {
+  basePath: string;
+  items: Array<{ slug: string; date?: string }>;
+  now: Date;
+  defaultPriority: number;
+  maxAgeWeeklyDays: number;
+}): MetadataRoute.Sitemap {
+  const { basePath, items, now, defaultPriority, maxAgeWeeklyDays } = params;
+
+  const bySlug = new Map<string, { slug: string; lastModified: Date }>();
+
+  for (const item of items) {
+    const slug = normalizeSlug(item.slug);
+    if (!slug) continue;
+
+    const lm = parseISODate(item.date) ?? now;
+
+    const existing = bySlug.get(slug);
+    if (!existing || existing.lastModified.getTime() < lm.getTime()) {
+      bySlug.set(slug, { slug, lastModified: lm });
+    }
+  }
+
+  return Array.from(bySlug.values()).map((x) => {
+    const ageDays = daysBetween(x.lastModified, now);
+    const freq: "weekly" | "monthly" =
+      ageDays <= maxAgeWeeklyDays ? "weekly" : "monthly";
+
+    return {
+      url: `${SITE_URL}${basePath}/${x.slug}`,
+      lastModified: x.lastModified,
+      changeFrequency: freq,
+      priority: defaultPriority,
+    };
+  });
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
 
-  // ====== 1) Rotas estáticas (varredura do /app) ======
+  // 1) Rotas estáticas do /app (páginas com page.tsx e sem [slug])
   const staticRoutes = await collectStaticRoutesFromAppDir();
 
   const highPriority = new Set([
@@ -124,36 +181,41 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: highPriority.has(route) ? 1 : 0.7,
   }));
 
-  // ====== 2) Artigos dinâmicos (/artigos/[slug]) ======
-  // Dedup por slug (se houver duplicado no array)
-  const bySlug = new Map<string, { slug: string; lastModified: Date }>();
+  // 2) Conteúdos dinâmicos (se existirem)
+  const [articles, glossary, tracks] = await Promise.all([
+    loadArticles(),
+    loadGlossary(),
+    loadTracks(),
+  ]);
 
-  for (const a of (articles as ArticleMeta[])) {
-    const slug = String(a.slug || "").trim().replace(/^\/+/, "").replace(/\/+$/, "");
-    if (!slug) continue;
+  const articleEntries = makeEntriesFromSlugs({
+    basePath: "/artigos",
+    items: articles,
+    now,
+    defaultPriority: 0.8,
+    maxAgeWeeklyDays: 30,
+  });
 
-    const d = parseArticleDate(a.date) ?? now;
+  const glossaryEntries = makeEntriesFromSlugs({
+    basePath: "/glossario",
+    items: glossary,
+    now,
+    defaultPriority: 0.7,
+    maxAgeWeeklyDays: 60,
+  });
 
-    // Se duplicado, fica com o mais recente
-    const existing = bySlug.get(slug);
-    if (!existing || existing.lastModified.getTime() < d.getTime()) {
-      bySlug.set(slug, { slug, lastModified: d });
-    }
-  }
+  const trackEntries = makeEntriesFromSlugs({
+    basePath: "/trilhas",
+    items: tracks,
+    now,
+    defaultPriority: 0.85,
+    maxAgeWeeklyDays: 60,
+  });
 
-  const articleEntries: MetadataRoute.Sitemap = Array.from(bySlug.values()).map(
-    (a) => ({
-      url: `${SITE_URL}/artigos/${a.slug}`,
-      lastModified: a.lastModified,
-      changeFrequency: "monthly",
-      priority: 0.8,
-    })
-  );
+  // 3) Dedup final por URL
+  const all = [...staticEntries, ...articleEntries, ...glossaryEntries, ...trackEntries];
+  const dedup = new Map<string, MetadataRoute.Sitemap[number]>();
+  for (const item of all) dedup.set(item.url, item);
 
-  // ====== 3) Dedup final por URL ======
-  const all = [...staticEntries, ...articleEntries];
-  const dedupByUrl = new Map<string, MetadataRoute.Sitemap[number]>();
-  for (const item of all) dedupByUrl.set(item.url, item);
-
-  return Array.from(dedupByUrl.values());
+  return Array.from(dedup.values());
 }
