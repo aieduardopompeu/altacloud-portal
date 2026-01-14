@@ -8,11 +8,6 @@ import { AdsContainer } from "./AdsContainer";
 type AdsBannerProps = {
   position: AdPosition;
   className?: string;
-
-  /**
-   * Controle fino de altura (opcional).
-   * Se não passar nada, usa o padrão do AdsContainer.
-   */
   minHMobile?: number;
   minHDesktop?: number;
 };
@@ -24,9 +19,24 @@ declare global {
 }
 
 const ADSENSE_ID = "ca-pub-4436420746304287";
+const CONSENT_STORAGE_KEY = "altacloud.cookieConsent"; // mesmo do CookieBanner
 
-// Se você quiser esconder posições específicas no mobile, liste aqui.
+// Se quiser esconder posições específicas no mobile, liste aqui.
 const DESKTOP_ONLY_POSITIONS: AdPosition[] = [];
+
+function getConsentLevel(): "essential" | "all" | "none" {
+  try {
+    const raw = window.localStorage.getItem(CONSENT_STORAGE_KEY);
+    if (!raw) return "essential";
+    const parsed = JSON.parse(raw) as { level?: "essential" | "all" | "none" };
+    if (parsed?.level === "all" || parsed?.level === "none" || parsed?.level === "essential") {
+      return parsed.level;
+    }
+    return "essential";
+  } catch {
+    return "essential";
+  }
+}
 
 export function AdsBanner({
   position,
@@ -35,8 +45,6 @@ export function AdsBanner({
   minHDesktop,
 }: AdsBannerProps) {
   const config = adsConfig?.[position];
-
-  // Sem config ou desabilitado => não renderiza.
   if (!config || config.enabled === false) return null;
 
   const wrapperClasses = [
@@ -46,8 +54,8 @@ export function AdsBanner({
     .filter(Boolean)
     .join(" ");
 
+  // <ins> é HTMLModElement no DOM typings
   const insRef = useRef<HTMLModElement | null>(null);
-
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -56,13 +64,19 @@ export function AdsBanner({
     const ins = insRef.current;
     if (!ins) return;
 
-    // Evita push duplicado no MESMO <ins>.
-    // O AdSense marca o elemento processado com data-adsbygoogle-status.
+    // Evita push duplicado no MESMO <ins>
     const alreadyProcessed =
       ins.getAttribute("data-adsbygoogle-status") ||
       ins.getAttribute("data-ad-status");
-
     if (alreadyProcessed) return;
+
+    // Se não aceitou "all", força Non-Personalized Ads (melhora consistência)
+    const level = getConsentLevel();
+    if (level !== "all") {
+      // AdSense lê isso antes do push()
+      (window as any).adsbygoogle = (window as any).adsbygoogle || [];
+      (window as any).adsbygoogle.requestNonPersonalizedAds = 1;
+    }
 
     try {
       window.adsbygoogle = window.adsbygoogle || [];
