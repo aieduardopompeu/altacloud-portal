@@ -1,14 +1,19 @@
-﻿// src/app/lib/seo.ts
+// src/app/lib/seo.ts
+//
+// Ajustes aplicados:
+// - Mantém URL canônica em https://www.altacloud.com.br
+// - Remove SearchAction (evita URLs de busca/parametrizadas aparecerem no GSC)
+//   Se no futuro você criar uma página /buscar com noindex, dá para reativar com segurança.
 
 export const siteConfig = {
   name: "Alta Cloud",
   description:
     "Alta Cloud é um hub de conhecimento sobre Cloud Computing: AWS, Azure, GCP, DevOps e mais.",
 
-  // URL canônica (alinhada com o domínio oficial no Vercel)
+  // URL canônica (domínio oficial)
   url: "https://www.altacloud.com.br",
 
-  // OG padrão (deixe como está se o arquivo existir em /public)
+  // OG padrão (mantenha se existir em /public)
   ogImage: "/og-default.jpg",
 
   // GA4 (opcional — se você já configura no layout, pode manter aqui só como referência)
@@ -26,7 +31,7 @@ export function buildCanonical(path: string) {
   return siteConfig.url + cleanPath;
 }
 
-// JSON-LD Organization (OBJETO, não função)
+// JSON-LD Organization (OBJETO)
 export const ldOrganization = {
   "@context": "https://schema.org",
   "@type": "Organization",
@@ -39,15 +44,11 @@ export const ldOrganization = {
   ],
 };
 
-// JSON-LD Website + SearchAction (OBJETO, não função)
+// JSON-LD Website (OBJETO)
+// Nota: sem SearchAction para evitar indexação de URLs de busca/parametrizadas.
 export const ldWebsite = {
   "@context": "https://schema.org",
   "@type": "WebSite",
   name: siteConfig.name,
   url: siteConfig.url,
-  potentialAction: {
-    "@type": "SearchAction",
-    target: `${siteConfig.url}/buscar?q={search_term_string}`,
-    "query-input": "required name=search_term_string",
-  },
 };
