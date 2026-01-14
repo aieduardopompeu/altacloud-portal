@@ -3,22 +3,18 @@ import type { MetadataRoute } from "next";
 import path from "path";
 import { readdir } from "fs/promises";
 
-// 1) Alinhe com seu domínio canônico
+// Domínio canônico
 const SITE_URL = "https://www.altacloud.com.br";
 
-// 2) Ajuste se seu app estiver em outro caminho
+// Pasta do App Router
 const APP_DIR = path.join(process.cwd(), "src", "app");
 
-// 3) Import da fonte de dados dos artigos
-//    Este import vai funcionar se `src/app/data/artigos.ts` exportar um array
-//    (export const artigos = [...]) ou export default [...]
-import * as ArtigosModule from "./data/articles";
+// Import do seu data source real
+import { articles } from "./data/articles";
 
-type MaybeArticle = {
-  slug?: string;
-  updatedAt?: string | Date;
-  date?: string | Date;
-  publishedAt?: string | Date;
+type ArticleMeta = {
+  slug: string;
+  date: string; // ex: "2025-11-26" ou "Jan 2025"
 };
 
 const EXCLUDE_DIRS = new Set([
@@ -28,7 +24,7 @@ const EXCLUDE_DIRS = new Set([
   "config",
   "styles",
   "public",
-  "data", // <- data não é rota
+  "data", // data não é rota
 ]);
 
 const PAGE_FILES = new Set(["page.tsx", "page.jsx", "page.mdx", "page.md"]);
@@ -47,6 +43,24 @@ function toUrlPath(relativeDir: string) {
   return normalized === "" ? "/" : `/${normalized}`;
 }
 
+// Tenta extrair uma data válida do seu campo `date`
+function parseArticleDate(input: string): Date | null {
+  if (!input) return null;
+
+  // 1) ISO (YYYY-MM-DD)
+  const iso = new Date(input);
+  if (!Number.isNaN(iso.getTime()) && /^\d{4}-\d{2}-\d{2}/.test(input)) {
+    return iso;
+  }
+
+  // 2) "Jan 2025" (ou variações)
+  // Fallback: tenta parsear como "01 <input>"
+  const loose = new Date(`01 ${input}`);
+  if (!Number.isNaN(loose.getTime())) return loose;
+
+  return null;
+}
+
 async function collectStaticRoutesFromAppDir(): Promise<string[]> {
   const routes: string[] = [];
 
@@ -58,7 +72,10 @@ async function collectStaticRoutesFromAppDir(): Promise<string[]> {
     const segments = currentRel ? currentRel.split(path.sep) : [];
     const isDynamic = segments.some(hasDynamicSegment);
 
-    if (hasPage && !isDynamic) routes.push(toUrlPath(currentRel));
+    // Adiciona somente rotas renderizáveis e não-dinâmicas
+    if (hasPage && !isDynamic) {
+      routes.push(toUrlPath(currentRel));
+    }
 
     for (const entry of entries) {
       if (!entry.isDirectory()) continue;
@@ -77,6 +94,7 @@ async function collectStaticRoutesFromAppDir(): Promise<string[]> {
 
   await walk(APP_DIR, "");
 
+  // remove duplicatas e rotas que você não quer indexar
   const unique = Array.from(new Set(routes))
     .filter((p) => !p.startsWith("/admin"))
     .sort();
@@ -84,50 +102,10 @@ async function collectStaticRoutesFromAppDir(): Promise<string[]> {
   return unique;
 }
 
-function getArtigosArray(): MaybeArticle[] {
-  // Tenta suportar múltiplos formatos:
-  // - export const artigos = [...]
-  // - export default [...]
-  // - export const posts = [...]
-  const anyMod: any = ArtigosModule;
-
-  const candidates = [
-    anyMod.artigos,
-    anyMod.posts,
-    anyMod.articles,
-    anyMod.default,
-  ];
-
-  const arr = candidates.find((c) => Array.isArray(c));
-  return Array.isArray(arr) ? (arr as MaybeArticle[]) : [];
-}
-
-function normalizeSlug(raw: unknown): string | null {
-  if (typeof raw !== "string") return null;
-  const s = raw.trim();
-  if (!s) return null;
-
-  // remove barras acidentais
-  const cleaned = s.replace(/^\/+/, "").replace(/\/+$/, "");
-
-  // evita slugs inválidos
-  if (cleaned.includes(" ")) return null;
-
-  return cleaned;
-}
-
-function pickLastModified(article: MaybeArticle): Date | undefined {
-  const cand = article.updatedAt ?? article.publishedAt ?? article.date;
-  if (!cand) return undefined;
-
-  const d = cand instanceof Date ? cand : new Date(String(cand));
-  if (Number.isNaN(d.getTime())) return undefined;
-  return d;
-}
-
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
 
+  // ====== 1) Rotas estáticas (varredura do /app) ======
   const staticRoutes = await collectStaticRoutesFromAppDir();
 
   const highPriority = new Set([
@@ -146,30 +124,36 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: highPriority.has(route) ? 1 : 0.7,
   }));
 
-  // ====== ARTIGOS (dinâmicos) ======
-  const artigos = getArtigosArray();
+  // ====== 2) Artigos dinâmicos (/artigos/[slug]) ======
+  // Dedup por slug (se houver duplicado no array)
+  const bySlug = new Map<string, { slug: string; lastModified: Date }>();
 
-  const artigoEntries: MetadataRoute.Sitemap = artigos
-    .map((a) => {
-      const slug = normalizeSlug(a.slug);
-      if (!slug) return null;
+  for (const a of (articles as ArticleMeta[])) {
+    const slug = String(a.slug || "").trim().replace(/^\/+/, "").replace(/\/+$/, "");
+    if (!slug) continue;
 
-      // Ajuste aqui caso sua rota real seja diferente
-      const url = `${SITE_URL}/artigos/${slug}`;
+    const d = parseArticleDate(a.date) ?? now;
 
-      return {
-        url,
-        lastModified: pickLastModified(a) ?? now,
-        changeFrequency: "monthly" as const,
-        priority: 0.8,
-      };
+    // Se duplicado, fica com o mais recente
+    const existing = bySlug.get(slug);
+    if (!existing || existing.lastModified.getTime() < d.getTime()) {
+      bySlug.set(slug, { slug, lastModified: d });
+    }
+  }
+
+  const articleEntries: MetadataRoute.Sitemap = Array.from(bySlug.values()).map(
+    (a) => ({
+      url: `${SITE_URL}/artigos/${a.slug}`,
+      lastModified: a.lastModified,
+      changeFrequency: "monthly",
+      priority: 0.8,
     })
-    .filter(Boolean) as MetadataRoute.Sitemap;
+  );
 
-  // Remove duplicatas caso alguma rota já exista no estático por acidente
-  const all = [...staticEntries, ...artigoEntries];
-  const dedup = new Map<string, MetadataRoute.Sitemap[number]>();
-  for (const item of all) dedup.set(item.url, item);
+  // ====== 3) Dedup final por URL ======
+  const all = [...staticEntries, ...articleEntries];
+  const dedupByUrl = new Map<string, MetadataRoute.Sitemap[number]>();
+  for (const item of all) dedupByUrl.set(item.url, item);
 
-  return Array.from(dedup.values());
+  return Array.from(dedupByUrl.values());
 }
