@@ -1,7 +1,7 @@
 // src/app/components/ads/AdsBanner.tsx
 "use client";
 
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { adsConfig, AdPosition } from "../../../config/ads";
 import { AdsContainer } from "./AdsContainer";
 
@@ -15,50 +15,28 @@ type AdsBannerProps = {
    */
   minHMobile?: number;
   minHDesktop?: number;
-
-  /**
-   * Em páginas dinâmicas, passe algo estável (ex: slug)
-   * para garantir “1 push por conteúdo” quando a rota mudar.
-   */
-  refreshKey?: string;
 };
 
 declare global {
   interface Window {
     adsbygoogle?: any[];
-    __adsensePushedKeys?: Set<string>;
   }
 }
 
 const ADSENSE_ID = "ca-pub-4436420746304287";
 
-// Ajuste aqui se você quiser esconder algumas posições no mobile.
-// Se você não usa isso, pode deixar vazio.
-const DESKTOP_ONLY_POSITIONS: AdPosition[] = [
-  // Exemplo (adicione/remova conforme seu config real):
-  // "directory_top",
-  // "directory_middle",
-  // "track_top",
-  // "track_middle",
-  // "track_bottom",
-];
-
-function getPushedSet(): Set<string> {
-  if (typeof window === "undefined") return new Set<string>();
-  if (!window.__adsensePushedKeys) window.__adsensePushedKeys = new Set<string>();
-  return window.__adsensePushedKeys;
-}
+// Se você quiser esconder posições específicas no mobile, liste aqui.
+const DESKTOP_ONLY_POSITIONS: AdPosition[] = [];
 
 export function AdsBanner({
   position,
   className,
   minHMobile,
   minHDesktop,
-  refreshKey,
 }: AdsBannerProps) {
   const config = adsConfig?.[position];
 
-  // Se não existe config para a posição ou está desabilitado, não renderiza.
+  // Sem config ou desabilitado => não renderiza.
   if (!config || config.enabled === false) return null;
 
   const wrapperClasses = [
@@ -68,33 +46,32 @@ export function AdsBanner({
     .filter(Boolean)
     .join(" ");
 
-  // Chave estável para impedir push duplicado por re-render/navegação
-  const pushKey = useMemo(
-    () => `${position}::${refreshKey ?? "static"}`,
-    [position, refreshKey]
-  );
-
-  // Ref do <ins> — garante que o elemento exista antes do push
   const insRef = useRef<HTMLModElement | null>(null);
+
 
   useEffect(() => {
     if (typeof window === "undefined") return;
     if (!config || config.enabled === false) return;
-    if (!insRef.current) return;
 
-    const pushed = getPushedSet();
-    if (pushed.has(pushKey)) return;
+    const ins = insRef.current;
+    if (!ins) return;
+
+    // Evita push duplicado no MESMO <ins>.
+    // O AdSense marca o elemento processado com data-adsbygoogle-status.
+    const alreadyProcessed =
+      ins.getAttribute("data-adsbygoogle-status") ||
+      ins.getAttribute("data-ad-status");
+
+    if (alreadyProcessed) return;
 
     try {
       window.adsbygoogle = window.adsbygoogle || [];
       window.adsbygoogle.push({});
-      pushed.add(pushKey);
     } catch {
-      // Não loga erro para não poluir console (e evitar “tempestade” em produção)
+      // silencioso
     }
-  }, [config, pushKey]);
+  }, [config, position]);
 
-  // Monta props do <ins> conforme o seu config
   const insProps: any = {
     className: "adsbygoogle block w-full h-auto",
     style: { display: "block" as const },
@@ -102,7 +79,6 @@ export function AdsBanner({
     "data-ad-slot": config.adSlot,
   };
 
-  // Alguns configs usam "in-article"/"fluid"
   if (config.format === "in-article") {
     insProps.style = { display: "block", textAlign: "center" as const };
     insProps["data-ad-layout"] = "in-article";
@@ -119,12 +95,7 @@ export function AdsBanner({
   return (
     <div className={wrapperClasses}>
       <AdsContainer minHMobile={minHMobile} minHDesktop={minHDesktop}>
-        <ins
-          ref={(el) => {
-            insRef.current = el as unknown as HTMLModElement | null;
-          }}
-          {...insProps}
-        />
+        <ins ref={insRef} {...insProps} />
       </AdsContainer>
     </div>
   );
