@@ -118,7 +118,9 @@ export const adsConfig: Record<AdPosition, AdConfig> = {
 
   /* ====== BOTTOM STICKY ====== */
   bottom_sticky: {
-    enabled: true,
+    // Mitigação: desativar temporariamente para reduzir sinais de tráfego inválido.
+    // Reative depois que a limitação de veiculação normalizar.
+    enabled: false,
     adSlot: "6664851396",
     format: "auto",
     fullWidthResponsive: true,

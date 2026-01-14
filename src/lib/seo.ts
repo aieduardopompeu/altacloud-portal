@@ -4,13 +4,15 @@ export const siteConfig = {
   name: "Alta Cloud",
   description:
     "Alta Cloud é um hub de conhecimento sobre Cloud Computing: AWS, Azure, GCP, DevOps e mais.",
-  url: "https://altacloud.com.br",
 
-  // OG padrão
+  // URL canônica (alinhada com o domínio oficial no Vercel)
+  url: "https://www.altacloud.com.br",
+
+  // OG padrão (deixe como está se o arquivo existir em /public)
   ogImage: "/og-default.jpg",
 
-  // GA4 — coloque seu ID real aqui depois
-  gaMeasurementId: "G-XXXXXXXXXX",
+  // GA4 (opcional — se você já configura no layout, pode manter aqui só como referência)
+  gaMeasurementId: "G-TZKCQC7Q7Y",
 };
 
 // Template para meta titles
@@ -18,37 +20,34 @@ export function buildTitle(title: string) {
   return `${title} - ${siteConfig.name}`;
 }
 
-// Canonical
+// Canonical (garante barra inicial)
 export function buildCanonical(path: string) {
-  return siteConfig.url + path;
+  const cleanPath = path.startsWith("/") ? path : `/${path}`;
+  return siteConfig.url + cleanPath;
 }
 
-// JSON-LD Organization
-export function ldOrganization() {
-  return {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    name: siteConfig.name,
-    url: siteConfig.url,
-    logo: siteConfig.url + "/logo.png",
-    sameAs: [
-      "https://www.youtube.com/@altacloud",
-      "https://www.instagram.com/altacloudofficial",
-    ],
-  };
-}
+// JSON-LD Organization (OBJETO, não função)
+export const ldOrganization = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: siteConfig.name,
+  url: siteConfig.url,
+  logo: `${siteConfig.url}/logo.png`,
+  sameAs: [
+    "https://www.youtube.com/@altacloud",
+    "https://www.instagram.com/altacloudofficial",
+  ],
+};
 
-// JSON-LD Website + SearchAction
-export function ldWebsite() {
-  return {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    name: siteConfig.name,
-    url: siteConfig.url,
-    potentialAction: {
-      "@type": "SearchAction",
-      target: `${siteConfig.url}/buscar?q={search_term_string}`,
-      "query-input": "required name=search_term_string",
-    },
-  };
-}
+// JSON-LD Website + SearchAction (OBJETO, não função)
+export const ldWebsite = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: siteConfig.name,
+  url: siteConfig.url,
+  potentialAction: {
+    "@type": "SearchAction",
+    target: `${siteConfig.url}/buscar?q={search_term_string}`,
+    "query-input": "required name=search_term_string",
+  },
+};
