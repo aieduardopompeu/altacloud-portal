@@ -1,40 +1,52 @@
 // src/app/components/ads/AdsBanner.tsx
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { adsConfig, AdPosition } from "../../../config/ads";
 import { AdsContainer } from "./AdsContainer";
 
 type AdsBannerProps = {
   position: AdPosition;
   className?: string;
+
+  /**
+   * Controle fino de altura (opcional).
+   * Se não passar nada, usa o padrão do AdsContainer.
+   */
   minHMobile?: number;
   minHDesktop?: number;
+
+  /**
+   * Em páginas dinâmicas, passe algo estável (ex: slug)
+   * para garantir “1 push por conteúdo” quando a rota mudar.
+   */
+  refreshKey?: string;
 };
 
 declare global {
   interface Window {
     adsbygoogle?: any[];
+    __adsensePushedKeys?: Set<string>;
   }
 }
 
-const ADSENSE_CLIENT = "ca-pub-4436420746304287";
-const STORAGE_KEY = "altacloud.cookieConsent";
+const ADSENSE_ID = "ca-pub-4436420746304287";
 
-type ConsentLevel = "essential" | "all" | "none";
+// Ajuste aqui se você quiser esconder algumas posições no mobile.
+// Se você não usa isso, pode deixar vazio.
+const DESKTOP_ONLY_POSITIONS: AdPosition[] = [
+  // Exemplo (adicione/remova conforme seu config real):
+  // "directory_top",
+  // "directory_middle",
+  // "track_top",
+  // "track_middle",
+  // "track_bottom",
+];
 
-function getConsentLevel(): ConsentLevel {
-  try {
-    const saved = window.localStorage.getItem(STORAGE_KEY);
-    if (!saved) return "essential";
-    const parsed = JSON.parse(saved) as { level?: ConsentLevel };
-    if (parsed.level === "all" || parsed.level === "none" || parsed.level === "essential") {
-      return parsed.level;
-    }
-    return "essential";
-  } catch {
-    return "essential";
-  }
+function getPushedSet(): Set<string> {
+  if (typeof window === "undefined") return new Set<string>();
+  if (!window.__adsensePushedKeys) window.__adsensePushedKeys = new Set<string>();
+  return window.__adsensePushedKeys;
 }
 
 export function AdsBanner({
@@ -42,88 +54,80 @@ export function AdsBanner({
   className,
   minHMobile,
   minHDesktop,
+  refreshKey,
 }: AdsBannerProps) {
   const config = adsConfig?.[position];
-  const insRef = useRef<HTMLModElement | null>(null);
 
-  // Re-render quando o usuário muda consentimento (para reinicializar o <ins>)
-  const [consentTick, setConsentTick] = useState(0);
+  // Se não existe config para a posição ou está desabilitado, não renderiza.
+  if (!config || config.enabled === false) return null;
 
-  useEffect(() => {
-    const onConsent = () => setConsentTick((v) => v + 1);
-    window.addEventListener("altacloud:cookie-consent-change", onConsent as any);
-    return () =>
-      window.removeEventListener("altacloud:cookie-consent-change", onConsent as any);
-  }, []);
+  const wrapperClasses = [
+    DESKTOP_ONLY_POSITIONS.includes(position) ? "hidden md:block" : "",
+    className ?? "",
+  ]
+    .filter(Boolean)
+    .join(" ");
 
-  const consentLevel = useMemo(() => {
-    if (typeof window === "undefined") return "essential" as ConsentLevel;
-    return getConsentLevel();
-  }, [consentTick]);
+  // Chave estável para impedir push duplicado por re-render/navegação
+  const pushKey = useMemo(
+    () => `${position}::${refreshKey ?? "static"}`,
+    [position, refreshKey]
+  );
 
-  // Key força um novo <ins> quando o consentimento muda (evita 'sumir' após F5/rota/consent)
-  const insKey = `${position}:${consentLevel}:${config?.adSlot ?? "noslot"}`;
-
-  const wrapperClasses = ["w-full", className ?? ""].filter(Boolean).join(" ");
+  // Ref do <ins> — garante que o elemento exista antes do push
+  const insRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
     if (!config || config.enabled === false) return;
+    if (!insRef.current) return;
 
-    const ins = insRef.current;
-    if (!ins) return;
-
-    // Se não aceitou "all", força Non-Personalized Ads (mais consistente e compatível com LGPD/Consent Mode básico)
-    // Importante: isso NÃO bloqueia anúncio — apenas reduz personalização.
-    if (consentLevel !== "all") {
-      ins.setAttribute("data-npa", "1");
-    } else {
-      ins.removeAttribute("data-npa");
-    }
-
-    // Evita push duplicado no MESMO <ins>
-    const alreadyProcessed =
-      ins.getAttribute("data-adsbygoogle-status") || ins.getAttribute("data-ad-status");
-    if (alreadyProcessed) return;
+    const pushed = getPushedSet();
+    if (pushed.has(pushKey)) return;
 
     try {
       window.adsbygoogle = window.adsbygoogle || [];
       window.adsbygoogle.push({});
+      pushed.add(pushKey);
     } catch {
-      // silencioso
+      // Não loga erro para não poluir console (e evitar “tempestade” em produção)
     }
-  }, [config, position, consentLevel, insKey]);
+  }, [config, pushKey]);
 
-  if (!config || config.enabled === false) {
-    return null;
-  }
-
+  // Monta props do <ins> conforme o seu config
+  // Importante: o <ins> precisa reservar altura.
+  // Se ele ficar com height=0 (comum em layouts flex), o AdSense frequentemente NÃO dispara o request (pagead/ads).
   const insProps: any = {
-    key: insKey,
-    className: "adsbygoogle block w-full h-auto",
+    className:
+      "adsbygoogle block w-full h-full min-h-[var(--ads-min-h)] md:min-h-[var(--ads-min-h-md)]",
     style: { display: "block" as const },
-    "data-ad-client": ADSENSE_CLIENT,
+    "data-ad-client": ADSENSE_ID,
     "data-ad-slot": config.adSlot,
   };
 
-  // Display ads responsivos (recomendado)
-  if (config.format === "auto") {
+  // Alguns configs usam "in-article"/"fluid"
+  if (config.format === "in-article") {
+    insProps.style = { display: "block", textAlign: "center" as const };
+    insProps["data-ad-layout"] = "in-article";
+    insProps["data-ad-format"] = "fluid";
+  } else if (config.format === "autorelaxed") {
+    insProps["data-ad-format"] = "autorelaxed";
+  } else {
     insProps["data-ad-format"] = "auto";
     if (config.fullWidthResponsive !== false) {
       insProps["data-full-width-responsive"] = "true";
     }
   }
 
-  // In-article (quando usado)
-  if (config.format === "in-article") {
-    insProps["data-ad-format"] = "fluid";
-    insProps["data-ad-layout"] = "in-article";
-  }
-
   return (
     <div className={wrapperClasses}>
       <AdsContainer minHMobile={minHMobile} minHDesktop={minHDesktop}>
-        <ins ref={insRef} {...insProps} />
+        <ins
+          ref={(el) => {
+            insRef.current = el;
+          }}
+          {...insProps}
+        />
       </AdsContainer>
     </div>
   );
