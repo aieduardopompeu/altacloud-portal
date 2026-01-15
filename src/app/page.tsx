@@ -3,7 +3,7 @@
 import { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
-import { AdsBanner } from "./components/ads/AdsBanner"; // <-- CORRIGIDO: Caminho relativo correto
+import Ad from "./components/ads/Ad";
 import { BottomStickyAd } from "./components/ads/BottomStickyAd"; // <-- CORRIGIDO: Caminho relativo correto
 
 // --- Bloco de Metadata ---
@@ -124,7 +124,7 @@ export default function HomePage() {
         </section>
         {/* ADS – logo abaixo do hero (home_top) */}
         <div className="mt-8">
-          <AdsBanner position="home_hero" />
+          <Ad slot="6664851396" />
         </div>
         {/* DESTAQUE – DIRETÓRIO DE PROFISSIONAIS */}
         <section className="mt-8">
@@ -167,7 +167,7 @@ export default function HomePage() {
         </section>
         {/* ADS – entre diretório e trilhas (home_between_sections) */}
         <div className="mt-8">
-          <AdsBanner position="home_between_sections" />
+          <Ad slot="7666231438" />
         </div>
         {/* TRILHAS EM DESTAQUE */}
         <section className="mt-10 space-y-5">
@@ -272,10 +272,6 @@ export default function HomePage() {
             </Link>
           </div>
         </section>
-        {/* ADS – rodapé da home (home_bottom) – controlado por enabled no adsConfig */}
-        <div className="mt-10">
-          <AdsBanner position="home_tracks_bottom" />
-        </div>
       </div>
       <BottomStickyAd />
     </main>
