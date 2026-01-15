@@ -1,5 +1,4 @@
-﻿import type { Metadata } from "next";
-import Script from "next/script";
+import type { Metadata } from "next";
 import { ArticleLayout } from "../../components/layout/ArticleLayout";
 import { siteConfig, buildCanonical } from "../../../lib/seo";
 
@@ -88,18 +87,16 @@ export default function Page() {
   return (
     <>
       {/* JSON-LD Article */}
-      <Script
+      <script
         id="ld-article"
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdArticle) }}
-      />
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdArticle) }}></script>
 
       {/* JSON-LD Breadcrumb */}
-      <Script
+      <script
         id="ld-breadcrumb"
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdBreadcrumb) }}
-      />
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdBreadcrumb) }}></script>
 
       <ArticleLayout
         category="AWS"

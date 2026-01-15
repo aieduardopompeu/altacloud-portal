@@ -1,6 +1,5 @@
-﻿// src/app/artigos/guia-cloud-computing-para-iniciantes/page.tsx
+// src/app/artigos/guia-cloud-computing-para-iniciantes/page.tsx
 import type { Metadata } from "next";
-import Script from "next/script";
 import { ArticleLayout } from "../../components/layout/ArticleLayout";
 
 const articleSlug = "guia-cloud-computing-para-iniciantes";
@@ -54,7 +53,7 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <>
-      <Script
+      <script
         id="ld-json-guia-cloud-computing"
         type="application/ld+json"
         strategy="afterInteractive"
@@ -224,6 +223,6 @@ export default function Page() {
           futuro em cima dela.
         </p>
       </ArticleLayout>
-    </>
+    <></script>
   );
 }
