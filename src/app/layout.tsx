@@ -2,7 +2,7 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import Script from "next/script";
-import type { ReactNode } from "react";
+import { ReactNode } from "react";
 
 import { Header } from "./components/layout/Header";
 import { Footer } from "./components/layout/Footer";
@@ -11,7 +11,7 @@ import { CookieBanner } from "./components/cookies/CookieBanner";
 import { siteConfig, ldOrganization, ldWebsite } from "../lib/seo";
 
 const GA_ID = "G-TZKCQC7Q7Y";
-const ADSENSE_CLIENT = "ca-pub-4436420746304287";
+const ADSENSE_ID = "ca-pub-4436420746304287";
 
 export const metadata: Metadata = {
   title: {
@@ -62,15 +62,6 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 
   return (
     <html lang="pt-BR">
-      <head>
-        {/* AdSense (1x global) — script CRU no HEAD (não usar next/script) */}
-        <script
-          async
-          src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT}`}
-          crossOrigin="anonymous"
-        />
-      </head>
-
       <body className="bg-slate-950 text-slate-50 antialiased">
         {/* JSON-LD */}
         <Script
@@ -88,6 +79,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 
         {/* GA4 */}
         <Script
+          id="ga-script"
           src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
           strategy="afterInteractive"
         />
@@ -101,8 +93,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           strategy="afterInteractive"
           dangerouslySetInnerHTML={{ __html: gaDebug }}
         />
-
-        <CookieBanner />
+<CookieBanner />
 
         <div className="flex min-h-screen flex-col">
           <Header />
