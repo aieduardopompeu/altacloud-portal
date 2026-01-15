@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 
 declare global {
   interface Window {
@@ -9,36 +9,46 @@ declare global {
 }
 
 type Props = {
-  slot: string;
+  slot: string;              // obrigatório
   className?: string;
-  /** default 250 */
-  minHeight?: number;
+  style?: React.CSSProperties;
 };
 
-export default function Ad({ slot, className, minHeight = 250 }: Props) {
-  const pushed = useRef(false);
+export default function Ad({ slot, className, style }: Props) {
+  const insRef = useRef<HTMLModElement | null>(null);
+
+  // BLOQUEIO: nunca renderizar sem slot
+  if (!slot || String(slot).trim() === "") return null;
 
   useEffect(() => {
-    if (pushed.current) return;
-    pushed.current = true;
-
     try {
       (window.adsbygoogle = window.adsbygoogle || []).push({});
-    } catch (e) {
-      // não quebra a página
-      console.error("Adsense push error:", e);
+    } catch {
+      // noop
     }
-  }, []);
 
-  // Regra de ouro: NUNCA renderizar <ins> sem slot
-  if (!slot) return null;
+    // Colapsa se não houver preenchimento (remove “buraco”)
+    const t = window.setTimeout(() => {
+      const ins = insRef.current as unknown as HTMLElement | null;
+      if (!ins) return;
+      const iframe = ins.querySelector("iframe") as HTMLIFrameElement | null;
+      const h = iframe?.offsetHeight ?? 0;
+      if (h === 0) {
+        const wrap = ins.parentElement as HTMLElement | null;
+        if (wrap) wrap.style.display = "none";
+      }
+    }, 1800);
+
+    return () => window.clearTimeout(t);
+  }, [slot]);
 
   return (
-    <div className={`ads-wrapper ${className ?? ""}`.trim()} style={{ minHeight }}>
+    <div className={className} style={style}>
       <ins
+        ref={insRef as any}
         className="adsbygoogle"
-        style={{ display: "block", minHeight }}
-        data-ad-client="ca-pub-4436420746304287"
+        style={{ display: "block" }}
+        data-ad-client={process.env.NEXT_PUBLIC_ADSENSE_CLIENT}
         data-ad-slot={slot}
         data-ad-format="auto"
         data-full-width-responsive="true"
