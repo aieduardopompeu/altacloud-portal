@@ -89,11 +89,13 @@ export default function Page() {
       <script
         id="ld-article-s3"
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdArticle) }}></script>
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdArticle) }}
+      ></script>
       <script
         id="ld-breadcrumb-s3"
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdBreadcrumb) }}></script>
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdBreadcrumb) }}
+      ></script>
 
       <ArticleLayout
         category="AWS"

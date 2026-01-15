@@ -1,7 +1,6 @@
 // src/app/layout.tsx
 import "./globals.css";
 import type { Metadata } from "next";
-import Script from "next/script";
 import { ReactNode } from "react";
 
 import { Header } from "./components/layout/Header";
@@ -62,37 +61,45 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 
   return (
     <html lang="pt-BR">
+      <head>
+        <script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4436420746304287"
+          crossOrigin="anonymous"
+        ></script>
+      </head>
+
       <body className="bg-slate-950 text-slate-50 antialiased">
         {/* JSON-LD */}
-        <Script
+        <script
           id="ld-organization"
           type="application/ld+json"
-          strategy="beforeInteractive"
+         
           dangerouslySetInnerHTML={{ __html: JSON.stringify(ldOrganization) }}
-        />
-        <Script
+        ></script>
+        <script
           id="ld-website"
           type="application/ld+json"
-          strategy="beforeInteractive"
+         
           dangerouslySetInnerHTML={{ __html: JSON.stringify(ldWebsite) }}
-        />
+        ></script>
 
         {/* GA4 */}
-        <Script
+        <script
           id="ga-script"
           src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
-          strategy="afterInteractive"
-        />
-        <Script
+         
+        ></script>
+        <script
           id="ga-init"
-          strategy="afterInteractive"
+         
           dangerouslySetInnerHTML={{ __html: gaInit }}
-        />
-        <Script
+        ></script>
+        <script
           id="ga-debug"
-          strategy="afterInteractive"
+         
           dangerouslySetInnerHTML={{ __html: gaDebug }}
-        />
+        ></script>
 <CookieBanner />
 
         <div className="flex min-h-screen flex-col">
