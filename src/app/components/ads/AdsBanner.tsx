@@ -9,10 +9,6 @@ type AdsBannerProps = {
   position: AdPosition;
   className?: string;
 
-  /**
-   * Controle fino de altura (opcional).
-   * Se não passar nada, usa o padrão do AdsContainer.
-   */
   minHMobile?: number;
   minHDesktop?: number;
 
@@ -32,21 +28,22 @@ declare global {
 
 const ADSENSE_ID = "ca-pub-4436420746304287";
 
-// Ajuste aqui se você quiser esconder algumas posições no mobile.
-// Se você não usa isso, pode deixar vazio.
-const DESKTOP_ONLY_POSITIONS: AdPosition[] = [
-  // Exemplo (adicione/remova conforme seu config real):
-  // "directory_top",
-  // "directory_middle",
-  // "track_top",
-  // "track_middle",
-  // "track_bottom",
-];
+// Se quiser esconder posições no mobile, adicione aqui.
+const DESKTOP_ONLY_POSITIONS: AdPosition[] = [];
 
 function getPushedSet(): Set<string> {
-  if (typeof window === "undefined") return new Set<string>();
   if (!window.__adsensePushedKeys) window.__adsensePushedKeys = new Set<string>();
   return window.__adsensePushedKeys;
+}
+
+function hasAdSenseScriptInDom(): boolean {
+  return !!document.querySelector('script[src*="pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"]');
+}
+
+function insHasStatus(ins: HTMLElement) {
+  // Quando o AdSense processa, costuma setar este atributo:
+  // data-adsbygoogle-status="done" | "unfilled" | etc.
+  return ins.hasAttribute("data-adsbygoogle-status");
 }
 
 export function AdsBanner({
@@ -58,7 +55,6 @@ export function AdsBanner({
 }: AdsBannerProps) {
   const config = adsConfig?.[position];
 
-  // Se não existe config para a posição ou está desabilitado, não renderiza.
   if (!config || config.enabled === false) return null;
 
   const wrapperClasses = [
@@ -68,44 +64,84 @@ export function AdsBanner({
     .filter(Boolean)
     .join(" ");
 
-  // Chave estável para impedir push duplicado por re-render/navegação
+  // chave estável para impedir push duplicado por re-render/navegação
   const pushKey = useMemo(
     () => `${position}::${refreshKey ?? "static"}`,
     [position, refreshKey]
   );
 
-  // Ref do <ins> — garante que o elemento exista antes do push
   const insRef = useRef<HTMLElement | null>(null);
+  const attemptsRef = useRef(0);
 
   useEffect(() => {
-    if (typeof window === "undefined") return;
     if (!config || config.enabled === false) return;
     if (!insRef.current) return;
 
+    const ins = insRef.current;
     const pushed = getPushedSet();
-    if (pushed.has(pushKey)) return;
 
-    try {
-      window.adsbygoogle = window.adsbygoogle || [];
-      window.adsbygoogle.push({});
+    // Se já tem status, não precisa fazer nada
+    if (insHasStatus(ins)) {
       pushed.add(pushKey);
-    } catch {
-      // Não loga erro para não poluir console (e evitar “tempestade” em produção)
+      return;
     }
+
+    // Já considerou "pushKey" como feito? Ainda assim, se não tem status, vamos tentar novamente.
+    // (Isso corrige o caso de push "cedo demais" que não inicializou o <ins>.)
+    const maxAttempts = 8; // ~ 8 * 700ms = ~5-6s de tentativas
+    const delayMs = 700;
+
+    const tryPush = () => {
+      // Se já processou, encerra
+      if (!insRef.current) return;
+      if (insHasStatus(insRef.current)) {
+        pushed.add(pushKey);
+        return;
+      }
+
+      // Se o script nem está no DOM, não adianta tentar agora
+      if (!hasAdSenseScriptInDom()) {
+        scheduleRetry();
+        return;
+      }
+
+      try {
+        window.adsbygoogle = window.adsbygoogle || [];
+        window.adsbygoogle.push({});
+        // NÃO marca pushed aqui; só marca quando o <ins> ganhar status.
+      } catch (e) {
+        // Log apenas para você depurar; se quiser “silencioso” em prod, posso condicionar por env
+        console.error("AdSense push error:", e);
+      }
+
+      scheduleRetry();
+    };
+
+    const scheduleRetry = () => {
+      attemptsRef.current += 1;
+      if (attemptsRef.current >= maxAttempts) return;
+
+      window.setTimeout(() => {
+        tryPush();
+      }, delayMs);
+    };
+
+    // Reset de tentativas por mudança de posição/refreshKey
+    attemptsRef.current = 0;
+    tryPush();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [config, pushKey]);
 
-  // Monta props do <ins> conforme o seu config
-  // Importante: o <ins> precisa reservar altura.
-  // Se ele ficar com height=0 (comum em layouts flex), o AdSense frequentemente NÃO dispara o request (pagead/ads).
+  // Monta props do <ins> conforme config
   const insProps: any = {
     className:
-      "adsbygoogle block w-full h-full min-h-[var(--ads-min-h)] md:min-h-[var(--ads-min-h-md)]",
+      "adsbygoogle block w-full min-h-[var(--ads-min-h)] md:min-h-[var(--ads-min-h-md)]",
     style: { display: "block" as const },
     "data-ad-client": ADSENSE_ID,
     "data-ad-slot": config.adSlot,
   };
 
-  // Alguns configs usam "in-article"/"fluid"
   if (config.format === "in-article") {
     insProps.style = { display: "block", textAlign: "center" as const };
     insProps["data-ad-layout"] = "in-article";
