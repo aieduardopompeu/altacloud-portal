@@ -53,7 +53,11 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <>
-      <script id="ld-json-guia-cloud-computing" type="application/ld+json" dangerouslySetInnerHTML={ __html: JSON.stringify(jsonLd) } />
+      <script
+        id="ld-json-guia-cloud-computing"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
 
       <ArticleLayout
         category="Fundamentos"
