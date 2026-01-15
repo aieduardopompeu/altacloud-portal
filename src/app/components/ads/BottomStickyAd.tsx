@@ -1,18 +1,13 @@
-// src/app/components/ads/BottomStickyAd.tsx
 "use client";
 
 import { useEffect, useState } from "react";
 import { AdsBanner } from "./AdsBanner";
 import type { AdPosition } from "@/config/ads";
-import { adsConfig } from "@/config/ads";
 
 const CLOSE_KEY = "altacloud_bottom_ad_closed";
 const POSITION: AdPosition = "bottom_sticky";
 
 export function BottomStickyAd() {
-  // Se o slot estiver desativado no config, não renderiza NADA (evita barra vazia).
-  if (!adsConfig[POSITION]?.enabled) return null;
-
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {

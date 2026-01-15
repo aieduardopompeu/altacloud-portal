@@ -62,19 +62,6 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 
   return (
     <html lang="pt-BR">
-      <head>
-        {/*
-          AdSense (1x global)
-          IMPORTANT: usar <script> “puro” no <head> evita o atributo data-nscript do next/script,
-          que dispara o aviso “AdSense head tag doesn't support data-nscript attribute.”
-        */}
-        <script
-          async
-          crossOrigin="anonymous"
-          src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_ID}`}
-        />
-      </head>
-
       <body className="bg-slate-950 text-slate-50 antialiased">
         {/* JSON-LD */}
         <Script
@@ -105,6 +92,15 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           id="ga-debug"
           strategy="afterInteractive"
           dangerouslySetInnerHTML={{ __html: gaDebug }}
+        />
+
+        {/* AdSense (1x global) */}
+        <Script
+          id="adsense-script"
+          async
+          strategy="afterInteractive"
+          crossOrigin="anonymous"
+          src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_ID}`}
         />
 
         <CookieBanner />
