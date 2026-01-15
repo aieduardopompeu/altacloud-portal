@@ -12,8 +12,8 @@ type Props = {
 };
 
 export default function AdSenseSlot({
-  client = "ca-pub-4436420746304287",
   slot,
+  client = "ca-pub-4436420746304287",
   className,
   style,
   format = "auto",
@@ -21,16 +21,18 @@ export default function AdSenseSlot({
 }: Props) {
   const pushed = useRef(false);
 
+  if (!slot) {
+    return null;
+  }
+
   useEffect(() => {
-    // Evita push duplicado em re-render / navegação
     if (pushed.current) return;
     pushed.current = true;
 
     try {
       (window.adsbygoogle = window.adsbygoogle || []).push({});
     } catch (e) {
-      // Não quebra a página
-      console.error("AdSense push error:", e);
+      console.error("AdSense error", e);
     }
   }, []);
 
@@ -45,3 +47,4 @@ export default function AdSenseSlot({
     />
   );
 }
+
