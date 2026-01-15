@@ -51,14 +51,14 @@ export const adsConfig: Record<AdPosition, AdConfig> = {
   /* ====== HOME ====== */
   home_between_sections: {
     enabled: true,
-    adSlot: "6664851396",
-    format: "auto",
+    adSlot: "7666231438",
+    format: "in-article",
     fullWidthResponsive: true,
   },
   home_tracks_bottom: {
     enabled: true,
-    adSlot: "6664851396",
-    format: "auto",
+    adSlot: "9227543350",
+    format: "autorelaxed",
     fullWidthResponsive: true,
   },
   home_hero: {
@@ -77,21 +77,21 @@ export const adsConfig: Record<AdPosition, AdConfig> = {
   },
   track_middle: {
     enabled: true,
-    adSlot: "6664851396",
-    format: "auto",
+    adSlot: "7666231438",
+    format: "in-article",
     fullWidthResponsive: true,
   },
   track_bottom: {
     enabled: true,
-    adSlot: "6664851396",
-    format: "auto",
+    adSlot: "9227543350",
+    format: "autorelaxed",
     fullWidthResponsive: true,
   },
 
   /* ====== ARTIGOS ====== */
   article_middle: {
     enabled: true,
-    adSlot: "6664851396",
+    adSlot: "7666231438",
     format: "in-article",
     fullWidthResponsive: true,
   },
@@ -120,9 +120,9 @@ export const adsConfig: Record<AdPosition, AdConfig> = {
   bottom_sticky: {
     // Mitigação: desativar temporariamente para reduzir sinais de tráfego inválido.
     // Reative depois que a limitação de veiculação normalizar.
-    enabled: false,
-    adSlot: "6664851396",
-    format: "auto",
+    enabled: true,
+    adSlot: "9227543350",
+    format: "autorelaxed",
     fullWidthResponsive: true,
   },
 

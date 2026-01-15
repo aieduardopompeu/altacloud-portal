@@ -9,6 +9,10 @@ type AdsBannerProps = {
   position: AdPosition;
   className?: string;
 
+  /**
+   * Controle fino de altura (opcional).
+   * Se não passar nada, usa o padrão do AdsContainer.
+   */
   minHMobile?: number;
   minHDesktop?: number;
 
@@ -26,22 +30,19 @@ declare global {
   }
 }
 
-const ADSENSE_ID = "ca-pub-4436420746304287";
-
-// Se quiser esconder posições no mobile, adicione aqui.
-const DESKTOP_ONLY_POSITIONS: AdPosition[] = [];
-
 function getPushedSet(): Set<string> {
   if (!window.__adsensePushedKeys) window.__adsensePushedKeys = new Set<string>();
   return window.__adsensePushedKeys;
 }
 
 function hasAdSenseScriptInDom(): boolean {
-  return !!document.querySelector('script[src*="pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"]');
+  return !!document.querySelector(
+    'script[src*="pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"]'
+  );
 }
 
 function insHasStatus(ins: HTMLElement) {
-  // Quando o AdSense processa, costuma setar este atributo:
+  // Quando o AdSense processa, costuma setar:
   // data-adsbygoogle-status="done" | "unfilled" | etc.
   return ins.hasAttribute("data-adsbygoogle-status");
 }
@@ -57,14 +58,9 @@ export function AdsBanner({
 
   if (!config || config.enabled === false) return null;
 
-  const wrapperClasses = [
-    DESKTOP_ONLY_POSITIONS.includes(position) ? "hidden md:block" : "",
-    className ?? "",
-  ]
-    .filter(Boolean)
-    .join(" ");
+  const wrapperClasses = [className ?? ""].filter(Boolean).join(" ");
 
-  // chave estável para impedir push duplicado por re-render/navegação
+  // Chave estável para evitar push duplicado por re-render/navegação
   const pushKey = useMemo(
     () => `${position}::${refreshKey ?? "static"}`,
     [position, refreshKey]
@@ -80,26 +76,31 @@ export function AdsBanner({
     const ins = insRef.current;
     const pushed = getPushedSet();
 
-    // Se já tem status, não precisa fazer nada
+    // Se já tem status, considera pronto
     if (insHasStatus(ins)) {
       pushed.add(pushKey);
       return;
     }
 
-    // Já considerou "pushKey" como feito? Ainda assim, se não tem status, vamos tentar novamente.
-    // (Isso corrige o caso de push "cedo demais" que não inicializou o <ins>.)
-    const maxAttempts = 8; // ~ 8 * 700ms = ~5-6s de tentativas
+    // Já tentou nesta mesma rota/refreshKey? Se sim, mas ainda sem status,
+    // tentamos de novo (caso o primeiro push tenha ocorrido cedo demais).
+    const maxAttempts = 10; // ~10 * 700ms = ~7s
     const delayMs = 700;
 
+    const scheduleRetry = () => {
+      attemptsRef.current += 1;
+      if (attemptsRef.current >= maxAttempts) return;
+      window.setTimeout(tryPush, delayMs);
+    };
+
     const tryPush = () => {
-      // Se já processou, encerra
       if (!insRef.current) return;
       if (insHasStatus(insRef.current)) {
         pushed.add(pushKey);
         return;
       }
 
-      // Se o script nem está no DOM, não adianta tentar agora
+      // Se o script não está no DOM ainda, aguarda.
       if (!hasAdSenseScriptInDom()) {
         scheduleRetry();
         return;
@@ -108,25 +109,13 @@ export function AdsBanner({
       try {
         window.adsbygoogle = window.adsbygoogle || [];
         window.adsbygoogle.push({});
-        // NÃO marca pushed aqui; só marca quando o <ins> ganhar status.
       } catch (e) {
-        // Log apenas para você depurar; se quiser “silencioso” em prod, posso condicionar por env
         console.error("AdSense push error:", e);
       }
 
       scheduleRetry();
     };
 
-    const scheduleRetry = () => {
-      attemptsRef.current += 1;
-      if (attemptsRef.current >= maxAttempts) return;
-
-      window.setTimeout(() => {
-        tryPush();
-      }, delayMs);
-    };
-
-    // Reset de tentativas por mudança de posição/refreshKey
     attemptsRef.current = 0;
     tryPush();
 
@@ -138,7 +127,7 @@ export function AdsBanner({
     className:
       "adsbygoogle block w-full min-h-[var(--ads-min-h)] md:min-h-[var(--ads-min-h-md)]",
     style: { display: "block" as const },
-    "data-ad-client": ADSENSE_ID,
+    "data-ad-client": "ca-pub-4436420746304287",
     "data-ad-slot": config.adSlot,
   };
 
